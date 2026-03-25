@@ -68,15 +68,15 @@ export default function About() {
             <div className="space-y-4 lg:pt-14">
               <div className="p-6 rounded-xl bg-dark-800 border border-stone-800">
                 <div className="text-4xl font-bold text-primary-500 mb-1">50+</div>
-                <p className="text-stone-500 text-sm">Projects delivered across construction, services, and business sectors</p>
+                <p className="text-stone-400 text-sm">Projects delivered across construction, services, and business sectors</p>
               </div>
               <div className="p-6 rounded-xl bg-dark-800 border border-stone-800 ml-0 lg:ml-8">
                 <div className="text-4xl font-bold text-primary-500 mb-1">15+</div>
-                <p className="text-stone-500 text-sm">Years of combined experience in software development and construction tech</p>
+                <p className="text-stone-400 text-sm">Years of combined experience in software development and construction tech</p>
               </div>
               <div className="p-6 rounded-xl bg-dark-800 border border-stone-800">
                 <div className="text-4xl font-bold text-primary-500 mb-1">100%</div>
-                <p className="text-stone-500 text-sm">Client satisfaction rate — every engagement built on referrals and long-term relationships</p>
+                <p className="text-stone-400 text-sm">Client satisfaction rate — every engagement built on referrals and long-term relationships</p>
               </div>
             </div>
           </div>
@@ -99,15 +99,15 @@ export default function About() {
               <div className="space-y-5">
                 <div className="pl-4 border-l-2 border-primary-600">
                   <h3 className="font-bold text-stone-200 mb-1">Industry Expertise</h3>
-                  <p className="text-stone-500 text-sm">We build software for construction and understand your industry inside and out.</p>
+                  <p className="text-stone-400 text-sm">We build software for construction and understand your industry inside and out.</p>
                 </div>
                 <div className="pl-4 border-l-2 border-primary-600">
                   <h3 className="font-bold text-stone-200 mb-1">Real Results</h3>
-                  <p className="text-stone-500 text-sm">Every project is measured by impact — efficiency gains, revenue growth, and operational improvements.</p>
+                  <p className="text-stone-400 text-sm">Every project is measured by impact — efficiency gains, revenue growth, and operational improvements.</p>
                 </div>
                 <div className="pl-4 border-l-2 border-primary-600">
                   <h3 className="font-bold text-stone-200 mb-1">Partnership Mindset</h3>
-                  <p className="text-stone-500 text-sm">We're invested in your success. We listen, we iterate, and we build solutions that work for your business.</p>
+                  <p className="text-stone-400 text-sm">We're invested in your success. We listen, we iterate, and we build solutions that work for your business.</p>
                 </div>
               </div>
             </div>
@@ -142,7 +142,7 @@ export default function About() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {['TypeScript', 'React', 'Node.js', 'PostgreSQL', 'Procore API', 'Playwright'].map(skill => (
-                    <span key={skill} className="px-2.5 py-1 rounded-md bg-stone-800 text-stone-500 text-xs font-medium">{skill}</span>
+                    <span key={skill} className="px-2.5 py-1 rounded-md bg-stone-800 text-stone-400 text-xs font-medium">{skill}</span>
                   ))}
                 </div>
               </div>
@@ -151,12 +151,12 @@ export default function About() {
             {/* Lean team blurb — no ghost cards */}
             <div className="p-8 rounded-2xl bg-dark-800/50 border border-stone-800 flex flex-col justify-center">
               <div className="w-10 h-10 rounded-xl bg-stone-800 flex items-center justify-center mb-5">
-                <svg className="w-5 h-5 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
               <h3 className="text-lg font-bold text-stone-200 mb-3">Lean by design.</h3>
-              <p className="text-stone-500 text-sm leading-relaxed">
+              <p className="text-stone-400 text-sm leading-relaxed">
                 We work with a focused team of product strategists and project managers who keep builds on track. No bloated agencies, no layers of account managers — just the people doing the work.
               </p>
             </div>
@@ -219,7 +219,7 @@ export default function About() {
                 </div>
                 <div>
                   <h3 className="font-bold text-stone-200 mb-1.5">{item.title}</h3>
-                  <p className="text-stone-500 text-sm leading-relaxed">{item.body}</p>
+                  <p className="text-stone-400 text-sm leading-relaxed">{item.body}</p>
                 </div>
               </div>
             ))}

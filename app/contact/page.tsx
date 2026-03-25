@@ -79,7 +79,7 @@ export default function Contact() {
               <h2 className="text-xl font-bold text-stone-100">Contact Information</h2>
 
               <div>
-                <h3 className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Email</h3>
+                <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Email</h3>
                 <a
                   href="mailto:hello@buildkitlabs.com"
                   className="text-stone-300 hover:text-primary-400 transition-colors text-sm break-all"
@@ -89,7 +89,7 @@ export default function Contact() {
               </div>
 
               <div>
-                <h3 className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Location</h3>
+                <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Location</h3>
                 <p className="text-stone-400 text-sm leading-relaxed">
                   Dallas-Fort Worth, Texas<br />
                   Serving North Texas and beyond
@@ -97,7 +97,7 @@ export default function Contact() {
               </div>
 
               <div>
-                <h3 className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-2">Availability</h3>
+                <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-2">Availability</h3>
                 <p className="text-stone-400 text-sm leading-relaxed">
                   Monday – Friday: 9am – 6pm CT<br />
                   Typically respond within 24 hours
@@ -105,7 +105,7 @@ export default function Contact() {
               </div>
 
               <div className="pt-6 border-t border-stone-800">
-                <h3 className="text-xs font-semibold text-stone-500 uppercase tracking-wider mb-4">Connect</h3>
+                <h3 className="text-xs font-semibold text-stone-400 uppercase tracking-wider mb-4">Connect</h3>
                 <div className="flex space-x-3">
                   <a
                     href="https://linkedin.com/company/buildkitlabs"
@@ -290,7 +290,7 @@ export default function Contact() {
           {/* Divider label */}
           <div className="flex items-center gap-4 mb-10">
             <div className="h-px flex-1 bg-stone-800" />
-            <span className="text-xs font-semibold text-stone-500 uppercase tracking-widest px-2">or book directly</span>
+            <span className="text-xs font-semibold text-stone-400 uppercase tracking-widest px-2">or book directly</span>
             <div className="h-px flex-1 bg-stone-800" />
           </div>
           <h2 className="text-3xl font-bold text-stone-100 mb-3">Schedule a Discovery Call</h2>

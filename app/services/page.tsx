@@ -66,7 +66,7 @@ export default function Services() {
                 Built for construction from the ground up — not adapted from generic tools. Every feature maps to how your crews, dispatch teams, and office actually work.
               </p>
 
-              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">What We Build</h3>
+              <h3 className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-5">What We Build</h3>
               <ul className="space-y-3 mb-10">
                 {[
                   { label: 'Operations Platforms', desc: 'Dispatch, scheduling, and crew coordination in one dashboard' },
@@ -82,7 +82,7 @@ export default function Services() {
                 ))}
               </ul>
 
-              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">Why Us</h3>
+              <h3 className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-5">Why Us</h3>
               <ul className="space-y-2.5">
                 {[
                   'Deep knowledge of construction operations',
@@ -110,7 +110,7 @@ export default function Services() {
                 ].map(item => (
                   <div key={item.title} className="p-4 rounded-xl bg-dark-900/60 border-l-2 border-primary-600">
                     <h4 className="font-semibold text-stone-200 text-sm mb-1">{item.title}</h4>
-                    <p className="text-stone-500 text-xs leading-relaxed">{item.desc}</p>
+                    <p className="text-stone-400 text-xs leading-relaxed">{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -126,7 +126,7 @@ export default function Services() {
 
             {/* Example cards */}
             <div className="rounded-2xl bg-dark-800 border border-stone-800 p-8 order-2 lg:order-1">
-              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-6">What we deliver</h3>
+              <h3 className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-6">What we deliver</h3>
               <div className="space-y-3">
                 {[
                   { title: 'Modern Business Websites', desc: 'Conversion-focused design that builds credibility and captures leads.' },
@@ -136,7 +136,7 @@ export default function Services() {
                 ].map(item => (
                   <div key={item.title} className="p-4 rounded-xl bg-dark-900/60 border-l-2 border-primary-600">
                     <h4 className="font-semibold text-stone-200 text-sm mb-1">{item.title}</h4>
-                    <p className="text-stone-500 text-xs leading-relaxed">{item.desc}</p>
+                    <p className="text-stone-400 text-xs leading-relaxed">{item.desc}</p>
                   </div>
                 ))}
               </div>
@@ -156,7 +156,7 @@ export default function Services() {
                 Custom code. 2–4 week turnaround. No monthly fees. From $3,000.
               </p>
 
-              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">What We Deliver</h3>
+              <h3 className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-5">What We Deliver</h3>
               <ul className="space-y-3 mb-10">
                 {[
                   { label: 'Custom Code', desc: 'Modern frameworks, no WordPress bloat' },
@@ -172,7 +172,7 @@ export default function Services() {
                 ))}
               </ul>
 
-              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">Industries We Serve</h3>
+              <h3 className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-5">Industries We Serve</h3>
               <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
                 {[
                   'Restaurants & Hospitality',
@@ -209,7 +209,7 @@ export default function Services() {
                 Not sure where to start? We help leaders make informed decisions about software, automation, and digital transformation — without the vendor spin.
               </p>
 
-              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">Our Consulting Services</h3>
+              <h3 className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-5">Our Consulting Services</h3>
               <ul className="space-y-3 mb-10">
                 {[
                   { label: 'Technology Assessments', desc: 'Audit your stack and find optimization opportunities' },
@@ -225,7 +225,7 @@ export default function Services() {
                 ))}
               </ul>
 
-              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">Who Should Work With Us</h3>
+              <h3 className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-5">Who Should Work With Us</h3>
               <ul className="space-y-2.5">
                 {[
                   'Construction companies ready to modernize',
@@ -257,7 +257,7 @@ export default function Services() {
                     </div>
                     <div className="pt-0.5">
                       <h4 className="font-semibold text-stone-200 mb-1 text-sm">{step.title}</h4>
-                      <p className="text-stone-500 text-xs leading-relaxed">{step.desc}</p>
+                      <p className="text-stone-400 text-xs leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
                 ))}

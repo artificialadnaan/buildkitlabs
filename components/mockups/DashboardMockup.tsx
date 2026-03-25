@@ -29,11 +29,8 @@ export default function DashboardMockup() {
                 {[40, 65, 45, 80, 55, 70, 90, 60].map((h, i) => (
                   <div
                     key={i}
-                    className="flex-1 rounded-t"
-                    style={{
-                      height: `${h}%`,
-                      backgroundColor: i === 6 ? 'rgba(217,119,6,0.7)' : 'rgba(217,119,6,0.25)',
-                    }}
+                    className={`flex-1 rounded-t ${i === 6 ? 'bg-primary-600/70' : 'bg-primary-600/25'}`}
+                    style={{ height: `${h}%` }}
                   />
                 ))}
               </div>

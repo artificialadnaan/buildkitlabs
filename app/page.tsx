@@ -116,7 +116,7 @@ export default function Home() {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {['Dispatch', 'Crew Mgmt', 'Job Tracking', 'CRM', 'Mobile Apps'].map(tag => (
-                    <span key={tag} className="px-2.5 py-1 rounded-md bg-stone-800 text-stone-500 text-xs font-medium">{tag}</span>
+                    <span key={tag} className="px-2.5 py-1 rounded-md bg-stone-800 text-stone-400 text-xs font-medium">{tag}</span>
                   ))}
                 </div>
               </div>
@@ -171,22 +171,22 @@ export default function Home() {
       {/* ── Numbers — horizontal rule style ─────────────────────────── */}
       <section className="bg-dark-950 border-b border-stone-800/60">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-stone-800/60">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-y-6 md:gap-y-0 md:divide-x md:divide-stone-800/60">
             <div className="px-8 py-6 first:pl-0 last:pr-0">
               <div className="text-4xl font-bold text-primary-500 mb-1">50+</div>
-              <p className="text-stone-500 text-sm">Projects delivered</p>
+              <p className="text-stone-400 text-sm">Projects delivered</p>
             </div>
             <div className="px-8 py-6">
               <div className="text-4xl font-bold text-primary-500 mb-1">15+</div>
-              <p className="text-stone-500 text-sm">Years combined experience</p>
+              <p className="text-stone-400 text-sm">Years combined experience</p>
             </div>
             <div className="px-8 py-6">
               <div className="text-4xl font-bold text-primary-500 mb-1">40%</div>
-              <p className="text-stone-500 text-sm">Avg. efficiency gain</p>
+              <p className="text-stone-400 text-sm">Avg. efficiency gain</p>
             </div>
             <div className="px-8 py-6">
               <div className="text-4xl font-bold text-primary-500 mb-1">DFW</div>
-              <p className="text-stone-500 text-sm">Local — North Texas</p>
+              <p className="text-stone-400 text-sm">Local — North Texas</p>
             </div>
           </div>
         </div>
@@ -220,12 +220,12 @@ export default function Home() {
                   Custom Software
                 </div>
                 <h3 className="text-lg font-bold text-stone-100 mb-2">Operations Command Center</h3>
-                <p className="text-stone-500 text-sm leading-relaxed mb-5 flex-1">
+                <p className="text-stone-400 text-sm leading-relaxed mb-5 flex-1">
                   Centralized dispatch and crew management for a multi-location construction services company across the DFW area.
                 </p>
                 <div className="flex items-center justify-between pt-4 border-t border-stone-800/60">
                   <span className="text-primary-500 font-bold text-sm">+40% efficiency</span>
-                  <Link href="/portfolio" className="text-stone-500 hover:text-stone-300 text-sm font-medium transition-colors">
+                  <Link href="/portfolio" className="text-stone-400 hover:text-stone-300 text-sm font-medium transition-colors">
                     Case study →
                   </Link>
                 </div>
@@ -242,12 +242,12 @@ export default function Home() {
                   Custom CRM
                 </div>
                 <h3 className="text-lg font-bold text-stone-100 mb-2">Automated Sales Engine</h3>
-                <p className="text-stone-500 text-sm leading-relaxed mb-5 flex-1">
+                <p className="text-stone-400 text-sm leading-relaxed mb-5 flex-1">
                   CRM platform for a commercial roofing company. Lead scoring, automated follow-ups, and sales pipeline visibility.
                 </p>
                 <div className="flex items-center justify-between pt-4 border-t border-stone-800/60">
                   <span className="text-primary-500 font-bold text-sm">+60% conversion</span>
-                  <Link href="/portfolio" className="text-stone-500 hover:text-stone-300 text-sm font-medium transition-colors">
+                  <Link href="/portfolio" className="text-stone-400 hover:text-stone-300 text-sm font-medium transition-colors">
                     Case study →
                   </Link>
                 </div>
@@ -264,12 +264,12 @@ export default function Home() {
                   Web Development
                 </div>
                 <h3 className="text-lg font-bold text-stone-100 mb-2">Digital Presence Overhaul</h3>
-                <p className="text-stone-500 text-sm leading-relaxed mb-5 flex-1">
+                <p className="text-stone-400 text-sm leading-relaxed mb-5 flex-1">
                   Website rebuilds for construction and home services companies. Mobile-first, SEO-optimized, conversion-focused.
                 </p>
                 <div className="flex items-center justify-between pt-4 border-t border-stone-800/60">
                   <span className="text-primary-500 font-bold text-sm">+120% inquiries</span>
-                  <Link href="/portfolio" className="text-stone-500 hover:text-stone-300 text-sm font-medium transition-colors">
+                  <Link href="/portfolio" className="text-stone-400 hover:text-stone-300 text-sm font-medium transition-colors">
                     Case study →
                   </Link>
                 </div>
@@ -310,7 +310,7 @@ export default function Home() {
           {/* Pricing signal + CTA */}
           <div className="text-center">
             <p className="text-2xl font-bold text-stone-100 mb-2">Projects from $3,000 - $8,000</p>
-            <p className="text-stone-500 text-sm mb-8">
+            <p className="text-stone-400 text-sm mb-8">
               For DFW businesses in any industry — restaurants, law firms, contractors, retail, and more.
             </p>
             <Link

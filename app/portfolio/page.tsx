@@ -57,35 +57,35 @@ export default function Portfolio() {
                 <div className="grid grid-cols-3 gap-4 mb-8 pb-7 border-b border-stone-800">
                   <div>
                     <div className="text-3xl font-bold text-primary-500">40%</div>
-                    <p className="text-stone-500 text-xs mt-1">Faster dispatching</p>
+                    <p className="text-stone-400 text-xs mt-1">Faster dispatching</p>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary-500">20hrs</div>
-                    <p className="text-stone-500 text-xs mt-1">Weekly admin saved</p>
+                    <p className="text-stone-400 text-xs mt-1">Weekly admin saved</p>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary-500">35%</div>
-                    <p className="text-stone-500 text-xs mt-1">Efficiency gain</p>
+                    <p className="text-stone-400 text-xs mt-1">Efficiency gain</p>
                   </div>
                 </div>
 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
                       A multi-location construction services company was juggling spreadsheets, phone calls, and manual scheduling for 40+ crews across DFW. Office managers were working 60+ hour weeks just to coordinate operations.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
                       Centralized operations platform with real-time dispatch, crew management, and automated notifications. Jobs assigned in seconds. Managers see everything on a live dashboard.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">Key Features</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">Key Features</h4>
                     <ul className="space-y-1.5">
                       {[
                         'Real-time job dispatch with route optimization',
@@ -130,7 +130,7 @@ export default function Portfolio() {
                     </div>
                     <div>
                       <span className="font-semibold text-stone-200 text-sm">{item.title} — </span>
-                      <span className="text-stone-500 text-sm">{item.body}</span>
+                      <span className="text-stone-400 text-sm">{item.body}</span>
                     </div>
                   </div>
                 ))}
@@ -159,35 +159,35 @@ export default function Portfolio() {
                 <div className="grid grid-cols-3 gap-4 mb-8 pb-7 border-b border-stone-800">
                   <div>
                     <div className="text-3xl font-bold text-primary-500">60%</div>
-                    <p className="text-stone-500 text-xs mt-1">Conversion increase</p>
+                    <p className="text-stone-400 text-xs mt-1">Conversion increase</p>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary-500">8hrs</div>
-                    <p className="text-stone-500 text-xs mt-1">Weekly admin saved</p>
+                    <p className="text-stone-400 text-xs mt-1">Weekly admin saved</p>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary-500">3x</div>
-                    <p className="text-stone-500 text-xs mt-1">Deal velocity</p>
+                    <p className="text-stone-400 text-xs mt-1">Deal velocity</p>
                   </div>
                 </div>
 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
                       A commercial roofing company was losing deals because follow-ups fell through the cracks. The sales team spent more time hunting for information than closing. Conversion was inconsistent at best.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
                       Custom CRM with automated follow-up workflows, lead scoring, and pipeline visibility. Leads are routed instantly. Follow-ups are scheduled automatically. Nothing falls through the cracks.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">Key Features</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">Key Features</h4>
                     <ul className="space-y-1.5">
                       {[
                         'Lead capture from multiple sources',
@@ -232,7 +232,7 @@ export default function Portfolio() {
                     </div>
                     <div>
                       <span className="font-semibold text-stone-200 text-sm">{item.title} — </span>
-                      <span className="text-stone-500 text-sm">{item.body}</span>
+                      <span className="text-stone-400 text-sm">{item.body}</span>
                     </div>
                   </div>
                 ))}
@@ -261,35 +261,35 @@ export default function Portfolio() {
                 <div className="grid grid-cols-3 gap-4 mb-8 pb-7 border-b border-stone-800">
                   <div>
                     <div className="text-3xl font-bold text-primary-500">120%</div>
-                    <p className="text-stone-500 text-xs mt-1">Inquiry increase</p>
+                    <p className="text-stone-400 text-xs mt-1">Inquiry increase</p>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary-500">1st</div>
-                    <p className="text-stone-500 text-xs mt-1">Page ranking (local)</p>
+                    <p className="text-stone-400 text-xs mt-1">Page ranking (local)</p>
                   </div>
                   <div>
                     <div className="text-3xl font-bold text-primary-500">2.5x</div>
-                    <p className="text-stone-500 text-xs mt-1">Traffic growth</p>
+                    <p className="text-stone-400 text-xs mt-1">Traffic growth</p>
                   </div>
                 </div>
 
                 <div className="space-y-6">
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
                       Multiple construction and home services companies had outdated sites that weren't generating leads — hard to navigate, unprofessional on mobile, and invisible in local search.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
                       Complete rebuilds with modern design, mobile-first development, and conversion-focused layouts. Each site tells the company's story and makes it easy for prospects to reach out.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">What We Built</h4>
+                    <h4 className="font-semibold text-stone-400 mb-2 text-xs uppercase tracking-widest">What We Built</h4>
                     <ul className="space-y-1.5">
                       {[
                         'Professional design tailored to each company',
@@ -334,7 +334,7 @@ export default function Portfolio() {
                     </div>
                     <div>
                       <span className="font-semibold text-stone-200 text-sm">{item.title} — </span>
-                      <span className="text-stone-500 text-sm">{item.body}</span>
+                      <span className="text-stone-400 text-sm">{item.body}</span>
                     </div>
                   </div>
                 ))}

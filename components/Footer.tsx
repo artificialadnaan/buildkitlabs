@@ -16,12 +16,12 @@ export default function Footer() {
               </div>
               <span className="text-base font-bold text-stone-100 tracking-tight">BuildKit Labs</span>
             </div>
-            <p className="text-stone-500 text-sm leading-relaxed">
+            <p className="text-stone-400 text-sm leading-relaxed">
               Custom software for construction companies. Web development for North Texas businesses.
             </p>
             <div className="mt-5 flex items-center gap-1">
               <div className="w-1.5 h-1.5 rounded-full bg-primary-500"></div>
-              <span className="text-xs text-stone-500 ml-1">Dallas-Fort Worth, TX</span>
+              <span className="text-xs text-stone-400 ml-1">Dallas-Fort Worth, TX</span>
             </div>
           </div>
 
@@ -30,17 +30,17 @@ export default function Footer() {
             <h3 className="font-semibold text-stone-200 mb-4 text-sm uppercase tracking-wider">Services</h3>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/services" className="text-stone-500 hover:text-primary-400 transition-colors text-sm">
+                <Link href="/services" className="text-stone-400 hover:text-primary-400 transition-colors text-sm">
                   Custom Software
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="text-stone-500 hover:text-primary-400 transition-colors text-sm">
+                <Link href="/services" className="text-stone-400 hover:text-primary-400 transition-colors text-sm">
                   Web Development
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="text-stone-500 hover:text-primary-400 transition-colors text-sm">
+                <Link href="/services" className="text-stone-400 hover:text-primary-400 transition-colors text-sm">
                   Tech Consulting
                 </Link>
               </li>
@@ -52,17 +52,17 @@ export default function Footer() {
             <h3 className="font-semibold text-stone-200 mb-4 text-sm uppercase tracking-wider">Company</h3>
             <ul className="space-y-2.5">
               <li>
-                <Link href="/about" className="text-stone-500 hover:text-primary-400 transition-colors text-sm">
+                <Link href="/about" className="text-stone-400 hover:text-primary-400 transition-colors text-sm">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/portfolio" className="text-stone-500 hover:text-primary-400 transition-colors text-sm">
+                <Link href="/portfolio" className="text-stone-400 hover:text-primary-400 transition-colors text-sm">
                   Portfolio
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-stone-500 hover:text-primary-400 transition-colors text-sm">
+                <Link href="/contact" className="text-stone-400 hover:text-primary-400 transition-colors text-sm">
                   Contact
                 </Link>
               </li>
@@ -72,7 +72,7 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h3 className="font-semibold text-stone-200 mb-4 text-sm uppercase tracking-wider">Get In Touch</h3>
-            <p className="text-stone-500 text-sm mb-4 leading-relaxed">
+            <p className="text-stone-400 text-sm mb-4 leading-relaxed">
               Ready to build something? Let's talk.
             </p>
             <a

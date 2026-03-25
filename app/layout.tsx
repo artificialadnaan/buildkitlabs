@@ -27,14 +27,6 @@ export const metadata: Metadata = {
     siteName: 'BuildKit Labs',
     title: 'BuildKit Labs | Custom Software & Web Development',
     description: 'Custom software development and web design for construction companies and North Texas businesses.',
-    images: [
-      {
-        url: 'https://buildkitlabs.com/og-image.png',
-        width: 1200,
-        height: 630,
-        alt: 'BuildKit Labs',
-      },
-    ],
   },
   robots: {
     index: true,
@@ -47,10 +39,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  icons: {
-    icon: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
-  },
 }
 
 export default function RootLayout({
@@ -61,8 +49,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`scroll-smooth ${sora.variable}`}>
       <body className={`bg-dark-950 text-stone-100 ${sora.className}`}>
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-dark-950 focus:rounded-lg focus:font-bold">
+          Skip to content
+        </a>
         <Header />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <Footer />
       </body>
     </html>

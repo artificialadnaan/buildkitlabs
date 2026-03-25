@@ -19,12 +19,7 @@ export default function PipelineMockup() {
                     <div className="h-1.5 w-full bg-stone-700 rounded mb-1" />
                     <div className="h-1 w-2/3 bg-stone-800 rounded mb-1.5" />
                     <div
-                      className="h-1 w-8 rounded"
-                      style={{
-                        backgroundColor: colIdx === 3
-                          ? 'rgba(34,197,94,0.45)'
-                          : 'rgba(217,119,6,0.40)',
-                      }}
+                      className={`h-1 w-8 rounded ${colIdx === 3 ? 'bg-green-500/45' : 'bg-primary-600/40'}`}
                     />
                   </div>
                 ))}
