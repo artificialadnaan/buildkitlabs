@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { useState } from 'react'
+import emailjs from '@emailjs/browser'
+import CalendlyEmbed from '@/components/CalendlyEmbed'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -29,12 +31,19 @@ export default function Contact() {
     setIsSubmitting(true)
 
     try {
-      // In a real application, you would send this to an API endpoint
-      // For now, we'll just log it and simulate success
-      console.log('Form submitted:', formData)
-
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
+      await emailjs.send(
+        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone,
+          company: formData.company,
+          service: formData.service,
+          message: formData.message,
+        },
+        process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!,
+      )
 
       setSubmitStatus('success')
       setFormData({
@@ -46,7 +55,6 @@ export default function Contact() {
         message: '',
       })
 
-      // Reset status after 5 seconds
       setTimeout(() => setSubmitStatus('idle'), 5000)
     } catch (error) {
       setSubmitStatus('error')
@@ -290,15 +298,7 @@ export default function Contact() {
               Prefer to schedule a time directly? Use Calendly to book a 30-minute discovery call with us. We'll discuss your project, goals, and how we can help.
             </p>
 
-            {/* Calendly Embed Placeholder */}
-            <div className="bg-slate-900/50 rounded-lg p-12 border border-dashed border-slate-600">
-              <p className="text-slate-400 mb-4">
-                Calendly embed will appear here. Add your Calendly URL to the environment variables.
-              </p>
-              <p className="text-slate-500 text-sm">
-                In production, replace this with your Calendly widget or scheduling system of choice.
-              </p>
-            </div>
+            <CalendlyEmbed url={process.env.NEXT_PUBLIC_CALENDLY_URL || ''} />
 
             <p className="text-slate-400 text-sm mt-6">
               Can't find a time that works? Email us at info@buildkitlabs.com and we'll work something out.
