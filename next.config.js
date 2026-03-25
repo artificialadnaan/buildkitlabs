@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  swcMinify: true,
   headers: async () => {
     return [
       {
@@ -14,6 +13,10 @@ const nextConfig = {
           {
             key: "X-Frame-Options",
             value: "SAMEORIGIN",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-src 'self' https://calendly.com;",
           },
           {
             key: "X-XSS-Protection",
