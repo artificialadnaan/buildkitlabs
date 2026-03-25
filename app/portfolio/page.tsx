@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import DashboardMockup from '@/components/mockups/DashboardMockup'
+import PipelineMockup from '@/components/mockups/PipelineMockup'
+import BeforeAfterMockup from '@/components/mockups/BeforeAfterMockup'
 
 export const metadata: Metadata = {
   title: 'Portfolio',
@@ -152,9 +155,7 @@ export default function Portfolio() {
                 </div>
               </div>
 
-              <p className="text-slate-400 italic mb-6">
-                "This platform transformed how we manage operations. What used to take 4 hours now takes 30 minutes. Our crews are happier, our managers have their nights back, and we're serving more customers."
-              </p>
+              <DashboardMockup />
             </div>
           </div>
         </div>
@@ -281,9 +282,7 @@ export default function Portfolio() {
                 </div>
               </div>
 
-              <p className="text-slate-400 italic mb-6">
-                "We're closing more deals in less time. The system keeps us accountable and we never miss a follow-up anymore. Best investment we've made in our sales infrastructure."
-              </p>
+              <PipelineMockup />
             </div>
           </div>
         </div>
@@ -410,9 +409,7 @@ export default function Portfolio() {
                 </div>
               </div>
 
-              <p className="text-slate-400 italic mb-6">
-                "We went from an outdated site that looked like 2010 to something we're actually proud to share. Calls are up and I finally have a professional online presence."
-              </p>
+              <BeforeAfterMockup />
             </div>
           </div>
         </div>

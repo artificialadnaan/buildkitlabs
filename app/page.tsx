@@ -1,6 +1,9 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
 import JsonLd from '@/components/JsonLd'
+import DashboardMockup from '@/components/mockups/DashboardMockup'
+import PipelineMockup from '@/components/mockups/PipelineMockup'
+import BeforeAfterMockup from '@/components/mockups/BeforeAfterMockup'
 
 export const metadata: Metadata = {
   title: 'BuildKit Labs | Custom Software & Web Development Dallas-Fort Worth',
@@ -165,10 +168,8 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
             {/* Project 1 */}
             <div className="group rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="h-48 bg-gradient-to-br from-primary-600/20 to-primary-400/5 flex items-center justify-center">
-                <svg className="w-24 h-24 text-primary-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                </svg>
+              <div className="p-4">
+                <DashboardMockup />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-slate-100 mb-2">Operations Command Center</h3>
@@ -184,10 +185,8 @@ export default function Home() {
 
             {/* Project 2 */}
             <div className="group rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="h-48 bg-gradient-to-br from-primary-600/20 to-primary-400/5 flex items-center justify-center">
-                <svg className="w-24 h-24 text-primary-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-                </svg>
+              <div className="p-4">
+                <PipelineMockup />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-slate-100 mb-2">Automated Sales Engine</h3>
@@ -203,10 +202,8 @@ export default function Home() {
 
             {/* Project 3 */}
             <div className="group rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="h-48 bg-gradient-to-br from-primary-600/20 to-primary-400/5 flex items-center justify-center">
-                <svg className="w-24 h-24 text-primary-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M10 21h7a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v11m0 5l4.591-4.591a2 2 0 012.828 0L21 21" />
-                </svg>
+              <div className="p-4">
+                <BeforeAfterMockup />
               </div>
               <div className="p-6">
                 <h3 className="text-xl font-bold text-slate-100 mb-2">Digital Presence Overhaul</h3>
