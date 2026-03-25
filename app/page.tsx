@@ -37,211 +37,264 @@ export default function Home() {
         },
         sameAs: [],
       }} />
-      {/* Hero Section */}
-      <section className="relative min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 flex items-center justify-center overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute top-40 right-20 w-72 h-72 bg-primary-600/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-40 left-20 w-72 h-72 bg-primary-500/5 rounded-full blur-3xl"></div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20 md:py-32">
-          <div className="space-y-6">
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold text-slate-100 leading-tight">
-              We Build the Software That{' '}
-              <span className="gradient-text">Builds Your Business</span>
-            </h1>
+      {/* ── Hero ─────────────────────────────────────────────────────── */}
+      <section className="relative min-h-[92vh] bg-dark-950 flex items-center justify-center overflow-hidden">
+        {/* Blueprint grid */}
+        <div className="absolute inset-0 blueprint-bg opacity-100 pointer-events-none" />
+        {/* Warm radial wash */}
+        <div className="absolute inset-0 bg-gradient-radial from-primary-900/10 via-transparent to-transparent pointer-events-none" />
 
-            <p className="text-lg md:text-xl text-slate-400 max-w-3xl mx-auto leading-relaxed">
-              Purpose-built software for construction companies. Professional web development for North Texas businesses. We transform operations, automate workflows, and drive growth.
-            </p>
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-24 md:py-36">
+          {/* Location badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-800/80 border border-stone-700 text-stone-400 text-xs font-medium mb-10 animate-fade-in">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary-500 inline-block"></span>
+            Dallas-Fort Worth, Texas
+          </div>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-              <Link
-                href="/contact"
-                className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-slate-950 font-bold rounded-lg hover:shadow-glow transition-all duration-300 hover:scale-105 text-lg"
-              >
-                Book a Discovery Call
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-stone-100 leading-[1.05] tracking-tight mb-8 animate-fade-in-delay-1">
+            We Build Software<br />
+            <span className="text-primary-500">That Works.</span>
+          </h1>
+
+          <p className="text-lg md:text-xl text-stone-400 max-w-2xl mx-auto leading-relaxed mb-12 animate-fade-in-delay-2">
+            Purpose-built platforms for construction companies. When your operations outgrow spreadsheets and generic tools, we build the software that gets you back in control.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in-delay-3">
+            <Link
+              href="/contact"
+              className="px-8 py-4 bg-primary-600 hover:bg-primary-500 text-dark-950 font-bold rounded-lg transition-all duration-200 text-base shadow-glow"
+            >
+              Book a Discovery Call
+            </Link>
+            <Link
+              href="/portfolio"
+              className="text-stone-400 hover:text-stone-100 font-medium text-base transition-colors duration-200 underline underline-offset-4 decoration-stone-700 hover:decoration-stone-400"
+            >
+              View Our Work
+            </Link>
+          </div>
+        </div>
+
+        {/* Bottom fade into next section */}
+        <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-dark-900 to-transparent pointer-events-none" />
+      </section>
+
+      {/* ── Services — asymmetric layout ─────────────────────────────── */}
+      <section className="bg-dark-900 border-b border-stone-800/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+          {/* Section header */}
+          <div className="pt-20 pb-16 border-b border-stone-800/60">
+            <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+              <div>
+                <p className="text-primary-500 text-sm font-semibold uppercase tracking-widest mb-3">What We Deliver</p>
+                <h2 className="text-4xl md:text-5xl font-bold text-stone-100 leading-tight">Built for how<br className="hidden md:block" /> construction works.</h2>
+              </div>
+              <p className="text-stone-400 max-w-sm text-base leading-relaxed md:text-right">
+                Not generic software. Not off-the-shelf templates. Everything we build is designed around your specific operations.
+              </p>
+            </div>
+          </div>
+
+          {/* Services — large feature card + two smaller */}
+          <div className="py-16 grid grid-cols-1 lg:grid-cols-5 gap-6">
+
+            {/* Large card: Custom Software */}
+            <div className="lg:col-span-3 group p-10 rounded-2xl bg-dark-800 border border-stone-800 card-hover flex flex-col justify-between min-h-[340px]">
+              <div>
+                <div className="w-12 h-12 bg-primary-600/15 rounded-xl flex items-center justify-center mb-7">
+                  <svg className="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <h3 className="text-2xl font-bold text-stone-100 mb-4">Custom Software</h3>
+                <p className="text-stone-400 leading-relaxed mb-6">
+                  Operations platforms, CRM systems, dispatch tools, mobile crew apps. Built specifically for construction workflows — not adapted from something else.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {['Dispatch', 'Crew Mgmt', 'Job Tracking', 'CRM', 'Mobile Apps'].map(tag => (
+                    <span key={tag} className="px-2.5 py-1 rounded-md bg-stone-800 text-stone-500 text-xs font-medium">{tag}</span>
+                  ))}
+                </div>
+              </div>
+              <Link href="/services" className="mt-8 inline-flex items-center text-primary-500 hover:text-primary-400 font-semibold text-sm transition-colors group/link">
+                Learn more <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
               </Link>
-              <Link
-                href="/portfolio"
-                className="px-8 py-4 border-2 border-primary-500 text-primary-400 font-bold rounded-lg hover:bg-primary-500/10 transition-all duration-300 text-lg"
-              >
-                View Our Work
-              </Link>
+            </div>
+
+            {/* Two stacked smaller cards */}
+            <div className="lg:col-span-2 flex flex-col gap-6">
+
+              {/* Web Development */}
+              <div className="group p-8 rounded-2xl bg-dark-800 border border-stone-800 card-hover flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 bg-primary-600/15 rounded-xl flex items-center justify-center mb-5">
+                    <svg className="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5h.01" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-stone-100 mb-3">Web Development</h3>
+                  <p className="text-stone-400 text-sm leading-relaxed">
+                    Modern websites built for conversion. Mobile-first, fast, and designed to generate leads.
+                  </p>
+                </div>
+                <Link href="/services" className="mt-5 inline-flex items-center text-primary-500 hover:text-primary-400 font-semibold text-sm transition-colors group/link">
+                  Learn more <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
+                </Link>
+              </div>
+
+              {/* Tech Consulting */}
+              <div className="group p-8 rounded-2xl bg-dark-800 border border-stone-800 card-hover flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="w-10 h-10 bg-primary-600/15 rounded-xl flex items-center justify-center mb-5">
+                    <svg className="w-5 h-5 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-xl font-bold text-stone-100 mb-3">Tech Consulting</h3>
+                  <p className="text-stone-400 text-sm leading-relaxed">
+                    Strategic guidance on automation, digital transformation, and making smart tech decisions.
+                  </p>
+                </div>
+                <Link href="/services" className="mt-5 inline-flex items-center text-primary-500 hover:text-primary-400 font-semibold text-sm transition-colors group/link">
+                  Learn more <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Services Overview */}
-      <section className="section-padding bg-slate-950 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-100 mb-4">What We Deliver</h2>
-            <p className="text-xl text-slate-400">Comprehensive solutions tailored to construction and North Texas businesses</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {/* Service 1 */}
-            <div className="group p-8 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="w-14 h-14 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold text-slate-100 mb-3">Custom Software</h3>
-              <p className="text-slate-400 mb-4">
-                Built specifically for construction operations—dispatching, crew management, job tracking, and more. Software that speaks your industry's language.
-              </p>
-              <Link href="/services" className="text-primary-400 hover:text-primary-300 font-semibold inline-flex items-center group">
-                Learn more <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-              </Link>
+      {/* ── Numbers — horizontal rule style ─────────────────────────── */}
+      <section className="bg-dark-950 border-b border-stone-800/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-stone-800/60">
+            <div className="px-8 py-6 first:pl-0 last:pr-0">
+              <div className="text-4xl font-bold text-primary-500 mb-1">50+</div>
+              <p className="text-stone-500 text-sm">Projects delivered</p>
             </div>
-
-            {/* Service 2 */}
-            <div className="group p-8 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="w-14 h-14 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5h.01" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold text-slate-100 mb-3">Web Development</h3>
-              <p className="text-slate-400 mb-4">
-                Modern websites and web applications that represent your brand professionally. Designed for conversion, optimized for performance.
-              </p>
-              <Link href="/services" className="text-primary-400 hover:text-primary-300 font-semibold inline-flex items-center group">
-                Learn more <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-              </Link>
+            <div className="px-8 py-6">
+              <div className="text-4xl font-bold text-primary-500 mb-1">15+</div>
+              <p className="text-stone-500 text-sm">Years combined experience</p>
             </div>
-
-            {/* Service 3 */}
-            <div className="group p-8 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="w-14 h-14 bg-gradient-to-br from-primary-400 to-primary-600 rounded-lg flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                <svg className="w-8 h-8 text-slate-950" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              <h3 className="text-2xl font-bold text-slate-100 mb-3">Tech Consulting</h3>
-              <p className="text-slate-400 mb-4">
-                Strategic guidance on technology adoption, digital transformation, and workflow optimization. We help you make smart tech decisions.
-              </p>
-              <Link href="/services" className="text-primary-400 hover:text-primary-300 font-semibold inline-flex items-center group">
-                Learn more <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-              </Link>
+            <div className="px-8 py-6">
+              <div className="text-4xl font-bold text-primary-500 mb-1">40%</div>
+              <p className="text-stone-500 text-sm">Avg. efficiency gain</p>
+            </div>
+            <div className="px-8 py-6">
+              <div className="text-4xl font-bold text-primary-500 mb-1">DFW</div>
+              <p className="text-stone-500 text-sm">Local — North Texas</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="section-padding bg-gradient-to-r from-slate-900 to-slate-800 border-b border-slate-700">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">50+</div>
-              <p className="text-slate-400 font-medium">Projects Delivered</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">15+</div>
-              <p className="text-slate-400 font-medium">Years Combined Experience</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">100%</div>
-              <p className="text-slate-400 font-medium">Client Satisfaction</p>
-            </div>
-            <div className="text-center">
-              <div className="text-4xl md:text-5xl font-bold gradient-text mb-2">DFW</div>
-              <p className="text-slate-400 font-medium">Local Experts</p>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── Portfolio Preview — elevated prominence ───────────────────── */}
+      <section className="bg-dark-900 border-b border-stone-800/60">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
 
-      {/* Portfolio Preview */}
-      <section className="section-padding bg-slate-950 border-b border-slate-800">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-slate-100 mb-4">Recent Work</h2>
-            <p className="text-xl text-slate-400 mb-8">Solutions we've built for construction and service companies</p>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14">
+            <div>
+              <p className="text-primary-500 text-sm font-semibold uppercase tracking-widest mb-3">Recent Work</p>
+              <h2 className="text-4xl md:text-5xl font-bold text-stone-100 leading-tight">Software we've shipped.</h2>
+            </div>
+            <Link
+              href="/portfolio"
+              className="text-stone-400 hover:text-stone-100 font-medium text-sm transition-colors underline underline-offset-4 decoration-stone-700 hover:decoration-stone-400 self-start md:self-auto"
+            >
+              See all projects →
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Project 1 */}
-            <div className="group rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="p-4">
+            <div className="group rounded-2xl overflow-hidden bg-dark-800 border border-stone-800 card-hover flex flex-col">
+              <div className="p-5 border-b border-stone-800/60">
                 <DashboardMockup />
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-slate-100 mb-2">Operations Command Center</h3>
-                <p className="text-slate-400 text-sm mb-4">
-                  Centralized operations platform for multi-location construction services company. Automated dispatching, real-time crew management, and comprehensive job tracking.
+              <div className="p-7 flex flex-col flex-1">
+                <div className="inline-block px-2.5 py-1 rounded-md bg-primary-600/15 text-primary-400 text-xs font-semibold mb-4 self-start">
+                  Custom Software
+                </div>
+                <h3 className="text-lg font-bold text-stone-100 mb-2">Operations Command Center</h3>
+                <p className="text-stone-500 text-sm leading-relaxed mb-5 flex-1">
+                  Centralized dispatch and crew management for a multi-location construction services company across the DFW area.
                 </p>
-                <p className="text-primary-400 font-semibold text-sm mb-4">+40% operational efficiency</p>
-                <Link href="/portfolio" className="text-primary-400 hover:text-primary-300 font-semibold text-sm inline-flex items-center group/link">
-                  View case study <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
-                </Link>
+                <div className="flex items-center justify-between pt-4 border-t border-stone-800/60">
+                  <span className="text-primary-500 font-bold text-sm">+40% efficiency</span>
+                  <Link href="/portfolio" className="text-stone-500 hover:text-stone-300 text-sm font-medium transition-colors">
+                    Case study →
+                  </Link>
+                </div>
               </div>
             </div>
 
             {/* Project 2 */}
-            <div className="group rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="p-4">
+            <div className="group rounded-2xl overflow-hidden bg-dark-800 border border-stone-800 card-hover flex flex-col">
+              <div className="p-5 border-b border-stone-800/60">
                 <PipelineMockup />
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-slate-100 mb-2">Automated Sales Engine</h3>
-                <p className="text-slate-400 text-sm mb-4">
-                  Custom CRM platform built for commercial roofing and exterior services. Lead management, automated follow-ups, sales pipeline tracking, and performance analytics.
+              <div className="p-7 flex flex-col flex-1">
+                <div className="inline-block px-2.5 py-1 rounded-md bg-primary-600/15 text-primary-400 text-xs font-semibold mb-4 self-start">
+                  Custom CRM
+                </div>
+                <h3 className="text-lg font-bold text-stone-100 mb-2">Automated Sales Engine</h3>
+                <p className="text-stone-500 text-sm leading-relaxed mb-5 flex-1">
+                  CRM platform for a commercial roofing company. Lead scoring, automated follow-ups, and sales pipeline visibility.
                 </p>
-                <p className="text-primary-400 font-semibold text-sm mb-4">+60% lead conversion</p>
-                <Link href="/portfolio" className="text-primary-400 hover:text-primary-300 font-semibold text-sm inline-flex items-center group/link">
-                  View case study <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
-                </Link>
+                <div className="flex items-center justify-between pt-4 border-t border-stone-800/60">
+                  <span className="text-primary-500 font-bold text-sm">+60% conversion</span>
+                  <Link href="/portfolio" className="text-stone-500 hover:text-stone-300 text-sm font-medium transition-colors">
+                    Case study →
+                  </Link>
+                </div>
               </div>
             </div>
 
             {/* Project 3 */}
-            <div className="group rounded-xl overflow-hidden bg-slate-800/50 border border-slate-700 hover:border-primary-500 transition-all duration-300 hover:shadow-glow">
-              <div className="p-4">
+            <div className="group rounded-2xl overflow-hidden bg-dark-800 border border-stone-800 card-hover flex flex-col">
+              <div className="p-5 border-b border-stone-800/60">
                 <BeforeAfterMockup />
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-slate-100 mb-2">Digital Presence Overhaul</h3>
-                <p className="text-slate-400 text-sm mb-4">
-                  Website rebuilds for construction and home services companies. Modern design, mobile-first approach, SEO optimization, and conversion-focused layouts.
+              <div className="p-7 flex flex-col flex-1">
+                <div className="inline-block px-2.5 py-1 rounded-md bg-primary-600/15 text-primary-400 text-xs font-semibold mb-4 self-start">
+                  Web Development
+                </div>
+                <h3 className="text-lg font-bold text-stone-100 mb-2">Digital Presence Overhaul</h3>
+                <p className="text-stone-500 text-sm leading-relaxed mb-5 flex-1">
+                  Website rebuilds for construction and home services companies. Mobile-first, SEO-optimized, conversion-focused.
                 </p>
-                <p className="text-primary-400 font-semibold text-sm mb-4">+120% inquiry increase</p>
-                <Link href="/portfolio" className="text-primary-400 hover:text-primary-300 font-semibold text-sm inline-flex items-center group/link">
-                  View case study <span className="ml-2 group-hover/link:translate-x-1 transition-transform">→</span>
-                </Link>
+                <div className="flex items-center justify-between pt-4 border-t border-stone-800/60">
+                  <span className="text-primary-500 font-bold text-sm">+120% inquiries</span>
+                  <Link href="/portfolio" className="text-stone-500 hover:text-stone-300 text-sm font-medium transition-colors">
+                    Case study →
+                  </Link>
+                </div>
               </div>
             </div>
-          </div>
-
-          <div className="text-center">
-            <Link
-              href="/portfolio"
-              className="inline-block px-8 py-3 border-2 border-primary-500 text-primary-400 font-bold rounded-lg hover:bg-primary-500/10 transition-all duration-300"
-            >
-              See All Projects
-            </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="section-padding bg-gradient-to-br from-primary-950 to-slate-950 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-primary-500/10 rounded-full blur-3xl"></div>
-        <div className="relative z-10 max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-bold text-slate-100 mb-6">
-            Ready to Build Something Great?
+      {/* ── CTA ─────────────────────────────────────────────────────── */}
+      <section className="relative bg-dark-950 overflow-hidden">
+        {/* Blueprint grid subtle overlay */}
+        <div className="absolute inset-0 blueprint-bg opacity-60 pointer-events-none" />
+        <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 py-28 md:py-36">
+          {/* Amber rule */}
+          <div className="w-12 h-px bg-primary-600 mx-auto mb-10" />
+          <h2 className="text-4xl md:text-6xl font-bold text-stone-100 mb-6 leading-tight tracking-tight">
+            Ready to build<br />something that lasts?
           </h2>
-          <p className="text-lg text-slate-300 mb-8">
-            Let's discuss your project and how we can drive real results for your business.
+          <p className="text-lg text-stone-400 mb-10 max-w-xl mx-auto leading-relaxed">
+            Let's talk through your operations. One call — no pitch deck, no runaround.
           </p>
           <Link
             href="/contact"
-            className="inline-block px-10 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-slate-950 font-bold rounded-lg hover:shadow-glow transition-all duration-300 hover:scale-105 text-lg"
+            className="inline-block px-10 py-4 bg-primary-600 hover:bg-primary-500 text-dark-950 font-bold rounded-lg transition-all duration-200 text-base shadow-glow"
           >
             Schedule a Free Discovery Call
           </Link>

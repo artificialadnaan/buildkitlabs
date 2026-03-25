@@ -1,13 +1,13 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Sora } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-const inter = Inter({
+const sora = Sora({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
-  variable: '--font-inter',
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-sora',
   display: 'swap',
 })
 
@@ -59,8 +59,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable}`}>
-      <body className={`bg-slate-950 text-slate-100 ${inter.className}`}>
+    <html lang="en" className={`scroll-smooth ${sora.variable}`}>
+      <body className={`bg-dark-950 text-stone-100 ${sora.className}`}>
         <Header />
         <main>{children}</main>
         <Footer />
