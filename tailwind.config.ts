@@ -52,6 +52,9 @@ const config: Config = {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
+      fontFamily: {
+        sans: ['var(--font-inter)', ...require('tailwindcss/defaultTheme').fontFamily.sans],
+      },
       boxShadow: {
         'glow': '0 0 20px rgba(14, 165, 233, 0.15)',
         'glow-lg': '0 0 40px rgba(14, 165, 233, 0.25)',

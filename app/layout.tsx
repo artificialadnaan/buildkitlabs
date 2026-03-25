@@ -1,7 +1,15 @@
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://buildkitlabs.com'),
@@ -47,13 +55,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="canonical" href="https://buildkitlabs.com" />
-      </head>
-      <body className="bg-slate-950 text-slate-100">
+    <html lang="en" className={`scroll-smooth ${inter.variable}`}>
+      <body className={`bg-slate-950 text-slate-100 ${inter.className}`}>
         <Header />
         <main>{children}</main>
         <Footer />
