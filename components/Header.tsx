@@ -10,7 +10,7 @@ export default function Header() {
   const closeMenu  = () => setIsMenuOpen(false)
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-dark-900/95 backdrop-blur-md border-b border-stone-800 z-50">
+    <header className="fixed top-0 left-0 right-0 bg-dark-900 backdrop-blur-md border-b border-stone-800 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
 
@@ -81,42 +81,42 @@ export default function Header() {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <nav className="md:hidden pb-6 border-t border-stone-800 pt-4" aria-label="Mobile navigation">
-            <div className="space-y-1">
+            <div className="space-y-1 px-1">
               <Link
                 href="/"
                 onClick={closeMenu}
-                className="block py-2.5 px-2 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
+                className="block py-3 px-3 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
               >
                 Home
               </Link>
               <Link
                 href="/services"
                 onClick={closeMenu}
-                className="block py-2.5 px-2 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
+                className="block py-3 px-3 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
               >
                 Services
               </Link>
               <Link
                 href="/portfolio"
                 onClick={closeMenu}
-                className="block py-2.5 px-2 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
+                className="block py-3 px-3 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
               >
                 Portfolio
               </Link>
               <Link
                 href="/about"
                 onClick={closeMenu}
-                className="block py-2.5 px-2 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
+                className="block py-3 px-3 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
               >
                 About
               </Link>
-              <div className="pt-2">
+              <div className="pt-3 mt-2 border-t border-stone-800/60">
                 <Link
                   href="/contact"
                   onClick={closeMenu}
-                  className="block px-5 py-3 bg-primary-600 hover:bg-primary-500 text-dark-950 font-semibold rounded-lg text-center transition-colors text-sm"
+                  className="block px-5 py-3.5 bg-primary-600 hover:bg-primary-500 text-dark-950 font-bold rounded-lg text-center transition-colors text-sm shadow-glow"
                 >
-                  Book a Call
+                  Book a Call →
                 </Link>
               </div>
             </div>

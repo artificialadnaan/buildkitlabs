@@ -37,14 +37,14 @@ export default function Services() {
 
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section className="relative bg-dark-950 overflow-hidden">
-        <div className="absolute inset-0 blueprint-bg opacity-60 pointer-events-none" />
+        <div className="absolute inset-0 blueprint-bg opacity-45 pointer-events-none" />
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <p className="text-primary-500 text-sm font-semibold uppercase tracking-widest mb-4">Our Services</p>
           <h1 className="text-5xl md:text-6xl font-bold text-stone-100 mb-6 leading-tight tracking-tight">
-            Complete solutions for construction<br className="hidden md:block" /> companies — and modern websites<br className="hidden md:block" /> for any business.
+            Software that fits.<br className="hidden md:block" /> Websites that convert.
           </h1>
-          <p className="text-xl text-stone-400 max-w-2xl leading-relaxed">
-            Custom software for construction operations. Fast, affordable websites for local businesses everywhere. Strategic tech consulting to tie it all together.
+          <p className="text-xl text-stone-400 max-w-xl leading-relaxed">
+            Custom software for construction. Modern websites for any business. Strategic consulting to tie it together.
           </p>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-dark-900 to-transparent pointer-events-none" />
@@ -52,43 +52,43 @@ export default function Services() {
 
       {/* ── Service 1: Construction Software ─────────────────────────── */}
       <section className="bg-dark-900 border-b border-stone-800/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <div className="w-12 h-12 bg-primary-600/15 rounded-xl flex items-center justify-center mb-7">
+              <div className="w-12 h-12 bg-primary-600/15 rounded-xl flex items-center justify-center mb-8">
                 <svg className="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-stone-100 mb-5 leading-tight">Construction Software Development</h2>
-              <p className="text-stone-400 leading-relaxed mb-7">
-                We don't just build software — we build software that understands construction. From dispatching and crew management to job tracking and invoicing, every feature is designed with your industry's unique workflows in mind.
+              <p className="text-stone-400 leading-relaxed mb-10">
+                Built for construction from the ground up — not adapted from generic tools. Every feature maps to how your crews, dispatch teams, and office actually work.
               </p>
 
-              <h3 className="text-lg font-bold text-stone-200 mb-4">What We Build</h3>
-              <ul className="space-y-3 mb-8">
+              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">What We Build</h3>
+              <ul className="space-y-3 mb-10">
                 {[
-                  { label: 'Operations Platforms', desc: 'Centralized dashboards for dispatch, scheduling, and team coordination' },
-                  { label: 'CRM Systems', desc: 'Lead management, automated follow-ups, and sales pipeline tracking' },
-                  { label: 'Mobile Apps', desc: 'Field tools for crews — photos, timesheets, job status updates' },
-                  { label: 'Integration Solutions', desc: 'Connect your software ecosystem — accounting, project management, customer data' },
-                  { label: 'Custom Automation', desc: 'Workflows that eliminate manual data entry and reduce human error' },
+                  { label: 'Operations Platforms', desc: 'Dispatch, scheduling, and crew coordination in one dashboard' },
+                  { label: 'CRM Systems', desc: 'Lead management, automated follow-ups, pipeline visibility' },
+                  { label: 'Mobile Apps', desc: 'Field tools for photos, timesheets, and job updates' },
+                  { label: 'Integration Solutions', desc: 'Connect your stack — QuickBooks, Procore, and more' },
+                  { label: 'Custom Automation', desc: 'Eliminate manual data entry and repetitive workflows' },
                 ].map(item => (
                   <li key={item.label} className="flex items-start gap-3">
-                    <span className="text-primary-500 mt-1 flex-shrink-0 text-sm">✓</span>
+                    <span className="text-primary-500 mt-0.5 flex-shrink-0 text-sm">✓</span>
                     <span className="text-stone-400 text-sm"><strong className="text-stone-300">{item.label}:</strong> {item.desc}</span>
                   </li>
                 ))}
               </ul>
 
-              <h3 className="text-lg font-bold text-stone-200 mb-4">Why Construction Companies Choose Us</h3>
-              <ul className="space-y-2">
+              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">Why Us</h3>
+              <ul className="space-y-2.5">
                 {[
-                  'Deep understanding of construction operations and workflows',
-                  'Scalable solutions that grow with your business',
-                  'Proven ROI through efficiency gains and reduced overhead',
-                  'Local support — we understand DFW\'s construction market',
+                  'Deep knowledge of construction operations',
+                  'Scalable — grows with your business',
+                  'Proven efficiency gains and reduced overhead',
+                  'Local DFW support, not a remote dev shop',
                 ].map(item => (
                   <li key={item} className="text-stone-400 text-sm flex items-center gap-2">
                     <span className="text-primary-500 flex-shrink-0">→</span>
@@ -121,18 +121,18 @@ export default function Services() {
 
       {/* ── Service 2: Web Development ────────────────────────────────── */}
       <section className="bg-dark-950 border-b border-stone-800/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
             {/* Example cards */}
             <div className="rounded-2xl bg-dark-800 border border-stone-800 p-8 order-2 lg:order-1">
-              <h3 className="text-base font-semibold text-stone-300 mb-6">What we deliver</h3>
-              <div className="space-y-4">
+              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-6">What we deliver</h3>
+              <div className="space-y-3">
                 {[
-                  { title: 'Modern Business Websites', desc: 'Professional sites built for conversion — showcasing your services, building credibility, and capturing leads.' },
-                  { title: 'E-Commerce Solutions', desc: 'Full-featured online stores with inventory management, payment processing, and customer accounts.' },
-                  { title: 'Responsive Design', desc: 'Mobile-first development that works flawlessly across all devices and screen sizes.' },
-                  { title: 'SEO & Performance', desc: 'Built for search engines and speed — fast loading times, structured data, and ranking optimization.' },
+                  { title: 'Modern Business Websites', desc: 'Conversion-focused design that builds credibility and captures leads.' },
+                  { title: 'E-Commerce Solutions', desc: 'Full-featured stores with payments, inventory, and customer accounts.' },
+                  { title: 'Responsive Design', desc: 'Mobile-first — works flawlessly on every device.' },
+                  { title: 'SEO & Performance', desc: 'Fast load times, structured data, and local search optimization.' },
                 ].map(item => (
                   <div key={item.title} className="p-4 rounded-xl bg-dark-900/60 border-l-2 border-primary-600">
                     <h4 className="font-semibold text-stone-200 text-sm mb-1">{item.title}</h4>
@@ -143,45 +143,45 @@ export default function Services() {
             </div>
 
             <div className="order-1 lg:order-2">
-              <div className="w-12 h-12 bg-primary-600/15 rounded-xl flex items-center justify-center mb-7">
+              <div className="w-12 h-12 bg-primary-600/15 rounded-xl flex items-center justify-center mb-8">
                 <svg className="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5h.01" />
                 </svg>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-stone-100 mb-5 leading-tight">Web Design & Development</h2>
               <p className="text-stone-400 leading-relaxed mb-4">
-                Your website is often the first impression clients have of your business. We create modern, fast, mobile-first websites that build trust, communicate value, and drive conversions — for any local business, not just construction.
+                Your website is your first impression. We build modern, fast, mobile-first sites for any local business — not templates, not page builders.
               </p>
-              <p className="text-primary-500 font-semibold text-sm mb-7">
-                Custom code. 2-4 week turnaround. No monthly fees. Projects from $3,000 - $8,000.
+              <p className="text-primary-500 font-semibold text-sm mb-10">
+                Custom code. 2–4 week turnaround. No monthly fees. From $3,000.
               </p>
 
-              <h3 className="text-lg font-bold text-stone-200 mb-4">What We Deliver</h3>
-              <ul className="space-y-3 mb-8">
+              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">What We Deliver</h3>
+              <ul className="space-y-3 mb-10">
                 {[
-                  { label: 'Custom Code', desc: 'Hand-coded with modern frameworks — no WordPress templates or bloated page builders' },
-                  { label: 'Quick Turnaround', desc: 'Most sites delivered in 2-4 weeks because we build lean and move fast' },
-                  { label: 'SEO & Performance', desc: 'Structured for search engines, built-in analytics, and conversion tracking' },
-                  { label: 'Responsive Design', desc: 'Mobile-first development that works flawlessly across all devices and screen sizes' },
-                  { label: 'Full Ownership', desc: 'You get the source code, hosting guidance, and complete control. No lock-in, no surprise charges' },
+                  { label: 'Custom Code', desc: 'Modern frameworks, no WordPress bloat' },
+                  { label: 'Quick Turnaround', desc: 'Most sites shipped in 2–4 weeks' },
+                  { label: 'SEO & Performance', desc: 'Built-in analytics and search optimization' },
+                  { label: 'Responsive Design', desc: 'Pixel-perfect on every screen size' },
+                  { label: 'Full Ownership', desc: 'Source code yours. No lock-in, no surprises' },
                 ].map(item => (
                   <li key={item.label} className="flex items-start gap-3">
-                    <span className="text-primary-500 mt-1 flex-shrink-0 text-sm">✓</span>
+                    <span className="text-primary-500 mt-0.5 flex-shrink-0 text-sm">✓</span>
                     <span className="text-stone-400 text-sm"><strong className="text-stone-300">{item.label}:</strong> {item.desc}</span>
                   </li>
                 ))}
               </ul>
 
-              <h3 className="text-lg font-bold text-stone-200 mb-4">Industries We Serve</h3>
-              <ul className="space-y-2">
+              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">Industries We Serve</h3>
+              <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
                 {[
                   'Restaurants & Hospitality',
-                  'Law Firms & Legal Services',
-                  'Medical Practices & Healthcare',
+                  'Law Firms & Legal',
+                  'Medical & Healthcare',
                   'Contractors & Home Services',
                   'Retail & E-Commerce',
-                  'Real Estate & Property Management',
-                  'Professional Services & Consulting',
+                  'Real Estate',
+                  'Professional Services',
                 ].map(item => (
                   <li key={item} className="text-stone-400 text-sm flex items-center gap-2">
                     <span className="text-primary-500 flex-shrink-0">→</span>
@@ -196,42 +196,42 @@ export default function Services() {
 
       {/* ── Service 3: Tech Consulting ────────────────────────────────── */}
       <section className="bg-dark-900 border-b border-stone-800/60">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
             <div>
-              <div className="w-12 h-12 bg-primary-600/15 rounded-xl flex items-center justify-center mb-7">
+              <div className="w-12 h-12 bg-primary-600/15 rounded-xl flex items-center justify-center mb-8">
                 <svg className="w-6 h-6 text-primary-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-stone-100 mb-5 leading-tight">Technology Consulting</h2>
-              <p className="text-stone-400 leading-relaxed mb-7">
-                Not sure where to start with technology? We help business leaders and operations managers make informed decisions about software, automation, and digital transformation.
+              <p className="text-stone-400 leading-relaxed mb-10">
+                Not sure where to start? We help leaders make informed decisions about software, automation, and digital transformation — without the vendor spin.
               </p>
 
-              <h3 className="text-lg font-bold text-stone-200 mb-4">Our Consulting Services</h3>
-              <ul className="space-y-3 mb-8">
+              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">Our Consulting Services</h3>
+              <ul className="space-y-3 mb-10">
                 {[
-                  { label: 'Technology Assessments', desc: 'Evaluate your current tech stack and identify optimization opportunities' },
-                  { label: 'Digital Strategy', desc: 'Roadmaps for modernizing operations, improving efficiency, and scaling growth' },
-                  { label: 'Automation Planning', desc: 'Identify workflows ripe for automation and calculate ROI' },
-                  { label: 'Software Selection', desc: 'Help you choose the right tools for your needs, budget, and scale' },
-                  { label: 'Implementation Support', desc: 'Guidance through deployments and team training' },
+                  { label: 'Technology Assessments', desc: 'Audit your stack and find optimization opportunities' },
+                  { label: 'Digital Strategy', desc: 'Modernization roadmaps with timelines and ROI projections' },
+                  { label: 'Automation Planning', desc: 'Identify high-value workflows to automate' },
+                  { label: 'Software Selection', desc: 'Choose the right tools for your budget and scale' },
+                  { label: 'Implementation Support', desc: 'Hands-on guidance through deployments and training' },
                 ].map(item => (
                   <li key={item.label} className="flex items-start gap-3">
-                    <span className="text-primary-500 mt-1 flex-shrink-0 text-sm">✓</span>
+                    <span className="text-primary-500 mt-0.5 flex-shrink-0 text-sm">✓</span>
                     <span className="text-stone-400 text-sm"><strong className="text-stone-300">{item.label}:</strong> {item.desc}</span>
                   </li>
                 ))}
               </ul>
 
-              <h3 className="text-lg font-bold text-stone-200 mb-4">Who Should Work With Us</h3>
-              <ul className="space-y-2">
+              <h3 className="text-sm font-semibold text-stone-500 uppercase tracking-widest mb-5">Who Should Work With Us</h3>
+              <ul className="space-y-2.5">
                 {[
-                  'Construction companies ready to modernize operations',
-                  'Business leaders wanting to improve efficiency and reduce costs',
-                  'Organizations evaluating custom software vs. off-the-shelf solutions',
-                  'Teams struggling with fragmented systems and manual workflows',
+                  'Construction companies ready to modernize',
+                  'Leaders who want efficiency gains without the guesswork',
+                  'Teams evaluating custom vs. off-the-shelf solutions',
+                  'Organizations dealing with fragmented, manual workflows',
                 ].map(item => (
                   <li key={item} className="text-stone-400 text-sm flex items-center gap-2">
                     <span className="text-primary-500 flex-shrink-0">→</span>

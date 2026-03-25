@@ -41,7 +41,7 @@ export default function Home() {
       {/* ── Hero ─────────────────────────────────────────────────────── */}
       <section className="relative min-h-[92vh] bg-dark-950 flex items-center justify-center overflow-hidden">
         {/* Blueprint grid */}
-        <div className="absolute inset-0 blueprint-bg opacity-100 pointer-events-none" />
+        <div className="absolute inset-0 blueprint-bg opacity-80 pointer-events-none" />
         {/* Warm radial wash */}
         <div className="absolute inset-0 bg-gradient-radial from-primary-900/10 via-transparent to-transparent pointer-events-none" />
 
@@ -70,9 +70,9 @@ export default function Home() {
             </Link>
             <Link
               href="/portfolio"
-              className="text-stone-400 hover:text-stone-100 font-medium text-base transition-colors duration-200 underline underline-offset-4 decoration-stone-700 hover:decoration-stone-400"
+              className="inline-flex items-center gap-2 text-stone-400 hover:text-stone-100 font-medium text-base transition-colors duration-200 underline underline-offset-4 decoration-stone-700 hover:decoration-stone-400"
             >
-              View Our Work
+              View Our Work <span aria-hidden="true">→</span>
             </Link>
           </div>
         </div>
@@ -326,7 +326,7 @@ export default function Home() {
       {/* ── CTA ─────────────────────────────────────────────────────── */}
       <section className="relative bg-dark-950 overflow-hidden">
         {/* Blueprint grid subtle overlay */}
-        <div className="absolute inset-0 blueprint-bg opacity-60 pointer-events-none" />
+        <div className="absolute inset-0 blueprint-bg opacity-45 pointer-events-none" />
         <div className="relative z-10 max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8 py-28 md:py-36">
           {/* Amber rule */}
           <div className="w-12 h-px bg-primary-600 mx-auto mb-10" />

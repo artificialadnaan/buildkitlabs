@@ -51,32 +51,48 @@ export default function Portfolio() {
                 <div className="inline-block px-2.5 py-1 rounded-md bg-primary-600/15 text-primary-400 text-xs font-semibold mb-5">
                   CUSTOM SOFTWARE
                 </div>
-                <h3 className="text-2xl font-bold text-stone-100 mb-7">Operations Command Center</h3>
+                <h3 className="text-2xl font-bold text-stone-100 mb-5">Operations Command Center</h3>
 
-                <div className="space-y-6 mb-8">
+                {/* Results — moved to top */}
+                <div className="grid grid-cols-3 gap-4 mb-8 pb-7 border-b border-stone-800">
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">The Challenge</h4>
+                    <div className="text-3xl font-bold text-primary-500">40%</div>
+                    <p className="text-stone-500 text-xs mt-1">Faster dispatching</p>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-primary-500">20hrs</div>
+                    <p className="text-stone-500 text-xs mt-1">Weekly admin saved</p>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-primary-500">35%</div>
+                    <p className="text-stone-500 text-xs mt-1">Efficiency gain</p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
-                      A multi-location construction services company was juggling spreadsheets, phone calls, and manual scheduling for 40+ crews across the DFW area. Job assignments were slow, crews didn't know where to go, and office managers were working 60+ hours per week just to coordinate operations.
+                      A multi-location construction services company was juggling spreadsheets, phone calls, and manual scheduling for 40+ crews across DFW. Office managers were working 60+ hour weeks just to coordinate operations.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">The Solution</h4>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
-                      Centralized operations platform with real-time job dispatch, crew management, and automated notifications. Dispatch teams assign jobs in seconds. Crews receive updates instantly. Managers see everything on a live dashboard.
+                      Centralized operations platform with real-time dispatch, crew management, and automated notifications. Jobs assigned in seconds. Managers see everything on a live dashboard.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">Key Features</h4>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">Key Features</h4>
                     <ul className="space-y-1.5">
                       {[
                         'Real-time job dispatch with route optimization',
                         'GPS tracking and crew location mapping',
                         'Mobile app for job details, photos, signatures',
-                        'Automated crew scheduling and availability management',
-                        'Integration with QuickBooks for billing',
+                        'Automated scheduling and availability management',
+                        'QuickBooks integration for billing',
                       ].map(f => (
                         <li key={f} className="flex items-start text-sm text-stone-400">
                           <span className="text-primary-500 mr-2 mt-0.5 flex-shrink-0">•</span>
@@ -84,24 +100,6 @@ export default function Portfolio() {
                         </li>
                       ))}
                     </ul>
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-stone-800">
-                  <h4 className="font-semibold text-stone-200 mb-5 text-sm uppercase tracking-wide">Results</h4>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">40%</div>
-                      <p className="text-stone-500 text-xs mt-1">Faster dispatching</p>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">20hrs</div>
-                      <p className="text-stone-500 text-xs mt-1">Weekly admin saved</p>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">35%</div>
-                      <p className="text-stone-500 text-xs mt-1">Efficiency gain</p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -155,25 +153,41 @@ export default function Portfolio() {
                 <div className="inline-block px-2.5 py-1 rounded-md bg-primary-600/15 text-primary-400 text-xs font-semibold mb-5">
                   CUSTOM CRM
                 </div>
-                <h3 className="text-2xl font-bold text-stone-100 mb-7">Automated Sales Engine</h3>
+                <h3 className="text-2xl font-bold text-stone-100 mb-5">Automated Sales Engine</h3>
 
-                <div className="space-y-6 mb-8">
+                {/* Results — moved to top */}
+                <div className="grid grid-cols-3 gap-4 mb-8 pb-7 border-b border-stone-800">
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">The Challenge</h4>
+                    <div className="text-3xl font-bold text-primary-500">60%</div>
+                    <p className="text-stone-500 text-xs mt-1">Conversion increase</p>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-primary-500">8hrs</div>
+                    <p className="text-stone-500 text-xs mt-1">Weekly admin saved</p>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-primary-500">3x</div>
+                    <p className="text-stone-500 text-xs mt-1">Deal velocity</p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
-                      A commercial roofing and exterior services company was losing deals because follow-ups fell through the cracks. Sales team spent more time hunting for information than closing deals. Lead conversion was inconsistent at best.
+                      A commercial roofing company was losing deals because follow-ups fell through the cracks. The sales team spent more time hunting for information than closing. Conversion was inconsistent at best.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">The Solution</h4>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
-                      Custom CRM with automated follow-up workflows, lead scoring, and deal pipeline visibility. When a lead comes in, the system automatically schedules follow-ups, sends reminders, and routes leads to the right salespeople.
+                      Custom CRM with automated follow-up workflows, lead scoring, and pipeline visibility. Leads are routed instantly. Follow-ups are scheduled automatically. Nothing falls through the cracks.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">Key Features</h4>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">Key Features</h4>
                     <ul className="space-y-1.5">
                       {[
                         'Lead capture from multiple sources',
@@ -188,24 +202,6 @@ export default function Portfolio() {
                         </li>
                       ))}
                     </ul>
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-stone-800">
-                  <h4 className="font-semibold text-stone-200 mb-5 text-sm uppercase tracking-wide">Results</h4>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">60%</div>
-                      <p className="text-stone-500 text-xs mt-1">Conversion increase</p>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">8hrs</div>
-                      <p className="text-stone-500 text-xs mt-1">Weekly admin saved</p>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">3x</div>
-                      <p className="text-stone-500 text-xs mt-1">Deal velocity</p>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -259,30 +255,46 @@ export default function Portfolio() {
                 <div className="inline-block px-2.5 py-1 rounded-md bg-primary-600/15 text-primary-400 text-xs font-semibold mb-5">
                   WEB DEVELOPMENT
                 </div>
-                <h3 className="text-2xl font-bold text-stone-100 mb-7">Digital Presence Overhaul</h3>
+                <h3 className="text-2xl font-bold text-stone-100 mb-5">Digital Presence Overhaul</h3>
 
-                <div className="space-y-6 mb-8">
+                {/* Results — moved to top */}
+                <div className="grid grid-cols-3 gap-4 mb-8 pb-7 border-b border-stone-800">
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">The Challenge</h4>
+                    <div className="text-3xl font-bold text-primary-500">120%</div>
+                    <p className="text-stone-500 text-xs mt-1">Inquiry increase</p>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-primary-500">1st</div>
+                    <p className="text-stone-500 text-xs mt-1">Page ranking (local)</p>
+                  </div>
+                  <div>
+                    <div className="text-3xl font-bold text-primary-500">2.5x</div>
+                    <p className="text-stone-500 text-xs mt-1">Traffic growth</p>
+                  </div>
+                </div>
+
+                <div className="space-y-6">
+                  <div>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Challenge</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
-                      Multiple construction and home services companies had outdated websites that weren't generating leads. Sites were hard to navigate, looked unprofessional, didn't work on mobile, and ranked poorly in search results.
+                      Multiple construction and home services companies had outdated sites that weren't generating leads — hard to navigate, unprofessional on mobile, and invisible in local search.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">The Solution</h4>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">The Solution</h4>
                     <p className="text-stone-400 text-sm leading-relaxed">
-                      Complete website rebuilds with modern design, mobile-first development, SEO optimization, and conversion-focused layouts. Each site tells the company's story and makes it easy for prospects to get in touch.
+                      Complete rebuilds with modern design, mobile-first development, and conversion-focused layouts. Each site tells the company's story and makes it easy for prospects to reach out.
                     </p>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-stone-300 mb-2 text-sm uppercase tracking-wide">What We Built</h4>
+                    <h4 className="font-semibold text-stone-500 mb-2 text-xs uppercase tracking-widest">What We Built</h4>
                     <ul className="space-y-1.5">
                       {[
-                        'Professional, modern design specific to each company',
-                        'Mobile-first responsive design across all devices',
-                        'SEO optimization for local search',
+                        'Professional design tailored to each company',
+                        'Mobile-first responsive across all devices',
+                        'Local SEO optimization',
                         'Portfolio/gallery showcasing past work',
                         'Contact forms and lead capture',
                       ].map(f => (
@@ -292,24 +304,6 @@ export default function Portfolio() {
                         </li>
                       ))}
                     </ul>
-                  </div>
-                </div>
-
-                <div className="pt-6 border-t border-stone-800">
-                  <h4 className="font-semibold text-stone-200 mb-5 text-sm uppercase tracking-wide">Results</h4>
-                  <div className="grid grid-cols-3 gap-4">
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">120%</div>
-                      <p className="text-stone-500 text-xs mt-1">Inquiry increase</p>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">1st</div>
-                      <p className="text-stone-500 text-xs mt-1">Page ranking (local)</p>
-                    </div>
-                    <div>
-                      <div className="text-3xl font-bold text-primary-500">2.5x</div>
-                      <p className="text-stone-500 text-xs mt-1">Traffic growth</p>
-                    </div>
                   </div>
                 </div>
               </div>

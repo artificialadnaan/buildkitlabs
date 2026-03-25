@@ -77,7 +77,7 @@ export default function Footer() {
             </p>
             <a
               href="mailto:hello@buildkitlabs.com"
-              className="inline-block px-4 py-2 bg-primary-600 hover:bg-primary-500 text-dark-950 font-semibold rounded-lg transition-colors text-sm"
+              className="inline-block px-4 py-2.5 bg-primary-600 hover:bg-primary-500 text-dark-950 font-bold rounded-lg transition-colors text-sm ring-2 ring-primary-500/40 hover:ring-primary-400/60 shadow-glow"
             >
               hello@buildkitlabs.com
             </a>

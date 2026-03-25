@@ -287,8 +287,14 @@ export default function Contact() {
       {/* ── Calendly ─────────────────────────────────────────────────── */}
       <section className="bg-dark-950 border-b border-stone-800/60">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+          {/* Divider label */}
+          <div className="flex items-center gap-4 mb-10">
+            <div className="h-px flex-1 bg-stone-800" />
+            <span className="text-xs font-semibold text-stone-500 uppercase tracking-widest px-2">or book directly</span>
+            <div className="h-px flex-1 bg-stone-800" />
+          </div>
           <h2 className="text-3xl font-bold text-stone-100 mb-3">Schedule a Discovery Call</h2>
-          <p className="text-stone-400 mb-10 text-sm">Prefer to book directly? Pick a time that works for you.</p>
+          <p className="text-stone-400 mb-10 text-sm">Pick a time that works for you — no back-and-forth needed.</p>
           <div className="rounded-2xl bg-dark-800 border border-stone-800 p-8">
             <CalendlyEmbed url={process.env.NEXT_PUBLIC_CALENDLY_URL || ''} />
             <p className="text-stone-600 text-xs mt-6 text-center">
