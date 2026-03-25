@@ -1,14 +1,26 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
 
 export const metadata: Metadata = {
-  title: 'Portfolio | BuildKit Labs',
-  description: 'Case studies and project examples of custom software and web development work for construction companies.',
+  title: 'Portfolio',
+  description: 'Case studies of custom software and web development projects for construction companies. Operations platforms, CRM systems, and website rebuilds with measurable results.',
+  keywords: ['construction software case studies', 'custom software portfolio', 'construction CRM results', 'web development portfolio DFW'],
+  alternates: {
+    canonical: 'https://buildkitlabs.com/portfolio',
+  },
 }
 
 export default function Portfolio() {
   return (
     <div className="pt-20">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Portfolio | BuildKit Labs',
+        description: 'Case studies of custom software and web development projects for construction companies.',
+        url: 'https://buildkitlabs.com/portfolio',
+      }} />
       {/* Hero */}
       <section className="bg-gradient-to-b from-slate-900 to-slate-950 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

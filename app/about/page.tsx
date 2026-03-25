@@ -1,14 +1,34 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
 
 export const metadata: Metadata = {
-  title: 'About Us | BuildKit Labs',
-  description: 'Learn about BuildKit Labs—a custom software and web development company based in Dallas-Fort Worth specializing in construction industry software.',
+  title: 'About',
+  description: 'BuildKit Labs is a construction technology consulting firm based in Dallas-Fort Worth. We build custom software and modern websites for construction and service companies.',
+  keywords: ['BuildKit Labs', 'construction technology consulting DFW', 'about BuildKit Labs', 'Dallas software development team'],
+  alternates: {
+    canonical: 'https://buildkitlabs.com/about',
+  },
 }
 
 export default function About() {
   return (
     <div className="pt-20">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'Organization',
+        name: 'BuildKit Labs',
+        description: 'Construction technology consulting firm based in Dallas-Fort Worth.',
+        url: 'https://buildkitlabs.com',
+        email: 'hello@buildkitlabs.com',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Dallas-Fort Worth',
+          addressRegion: 'TX',
+          addressCountry: 'US',
+        },
+        numberOfEmployees: { '@type': 'QuantitativeValue', value: 3 },
+      }} />
       {/* Hero */}
       <section className="bg-gradient-to-b from-slate-900 to-slate-950 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

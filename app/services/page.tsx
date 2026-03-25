@@ -1,14 +1,39 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
 
 export const metadata: Metadata = {
-  title: 'Services | BuildKit Labs',
-  description: 'Custom software development, web design, and tech consulting services for construction companies and North Texas businesses.',
+  title: 'Services',
+  description: 'Construction software development, professional web design, and technology consulting for Dallas-Fort Worth businesses. Custom operations platforms, CRM systems, and modern websites.',
+  keywords: ['construction software development', 'web development Fort Worth', 'tech consulting Dallas', 'custom CRM construction', 'website design DFW'],
+  alternates: {
+    canonical: 'https://buildkitlabs.com/services',
+  },
 }
 
 export default function Services() {
   return (
     <div className="pt-20">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'WebPage',
+        name: 'Services | BuildKit Labs',
+        description: 'Construction software development, web design, and technology consulting for DFW businesses.',
+        url: 'https://buildkitlabs.com/services',
+        provider: {
+          '@type': 'LocalBusiness',
+          name: 'BuildKit Labs',
+        },
+        hasOfferCatalog: {
+          '@type': 'OfferCatalog',
+          name: 'BuildKit Labs Services',
+          itemListElement: [
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Construction Software Development', description: 'Custom operations platforms, CRM systems, and mobile apps for construction companies.' }},
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Web Design & Development', description: 'Modern, SEO-optimized websites for North Texas businesses.' }},
+            { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Technology Consulting', description: 'Digital strategy, automation planning, and technology assessments.' }},
+          ],
+        },
+      }} />
       {/* Hero */}
       <section className="bg-gradient-to-b from-slate-900 to-slate-950 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

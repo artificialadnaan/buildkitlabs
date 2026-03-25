@@ -1,14 +1,39 @@
 import Link from 'next/link'
 import { Metadata } from 'next'
+import JsonLd from '@/components/JsonLd'
 
 export const metadata: Metadata = {
-  title: 'BuildKit Labs | Custom Software & Web Development',
-  description: 'Custom software development and web design for construction companies and North Texas businesses.',
+  title: 'BuildKit Labs | Custom Software & Web Development Dallas-Fort Worth',
+  description: 'Custom software development for construction companies and professional web development for North Texas businesses. Operations platforms, CRM systems, and digital transformation in DFW.',
+  keywords: ['custom software development Dallas', 'construction software DFW', 'web development Fort Worth', 'construction operations platform', 'construction CRM Texas'],
+  alternates: {
+    canonical: 'https://buildkitlabs.com',
+  },
 }
 
 export default function Home() {
   return (
     <div className="pt-20">
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: 'BuildKit Labs',
+        description: 'Custom software development for construction companies and web development for North Texas businesses.',
+        url: 'https://buildkitlabs.com',
+        email: 'hello@buildkitlabs.com',
+        areaServed: {
+          '@type': 'GeoCircle',
+          geoMidpoint: { '@type': 'GeoCoordinates', latitude: 32.7767, longitude: -96.7970 },
+          geoRadius: '100 mi',
+        },
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Dallas-Fort Worth',
+          addressRegion: 'TX',
+          addressCountry: 'US',
+        },
+        sameAs: [],
+      }} />
       {/* Hero Section */}
       <section className="relative min-h-screen bg-gradient-to-b from-slate-950 to-slate-900 flex items-center justify-center overflow-hidden">
         {/* Background Elements */}
