@@ -8,7 +8,7 @@ import BeforeAfterMockup from '@/components/mockups/BeforeAfterMockup'
 export const metadata: Metadata = {
   title: 'BuildKit Labs | Custom Software & Web Development Dallas-Fort Worth',
   description: 'Custom software development for construction companies and professional web development for North Texas businesses. Operations platforms, CRM systems, and digital transformation in DFW.',
-  keywords: ['custom software development Dallas', 'construction software DFW', 'web development Fort Worth', 'construction operations platform', 'construction CRM Texas'],
+  keywords: ['custom software development Dallas', 'construction software DFW', 'web development Fort Worth', 'construction operations platform', 'construction CRM Texas', 'website redesign DFW', 'affordable web development Dallas', 'custom website no monthly fees', 'small business website Fort Worth'],
   alternates: {
     canonical: 'https://buildkitlabs.com',
   },
@@ -138,7 +138,7 @@ export default function Home() {
                   </div>
                   <h3 className="text-xl font-bold text-stone-100 mb-3">Web Development</h3>
                   <p className="text-stone-400 text-sm leading-relaxed">
-                    Modern websites built for conversion. Mobile-first, fast, and designed to generate leads.
+                    Modern websites for any business. Custom-coded, mobile-first, and delivered fast — no templates, no monthly fees.
                   </p>
                 </div>
                 <Link href="/services" className="mt-5 inline-flex items-center text-primary-500 hover:text-primary-400 font-semibold text-sm transition-colors group/link">
@@ -275,6 +275,50 @@ export default function Home() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Local Business Web Dev ────────────────────────────────── */}
+      <section className="bg-stone-900 border-b border-stone-800/60">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+
+          {/* Section header */}
+          <div className="text-center mb-14">
+            <p className="text-primary-500 text-sm font-semibold uppercase tracking-widest mb-3">Web Development for Local Businesses</p>
+            <h2 className="text-4xl md:text-5xl font-bold text-stone-100 leading-tight mb-4">Need a New Website?</h2>
+            <p className="text-lg text-stone-400 max-w-2xl mx-auto leading-relaxed">
+              Fast turnaround. Custom code. No monthly fees.
+            </p>
+          </div>
+
+          {/* Three value prop cards — horizontal, numbered, top border accent */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            {[
+              { num: '01', title: 'Custom Built', desc: 'Hand-coded websites, not WordPress templates. Your site is built from scratch with modern frameworks.' },
+              { num: '02', title: 'Quick Turnaround', desc: 'Most sites delivered in 2-4 weeks. We move fast because we don\'t use bloated page builders.' },
+              { num: '03', title: 'No Management Fees', desc: 'You own your website. No monthly retainers, no hosting lock-in, no surprise charges.' },
+            ].map(card => (
+              <div key={card.num} className="relative p-7 rounded-xl bg-dark-950/70 border border-stone-800 border-t-2 border-t-primary-600">
+                <span className="text-primary-600/40 text-4xl font-bold absolute top-4 right-5 select-none">{card.num}</span>
+                <h3 className="text-lg font-bold text-stone-100 mb-3 mt-1">{card.title}</h3>
+                <p className="text-stone-400 text-sm leading-relaxed">{card.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Pricing signal + CTA */}
+          <div className="text-center">
+            <p className="text-2xl font-bold text-stone-100 mb-2">Projects from $3,000 - $8,000</p>
+            <p className="text-stone-500 text-sm mb-8">
+              For DFW businesses in any industry — restaurants, law firms, contractors, retail, and more.
+            </p>
+            <Link
+              href="/contact"
+              className="inline-block px-8 py-4 bg-primary-600 hover:bg-primary-500 text-dark-950 font-bold rounded-lg transition-all duration-200 text-base shadow-glow"
+            >
+              Get a Free Website Audit
+            </Link>
           </div>
         </div>
       </section>

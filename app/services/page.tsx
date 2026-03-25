@@ -5,7 +5,7 @@ import JsonLd from '@/components/JsonLd'
 export const metadata: Metadata = {
   title: 'Services',
   description: 'Construction software development, professional web design, and technology consulting for Dallas-Fort Worth businesses. Custom operations platforms, CRM systems, and modern websites.',
-  keywords: ['construction software development', 'web development Fort Worth', 'tech consulting Dallas', 'custom CRM construction', 'website design DFW'],
+  keywords: ['construction software development', 'web development Fort Worth', 'tech consulting Dallas', 'custom CRM construction', 'website design DFW', 'website redesign DFW', 'affordable web development Dallas', 'custom website no monthly fees', 'small business website Fort Worth'],
   alternates: {
     canonical: 'https://buildkitlabs.com/services',
   },
@@ -41,10 +41,10 @@ export default function Services() {
         <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
           <p className="text-primary-500 text-sm font-semibold uppercase tracking-widest mb-4">Our Services</p>
           <h1 className="text-5xl md:text-6xl font-bold text-stone-100 mb-6 leading-tight tracking-tight">
-            Complete solutions for<br className="hidden md:block" /> construction companies.
+            Complete solutions for construction<br className="hidden md:block" /> companies — and modern websites<br className="hidden md:block" /> for any business.
           </h1>
           <p className="text-xl text-stone-400 max-w-2xl leading-relaxed">
-            Custom software, modern web development, and strategic tech consulting — designed specifically for how construction businesses operate.
+            Custom software for construction operations. Fast, affordable websites for local businesses everywhere. Strategic tech consulting to tie it all together.
           </p>
         </div>
         <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-dark-900 to-transparent pointer-events-none" />
@@ -149,18 +149,21 @@ export default function Services() {
                 </svg>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-stone-100 mb-5 leading-tight">Web Design & Development</h2>
-              <p className="text-stone-400 leading-relaxed mb-7">
-                Your website is often the first impression clients have of your business. We create modern, fast, mobile-first websites that build trust, communicate value, and drive conversions.
+              <p className="text-stone-400 leading-relaxed mb-4">
+                Your website is often the first impression clients have of your business. We create modern, fast, mobile-first websites that build trust, communicate value, and drive conversions — for any local business, not just construction.
+              </p>
+              <p className="text-primary-500 font-semibold text-sm mb-7">
+                Custom code. 2-4 week turnaround. No monthly fees. Projects from $3,000 - $8,000.
               </p>
 
               <h3 className="text-lg font-bold text-stone-200 mb-4">What We Deliver</h3>
               <ul className="space-y-3 mb-8">
                 {[
-                  { label: 'Website Design', desc: 'Professional, modern design tailored to your brand and audience' },
-                  { label: 'Technical Excellence', desc: 'Built with modern frameworks, optimized performance, and enterprise-grade security' },
-                  { label: 'SEO Optimization', desc: 'Structured for search engines, built-in analytics, and conversion tracking' },
-                  { label: 'Content Management', desc: 'Easy-to-use systems so you can update content without technical knowledge' },
-                  { label: 'Hosting & Maintenance', desc: 'Reliable hosting, regular updates, and ongoing support' },
+                  { label: 'Custom Code', desc: 'Hand-coded with modern frameworks — no WordPress templates or bloated page builders' },
+                  { label: 'Quick Turnaround', desc: 'Most sites delivered in 2-4 weeks because we build lean and move fast' },
+                  { label: 'SEO & Performance', desc: 'Structured for search engines, built-in analytics, and conversion tracking' },
+                  { label: 'Responsive Design', desc: 'Mobile-first development that works flawlessly across all devices and screen sizes' },
+                  { label: 'Full Ownership', desc: 'You get the source code, hosting guidance, and complete control. No lock-in, no surprise charges' },
                 ].map(item => (
                   <li key={item.label} className="flex items-start gap-3">
                     <span className="text-primary-500 mt-1 flex-shrink-0 text-sm">✓</span>
@@ -172,10 +175,13 @@ export default function Services() {
               <h3 className="text-lg font-bold text-stone-200 mb-4">Industries We Serve</h3>
               <ul className="space-y-2">
                 {[
-                  'Construction & Home Services',
-                  'Professional Services & Consulting',
+                  'Restaurants & Hospitality',
+                  'Law Firms & Legal Services',
+                  'Medical Practices & Healthcare',
+                  'Contractors & Home Services',
                   'Retail & E-Commerce',
-                  'Local & Small Businesses',
+                  'Real Estate & Property Management',
+                  'Professional Services & Consulting',
                 ].map(item => (
                   <li key={item} className="text-stone-400 text-sm flex items-center gap-2">
                     <span className="text-primary-500 flex-shrink-0">→</span>
