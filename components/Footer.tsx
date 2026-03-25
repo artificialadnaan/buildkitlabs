@@ -89,7 +89,7 @@ export default function Footer() {
               Ready to transform your operations?
             </p>
             <a
-              href="mailto:info@buildkitlabs.com"
+              href="mailto:hello@buildkitlabs.com"
               className="inline-block px-4 py-2 bg-primary-600 hover:bg-primary-700 text-slate-950 font-semibold rounded-lg transition-colors text-sm"
             >
               Email Us
@@ -105,7 +105,7 @@ export default function Footer() {
             </p>
             <div className="flex space-x-6 mt-4 md:mt-0">
               <a
-                href="https://linkedin.com"
+                href="https://linkedin.com/company/buildkitlabs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-primary-400 transition-colors"
@@ -116,7 +116,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://twitter.com"
+                href="https://twitter.com/buildkitlabs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-primary-400 transition-colors"
@@ -127,7 +127,7 @@ export default function Footer() {
                 </svg>
               </a>
               <a
-                href="https://github.com"
+                href="https://github.com/buildkitlabs"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-slate-400 hover:text-primary-400 transition-colors"

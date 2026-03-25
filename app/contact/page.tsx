@@ -89,10 +89,10 @@ export default function Contact() {
               <div>
                 <h3 className="text-lg font-bold text-primary-400 mb-2">Email</h3>
                 <a
-                  href="mailto:info@buildkitlabs.com"
+                  href="mailto:hello@buildkitlabs.com"
                   className="text-slate-300 hover:text-primary-400 transition-colors break-all"
                 >
-                  info@buildkitlabs.com
+                  hello@buildkitlabs.com
                 </a>
               </div>
 
@@ -116,7 +116,7 @@ export default function Contact() {
                 <h3 className="text-lg font-bold text-primary-400 mb-4">Connect With Us</h3>
                 <div className="flex space-x-4">
                   <a
-                    href="https://linkedin.com"
+                    href="https://linkedin.com/company/buildkitlabs"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-primary-600 flex items-center justify-center text-slate-400 hover:text-slate-950 transition-all"
@@ -126,7 +126,7 @@ export default function Contact() {
                     </svg>
                   </a>
                   <a
-                    href="https://twitter.com"
+                    href="https://twitter.com/buildkitlabs"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-primary-600 flex items-center justify-center text-slate-400 hover:text-slate-950 transition-all"
@@ -136,7 +136,7 @@ export default function Contact() {
                     </svg>
                   </a>
                   <a
-                    href="https://github.com"
+                    href="https://github.com/buildkitlabs"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-10 h-10 rounded-lg bg-slate-800 hover:bg-primary-600 flex items-center justify-center text-slate-400 hover:text-slate-950 transition-all"
@@ -301,7 +301,7 @@ export default function Contact() {
             <CalendlyEmbed url={process.env.NEXT_PUBLIC_CALENDLY_URL || ''} />
 
             <p className="text-slate-400 text-sm mt-6">
-              Can't find a time that works? Email us at info@buildkitlabs.com and we'll work something out.
+              Can't find a time that works? Email us at hello@buildkitlabs.com and we'll work something out.
             </p>
           </div>
         </div>
