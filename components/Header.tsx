@@ -16,10 +16,18 @@ export default function Header() {
 
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group" aria-label="BuildKit Labs home">
-            <div className="w-10 h-10 rounded-lg bg-primary-600 flex items-center justify-center transition-all duration-200 group-hover:bg-primary-500">
-              <span className="text-dark-950 font-bold text-base tracking-tight">BK</span>
-            </div>
-            <span className="text-lg font-bold text-stone-100 hidden sm:inline tracking-tight">BuildKit Labs</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none" className="w-9 h-9 transition-transform duration-200 group-hover:scale-105">
+              <rect x="0" y="0" width="10" height="10" rx="2" fill="#d97706" opacity="0.3"/>
+              <rect x="13" y="0" width="10" height="10" rx="2" fill="#d97706" opacity="0.35"/>
+              <rect x="26" y="0" width="10" height="10" rx="2" fill="#d97706" opacity="0.5"/>
+              <rect x="0" y="13" width="10" height="10" rx="2" fill="#d97706" opacity="0.35"/>
+              <rect x="13" y="13" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.6"/>
+              <rect x="26" y="13" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.8"/>
+              <rect x="0" y="26" width="10" height="10" rx="2" fill="#d97706" opacity="0.5"/>
+              <rect x="13" y="26" width="10" height="10" rx="2" fill="#f59e0b" opacity="0.8"/>
+              <rect x="26" y="26" width="10" height="10" rx="2" fill="#f97316" opacity="1"/>
+            </svg>
+            <span className="text-lg font-extrabold text-stone-100 hidden sm:inline tracking-tight">Build<span className="text-primary-500">Kit</span> Labs</span>
           </Link>
 
           {/* Desktop Navigation */}

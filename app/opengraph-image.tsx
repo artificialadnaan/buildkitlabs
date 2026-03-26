@@ -19,30 +19,30 @@ export default function OgImage() {
           fontFamily: 'system-ui, sans-serif',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', marginBottom: 32 }}>
-          <div
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: 12,
-              background: '#d97706',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#0e0b08',
-              fontSize: 32,
-              fontWeight: 700,
-              marginRight: 20,
-            }}
-          >
-            BK
+        {/* The Grid */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 40 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#d97706', opacity: 0.3 }} />
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#d97706', opacity: 0.35 }} />
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#d97706', opacity: 0.5 }} />
           </div>
-          <div style={{ fontSize: 48, fontWeight: 700, color: '#f5f5f4' }}>
-            BuildKit Labs
+          <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#d97706', opacity: 0.35 }} />
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f59e0b', opacity: 0.6 }} />
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f59e0b', opacity: 0.8 }} />
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#d97706', opacity: 0.5 }} />
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f59e0b', opacity: 0.8 }} />
+            <div style={{ width: 28, height: 28, borderRadius: 6, background: '#f97316', opacity: 1 }} />
           </div>
         </div>
-        <div style={{ fontSize: 28, color: '#a8a29e', maxWidth: 700, textAlign: 'center' }}>
-          Custom Software &amp; Web Development
+
+        <div style={{ fontSize: 56, fontWeight: 800, color: '#f5f5f4', letterSpacing: '-0.02em' }}>
+          BuildKit Labs
+        </div>
+        <div style={{ fontSize: 22, color: '#a8a29e', marginTop: 12, letterSpacing: '0.15em', textTransform: 'uppercase' as const }}>
+          Software + Web Development
         </div>
         <div
           style={{
