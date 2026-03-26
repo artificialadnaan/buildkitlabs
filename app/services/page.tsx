@@ -153,7 +153,7 @@ export default function Services() {
                 Your website is your first impression. We build modern, fast, mobile-first sites for any local business — not templates, not page builders.
               </p>
               <p className="text-primary-500 font-semibold text-sm mb-10">
-                Custom code. 2–4 week turnaround. No monthly fees. From $3,000.
+                Custom code. 2–4 week turnaround. No monthly fees. From $1,000.
               </p>
 
               <h3 className="text-sm font-semibold text-stone-400 uppercase tracking-widest mb-5">What We Deliver</h3>

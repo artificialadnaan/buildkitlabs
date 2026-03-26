@@ -309,7 +309,7 @@ export default function Home() {
 
           {/* Pricing signal + CTA */}
           <div className="text-center">
-            <p className="text-2xl font-bold text-stone-100 mb-2">Projects from $3,000 - $8,000</p>
+            <p className="text-2xl font-bold text-stone-100 mb-2">Projects from $1,000 - $8,000</p>
             <p className="text-stone-400 text-sm mb-8">
               For DFW businesses in any industry — restaurants, law firms, contractors, retail, and more.
             </p>
