@@ -83,6 +83,17 @@ body {
   animation: fadeUp 0.55s ease-out 0.35s both;
 }
 
+/* Showcase — detail panel animations */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
 /* Card border highlight on hover */
 .card-hover {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;

@@ -51,6 +51,12 @@ export default function Header() {
               Portfolio
             </Link>
             <Link
+              href="/showcase"
+              className="text-stone-400 hover:text-stone-100 transition-colors duration-200 font-medium text-sm"
+            >
+              Showcase
+            </Link>
+            <Link
               href="/about"
               className="text-stone-400 hover:text-stone-100 transition-colors duration-200 font-medium text-sm"
             >
@@ -110,6 +116,13 @@ export default function Header() {
                 className="block py-3 px-3 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
               >
                 Portfolio
+              </Link>
+              <Link
+                href="/showcase"
+                onClick={closeMenu}
+                className="block py-3 px-3 text-stone-400 hover:text-stone-100 transition-colors font-medium text-sm rounded-lg hover:bg-stone-800/50"
+              >
+                Showcase
               </Link>
               <Link
                 href="/about"
