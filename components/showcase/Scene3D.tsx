@@ -53,7 +53,7 @@ const FILLERS = [
   { x: RIGHT_X, z: -35, w: 4, h: 7, d: 3 },
 ]
 
-const WALK_MIN = -27
+const WALK_MIN = -22
 const WALK_MAX = 6
 
 // ═══ Loading Screen ═══
