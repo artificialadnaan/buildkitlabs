@@ -1,16 +1,22 @@
 'use client'
 
-import { useRef, useState, useEffect, useMemo } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useTexture, Text, MeshReflectorMaterial, useProgress } from '@react-three/drei'
+import { useRef, useState, useEffect, useMemo, Suspense } from 'react'
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber'
+import { MeshReflectorMaterial, useProgress } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import { projects, type Project } from './data'
 
-// ── Loading Screen ──
+// ── Loading Screen with timeout ──
 function LoadingScreen() {
   const { progress } = useProgress()
   const [visible, setVisible] = useState(true)
+
+  useEffect(() => {
+    // Auto-hide after 6s regardless of progress (prevents infinite loading)
+    const timeout = setTimeout(() => setVisible(false), 6000)
+    return () => clearTimeout(timeout)
+  }, [])
 
   useEffect(() => {
     if (progress >= 100) {
@@ -70,7 +76,6 @@ function CameraController() {
     const onKeyDown = (e: KeyboardEvent) => keys.current.add(e.key.toLowerCase())
     const onKeyUp = (e: KeyboardEvent) => keys.current.delete(e.key.toLowerCase())
 
-    // Touch controls
     let touchY = 0
     const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0].clientY }
     const onTouchMove = (e: TouchEvent) => {
@@ -97,19 +102,13 @@ function CameraController() {
 
   useFrame((_, delta) => {
     time.current += delta
-
-    // Keyboard movement
     const k = keys.current
     const speed = 3 * delta
     if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(10, targetZ.current + speed)
     if (k.has('s') || k.has('arrowdown')) targetZ.current = Math.max(-15, targetZ.current - speed)
 
-    // Lerp
     currentZ.current += (targetZ.current - currentZ.current) * 0.05
-
-    // Walking bob
     const bob = Math.sin(time.current * 3) * 0.03
-
     camera.position.z = currentZ.current
     camera.position.y = 1.7 + bob
     camera.lookAt(0, 1.7, currentZ.current + 20)
@@ -118,74 +117,44 @@ function CameraController() {
   return null
 }
 
-// ── Ground Glow (light pool beneath building) ──
+// ── Ground Glow ──
 function GroundGlow({ position, color }: { position: [number, number, number]; color: string }) {
   const colorObj = useMemo(() => new THREE.Color(color), [color])
-
   return (
     <mesh position={[position[0], 0.01, position[2]]} rotation={[-Math.PI / 2, 0, 0]}>
       <planeGeometry args={[4, 4]} />
-      <meshBasicMaterial
-        color={colorObj}
-        transparent
-        opacity={0.15}
-        side={THREE.DoubleSide}
-        depthWrite={false}
-        blending={THREE.AdditiveBlending}
-      />
+      <meshBasicMaterial color={colorObj} transparent opacity={0.15} side={THREE.DoubleSide} depthWrite={false} blending={THREE.AdditiveBlending} />
     </mesh>
   )
 }
 
-// ── Building Plane ──
-function BuildingPlane({
-  project,
-  onSelect,
-  onHover,
-  onUnhover,
-}: {
-  project: Project
-  onSelect: (p: Project) => void
-  onHover: (p: Project) => void
-  onUnhover: () => void
-}) {
+// ── Building with texture (wrapped in Suspense) ──
+function TexturedBuilding({ project, onSelect }: { project: Project; onSelect: (p: Project) => void }) {
   const meshRef = useRef<THREE.Mesh>(null)
   const lightRef = useRef<THREE.PointLight>(null)
   const [hovered, setHovered] = useState(false)
-  const targetScale = useRef(1)
 
-  // Load building texture
-  const texture = useTexture(project.buildingImage)
+  // Load texture — this will suspend until loaded
+  const texture = useLoader(THREE.TextureLoader, project.buildingImage)
 
-  // Configure texture
   useMemo(() => {
     texture.colorSpace = THREE.SRGBColorSpace
     texture.minFilter = THREE.LinearFilter
     texture.magFilter = THREE.LinearFilter
   }, [texture])
 
-  // Calculate aspect ratio from texture
-  const aspect = useMemo(() => {
-    const img = texture.image as HTMLImageElement | undefined
-    if (img?.width && img?.height) {
-      return img.width / img.height
-    }
-    return 0.6 // fallback
-  }, [texture])
-
+  const img = texture.image as HTMLImageElement | undefined
+  const aspect = (img?.width && img?.height) ? img.width / img.height : 0.6
   const planeWidth = project.scaleHeight * aspect
   const planeHeight = project.scaleHeight
 
   useFrame(() => {
     if (!meshRef.current) return
-    targetScale.current = hovered ? 1.08 : 1
+    const target = hovered ? 1.08 : 1
     const s = meshRef.current.scale.x
-    const ns = s + (targetScale.current - s) * 0.1
-    meshRef.current.scale.set(ns, ns, ns)
-
+    meshRef.current.scale.setScalar(s + (target - s) * 0.1)
     if (lightRef.current) {
-      const targetIntensity = hovered ? 4 : 2
-      lightRef.current.intensity += (targetIntensity - lightRef.current.intensity) * 0.1
+      lightRef.current.intensity += ((hovered ? 4 : 2) - lightRef.current.intensity) * 0.1
     }
   })
 
@@ -193,70 +162,63 @@ function BuildingPlane({
 
   return (
     <group position={[project.position[0], planeHeight / 2, project.position[2]]}>
-      {/* Building texture plane */}
       <mesh
         ref={meshRef}
-        onPointerOver={(e) => {
-          e.stopPropagation()
-          setHovered(true)
-          onHover(project)
-          document.body.style.cursor = 'pointer'
-        }}
-        onPointerOut={() => {
-          setHovered(false)
-          onUnhover()
-          document.body.style.cursor = 'default'
-        }}
-        onClick={(e) => {
-          e.stopPropagation()
-          onSelect(project)
-        }}
+        onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
+        onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
+        onClick={(e) => { e.stopPropagation(); onSelect(project) }}
       >
         <planeGeometry args={[planeWidth, planeHeight]} />
-        <meshBasicMaterial
-          map={texture}
-          transparent
-          alphaTest={0.1}
-          side={THREE.DoubleSide}
-        />
+        <meshBasicMaterial map={texture} transparent alphaTest={0.1} side={THREE.DoubleSide} />
       </mesh>
-
-      {/* Name label */}
-      <Text
-        position={[0, -planeHeight / 2 - 0.3, 0]}
-        fontSize={0.25}
-        color={project.accent}
-        anchorX="center"
-        anchorY="top"
-        font="/fonts/DMSans-Bold.woff"
-        outlineWidth={0.01}
-        outlineColor="#000000"
-      >
-        {project.name}
-      </Text>
-      <Text
-        position={[0, -planeHeight / 2 - 0.6, 0]}
-        fontSize={0.15}
-        color="#6B7280"
-        anchorX="center"
-        anchorY="top"
-        font="/fonts/DMSans-Regular.woff"
-        outlineWidth={0.005}
-        outlineColor="#000000"
-      >
-        {project.subtitle}
-      </Text>
-
-      {/* Point light at base */}
-      <pointLight
-        ref={lightRef}
-        position={[0, -planeHeight / 2 + 0.5, 1]}
-        color={accentColor}
-        intensity={2}
-        distance={15}
-        decay={2}
-      />
+      <pointLight ref={lightRef} position={[0, -planeHeight / 2 + 0.5, 1]} color={accentColor} intensity={2} distance={15} decay={2} />
     </group>
+  )
+}
+
+// ── Fallback building (colored box when texture fails to load) ──
+function FallbackBuilding({ project, onSelect }: { project: Project; onSelect: (p: Project) => void }) {
+  const meshRef = useRef<THREE.Mesh>(null)
+  const lightRef = useRef<THREE.PointLight>(null)
+  const [hovered, setHovered] = useState(false)
+
+  const planeWidth = project.scaleHeight * 0.5
+  const planeHeight = project.scaleHeight
+  const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
+  const darkColor = useMemo(() => new THREE.Color(project.accent).multiplyScalar(0.15), [project.accent])
+
+  useFrame(() => {
+    if (!meshRef.current) return
+    const target = hovered ? 1.08 : 1
+    const s = meshRef.current.scale.x
+    meshRef.current.scale.setScalar(s + (target - s) * 0.1)
+    if (lightRef.current) {
+      lightRef.current.intensity += ((hovered ? 4 : 2) - lightRef.current.intensity) * 0.1
+    }
+  })
+
+  return (
+    <group position={[project.position[0], planeHeight / 2, project.position[2]]}>
+      <mesh
+        ref={meshRef}
+        onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
+        onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
+        onClick={(e) => { e.stopPropagation(); onSelect(project) }}
+      >
+        <boxGeometry args={[planeWidth, planeHeight, planeWidth * 0.3]} />
+        <meshStandardMaterial color={darkColor} emissive={accentColor} emissiveIntensity={0.15} />
+      </mesh>
+      <pointLight ref={lightRef} position={[0, -planeHeight / 2 + 0.5, 1]} color={accentColor} intensity={2} distance={15} decay={2} />
+    </group>
+  )
+}
+
+// ── Building wrapper — tries texture, falls back to box ──
+function BuildingPlane({ project, onSelect }: { project: Project; onSelect: (p: Project) => void }) {
+  return (
+    <Suspense fallback={<FallbackBuilding project={project} onSelect={onSelect} />}>
+      <TexturedBuilding project={project} onSelect={onSelect} />
+    </Suspense>
   )
 }
 
@@ -279,15 +241,9 @@ function Ground() {
 }
 
 // ── Scene Content ──
-function SceneContent({
-  onSelectProject,
-}: {
-  onSelectProject: (p: Project) => void
-}) {
+function SceneContent({ onSelectProject }: { onSelectProject: (p: Project) => void }) {
   const { scene } = useThree()
-  const [, setHoveredProject] = useState<Project | null>(null)
 
-  // Set scene fog
   useEffect(() => {
     scene.fog = new THREE.FogExp2('#0a1628', 0.04)
     return () => { scene.fog = null }
@@ -295,36 +251,17 @@ function SceneContent({
 
   return (
     <>
-      {/* Ambient light */}
       <ambientLight intensity={0.15} color="#0a1628" />
-
-      {/* Camera controller */}
       <CameraController />
-
-      {/* Ground */}
       <Ground />
-
-      {/* Buildings + ground glows */}
       {projects.map((p) => (
         <group key={p.id}>
-          <BuildingPlane
-            project={p}
-            onSelect={onSelectProject}
-            onHover={(proj) => setHoveredProject(proj)}
-            onUnhover={() => setHoveredProject(null)}
-          />
+          <BuildingPlane project={p} onSelect={onSelectProject} />
           <GroundGlow position={p.position} color={p.accent} />
         </group>
       ))}
-
-      {/* Post-processing */}
       <EffectComposer>
-        <Bloom
-          intensity={0.5}
-          luminanceThreshold={0.4}
-          luminanceSmoothing={0.9}
-          radius={0.8}
-        />
+        <Bloom intensity={0.5} luminanceThreshold={0.4} luminanceSmoothing={0.9} radius={0.8} />
         <Vignette eskil={false} offset={0.1} darkness={0.6} />
       </EffectComposer>
     </>
@@ -334,15 +271,10 @@ function SceneContent({
 // ── Tooltip ──
 function Tooltip({ project }: { project: Project | null }) {
   if (!project) return null
-
   return (
     <div
-      className="fixed top-6 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg pointer-events-none animate-[fadeIn_0.15s_ease]"
-      style={{
-        background: 'rgba(6,12,24,0.9)',
-        border: `1px solid ${project.accent}30`,
-        backdropFilter: 'blur(12px)',
-      }}
+      className="fixed top-24 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg pointer-events-none animate-[fadeIn_0.15s_ease]"
+      style={{ background: 'rgba(6,12,24,0.9)', border: `1px solid ${project.accent}30`, backdropFilter: 'blur(12px)' }}
     >
       <span className="text-sm font-bold" style={{ color: project.accent }}>{project.name}</span>
       <span className="text-white/40 text-xs ml-2">{project.subtitle}</span>
@@ -364,19 +296,16 @@ export default function Scene3D({
     <>
       <LoadingScreen />
       <Tooltip project={hoveredProject} />
-
       <Canvas
-        gl={{
-          antialias: true,
-          toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1,
-        }}
+        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
         camera={{ fov: 60, near: 0.1, far: 100 }}
         style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
         onPointerMissed={() => setHoveredProject(null)}
       >
         <color attach="background" args={['#0a1628']} />
-        <SceneContent onSelectProject={onSelectProject} />
+        <Suspense fallback={null}>
+          <SceneContent onSelectProject={onSelectProject} />
+        </Suspense>
       </Canvas>
     </>
   )

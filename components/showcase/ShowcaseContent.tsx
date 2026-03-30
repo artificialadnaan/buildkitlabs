@@ -54,32 +54,14 @@ export default function ShowcaseContent() {
             setHoveredProject={setHoveredProject}
           />
 
-          {/* UI Overlays */}
-          <div className="fixed inset-0 z-50 pointer-events-none">
-            {/* Top left — name */}
-            <a
-              href="/"
-              className="absolute top-6 left-8 text-white text-lg font-bold tracking-[0.2em] uppercase pointer-events-auto hover:text-white/80 transition-colors"
-            >
-              Adnaan Iqbal
-            </a>
-
-            {/* Top right — nav */}
-            <div className="absolute top-6 right-8 flex gap-6 pointer-events-auto">
-              <a href="/about" className="text-white/50 hover:text-white text-sm tracking-wider transition-colors">About</a>
-              <a href="https://github.com/artificialadnaan" target="_blank" rel="noopener noreferrer" className="text-white/50 hover:text-white text-sm tracking-wider transition-colors">GitHub</a>
-              <a href="/contact" className="text-white/50 hover:text-white text-sm tracking-wider transition-colors">Contact</a>
+          {/* Bottom hint overlay */}
+          {!selectedProject && (
+            <div className="fixed bottom-8 left-0 right-0 text-center z-50 pointer-events-none">
+              <span className="text-white/30 text-xs tracking-[0.3em] uppercase">
+                Click any building to explore
+              </span>
             </div>
-
-            {/* Bottom center — hint */}
-            {!selectedProject && (
-              <div className="absolute bottom-8 left-0 right-0 text-center">
-                <span className="text-white/30 text-xs tracking-[0.3em] uppercase">
-                  Click any building to explore
-                </span>
-              </div>
-            )}
-          </div>
+          )}
         </>
       )}
 
