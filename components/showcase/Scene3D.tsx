@@ -1,15 +1,13 @@
 'use client'
 
 import { useRef, useState, useEffect, useMemo, Suspense } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { MeshReflectorMaterial, useProgress, Stars, Text, useTexture, Billboard } from '@react-three/drei'
+import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber'
+import { MeshReflectorMaterial, useProgress, Stars, Text, useTexture } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import { projects, type Project } from './data'
 
-// ═══════════════════════════════════════
-// Preload all building textures
-// ═══════════════════════════════════════
+// ═══ Preload textures ═══
 useTexture.preload('/buildings/fencetastic.jpeg')
 useTexture.preload('/buildings/booth-plug.jpeg')
 useTexture.preload('/buildings/virasat-jewels.jpeg')
@@ -18,9 +16,9 @@ useTexture.preload('/buildings/synchub.jpeg')
 useTexture.preload('/buildings/buildkit-crm.jpeg')
 useTexture.preload('/buildings/buildkit-labs.jpeg')
 
-// ═══════════════════════════════════════
-// Street layout
-// ═══════════════════════════════════════
+// ═══ Street layout ═══
+// Buildings face INWARD toward the street center.
+// Left side planes face +X (rotY = PI/2), right side face -X (rotY = -PI/2)
 
 interface BuildingLayout {
   id: string
@@ -30,89 +28,68 @@ interface BuildingLayout {
   displayHeight: number
 }
 
+// LEFT side: smallest closest, biggest furthest back
+// RIGHT side: same pattern
 const STREET_LAYOUT: BuildingLayout[] = [
-  // LEFT SIDE
-  { id: 'fencetastic',    side: 'left',  x: -7, z: 12, displayHeight: 4  },
-  { id: 'booth-plug',     side: 'left',  x: -7, z: 20, displayHeight: 6  },
-  { id: 'virasat-jewels', side: 'left',  x: -7, z: 28, displayHeight: 9  },
-  { id: 'skyguard',       side: 'left',  x: -7, z: 36, displayHeight: 12 },
-  // RIGHT SIDE
-  { id: 'buildkit-labs',  side: 'right', x: 7,  z: 12, displayHeight: 4  },
-  { id: 'buildkit-crm',   side: 'right', x: 7,  z: 20, displayHeight: 10 },
-  { id: 'synchub',        side: 'right', x: 7,  z: 28, displayHeight: 16 },
+  // LEFT SIDE — face right toward street
+  { id: 'fencetastic',    side: 'left',  x: -6, z: 10, displayHeight: 3.5 },
+  { id: 'booth-plug',     side: 'left',  x: -6, z: 17, displayHeight: 5   },
+  { id: 'virasat-jewels', side: 'left',  x: -6, z: 24, displayHeight: 7   },
+  { id: 'skyguard',       side: 'left',  x: -6, z: 31, displayHeight: 9   },
+  // RIGHT SIDE — face left toward street
+  { id: 'buildkit-labs',  side: 'right', x: 6,  z: 10, displayHeight: 3.5 },
+  { id: 'buildkit-crm',   side: 'right', x: 6,  z: 17, displayHeight: 7   },
+  { id: 'synchub',        side: 'right', x: 6,  z: 24, displayHeight: 11  },
 ]
 
 const FILLER_BUILDINGS = [
-  { x: -8, z: 44, w: 3, h: 8,  color: '#0d1117' },
-  { x: -7, z: 50, w: 4, h: 12, color: '#0f1419' },
-  { x: -9, z: 56, w: 3, h: 6,  color: '#0d1117' },
-  { x: 8,  z: 36, w: 3, h: 7,  color: '#0d1117' },
-  { x: 7,  z: 44, w: 4, h: 14, color: '#0f1419' },
-  { x: 9,  z: 52, w: 3, h: 5,  color: '#0d1117' },
+  { x: -7, z: 38, w: 3, h: 6,  color: '#0d1117' },
+  { x: -6, z: 44, w: 4, h: 10, color: '#0f1419' },
+  { x: -8, z: 50, w: 3, h: 5,  color: '#0d1117' },
+  { x: 7,  z: 32, w: 3, h: 5,  color: '#0d1117' },
+  { x: 6,  z: 38, w: 4, h: 12, color: '#0f1419' },
+  { x: 8,  z: 46, w: 3, h: 4,  color: '#0d1117' },
 ]
 
-// ═══════════════════════════════════════
-// Loading Screen
-// ═══════════════════════════════════════
-
+// ═══ Loading Screen ═══
 function LoadingScreen() {
   const { progress } = useProgress()
   const [visible, setVisible] = useState(true)
-
-  useEffect(() => {
-    const timeout = setTimeout(() => setVisible(false), 8000)
-    return () => clearTimeout(timeout)
-  }, [])
-
-  useEffect(() => {
-    if (progress >= 100) {
-      const t = setTimeout(() => setVisible(false), 600)
-      return () => clearTimeout(t)
-    }
-    return undefined
-  }, [progress])
-
+  useEffect(() => { const t = setTimeout(() => setVisible(false), 8000); return () => clearTimeout(t) }, [])
+  useEffect(() => { if (progress >= 100) { const t = setTimeout(() => setVisible(false), 600); return () => clearTimeout(t) } return undefined }, [progress])
   if (!visible) return null
-  const gradientColors = projects.map(p => p.accent).join(', ')
-
+  const colors = projects.map(p => p.accent).join(', ')
   return (
-    <div
-      className="fixed inset-0 z-[300] flex flex-col items-center justify-center transition-opacity duration-500"
-      style={{ backgroundColor: '#0a1628', opacity: progress >= 100 ? 0 : 1, pointerEvents: progress >= 100 ? 'none' : 'auto' }}
-    >
+    <div className="fixed inset-0 z-[300] flex flex-col items-center justify-center transition-opacity duration-500"
+      style={{ backgroundColor: '#0a1628', opacity: progress >= 100 ? 0 : 1, pointerEvents: progress >= 100 ? 'none' : 'auto' }}>
       <p className="text-white/50 tracking-[0.3em] text-sm uppercase mb-6">Entering the city...</p>
       <div className="w-64 h-1 rounded-full overflow-hidden bg-white/10">
-        <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${gradientColors})` }} />
+        <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${colors})` }} />
       </div>
-      <p className="text-white/30 text-xs mt-3 tracking-wider">{Math.round(progress)}%</p>
     </div>
   )
 }
 
-// ═══════════════════════════════════════
-// First-person camera
-// ═══════════════════════════════════════
-
+// ═══ First-person camera — walk forward along Z ═══
 function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
   const { camera } = useThree()
-  const targetZ = useRef(0)
+  const targetZ = useRef(-4)
+  const currentZ = useRef(-4)
   const targetX = useRef(0)
-  const currentZ = useRef(0)
   const currentX = useRef(0)
   const time = useRef(0)
-  const isMoving = useRef(false)
+  const moving = useRef(false)
   const keys = useRef<Set<string>>(new Set())
   const mouseX = useRef(0)
   const mouseY = useRef(0)
 
   useEffect(() => {
-    camera.position.set(0, 1.7, 0)
-    camera.lookAt(0, 1.7, 20)
+    camera.position.set(0, 1.6, -4)
+    camera.lookAt(0, 2, 30)
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
-      // ~2 units per full scroll, 8-10 scrolls for the full street
-      targetZ.current = Math.max(-2, Math.min(40, targetZ.current + e.deltaY * 0.012))
+      targetZ.current = Math.max(-6, Math.min(35, targetZ.current + e.deltaY * 0.012))
     }
     const onKeyDown = (e: KeyboardEvent) => keys.current.add(e.key.toLowerCase())
     const onKeyUp = (e: KeyboardEvent) => keys.current.delete(e.key.toLowerCase())
@@ -124,7 +101,7 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0].clientY }
     const onTouchMove = (e: TouchEvent) => {
       const dy = touchY - e.touches[0].clientY
-      targetZ.current = Math.max(-2, Math.min(40, targetZ.current + dy * 0.03))
+      targetZ.current = Math.max(-6, Math.min(35, targetZ.current + dy * 0.025))
       touchY = e.touches[0].clientY
     }
 
@@ -135,7 +112,6 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     window.addEventListener('mousemove', onMouseMove)
     canvas?.addEventListener('touchstart', onTouchStart, { passive: true })
     canvas?.addEventListener('touchmove', onTouchMove, { passive: true })
-
     return () => {
       canvas?.removeEventListener('wheel', onWheel)
       window.removeEventListener('keydown', onKeyDown)
@@ -149,33 +125,30 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
   useFrame((_, delta) => {
     time.current += delta
     const k = keys.current
-    const speed = 5 * delta
-    if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(40, targetZ.current + speed)
-    if (k.has('s') || k.has('arrowdown')) targetZ.current = Math.max(-2, targetZ.current - speed)
-    if (k.has('a') || k.has('arrowleft')) targetX.current = Math.max(-1, targetX.current - speed * 0.5)
-    if (k.has('d') || k.has('arrowright')) targetX.current = Math.min(1, targetX.current + speed * 0.5)
+    const spd = 4 * delta
+    if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(35, targetZ.current + spd)
+    if (k.has('s') || k.has('arrowdown')) targetZ.current = Math.max(-6, targetZ.current - spd)
+    if (k.has('a') || k.has('arrowleft')) targetX.current = Math.max(-1.5, targetX.current - spd * 0.4)
+    if (k.has('d') || k.has('arrowright')) targetX.current = Math.min(1.5, targetX.current + spd * 0.4)
 
     const prevZ = currentZ.current
     currentZ.current += (targetZ.current - currentZ.current) * 0.06
     currentX.current += (targetX.current - currentX.current) * 0.06
-    isMoving.current = Math.abs(currentZ.current - prevZ) > 0.001
+    moving.current = Math.abs(currentZ.current - prevZ) > 0.002
 
-    const bob = isMoving.current ? Math.sin(time.current * 3) * 0.03 : 0
-    camera.position.set(currentX.current, 1.7 + bob, currentZ.current)
+    const bob = moving.current ? Math.sin(time.current * 3) * 0.02 : 0
+    camera.position.set(currentX.current, 1.6 + bob, currentZ.current)
 
-    const lookX = currentX.current + mouseX.current * 0.8
-    const lookY = 1.7 - mouseY.current * 0.3
-    camera.lookAt(lookX, lookY, currentZ.current + 20)
+    // Subtle parallax look from mouse
+    const lx = currentX.current + mouseX.current * 0.6
+    const ly = 2.0 - mouseY.current * 0.2
+    camera.lookAt(lx, ly, currentZ.current + 25)
     onCameraZ(currentZ.current)
   })
-
   return null
 }
 
-// ═══════════════════════════════════════
-// Building with texture + black bg removal
-// ═══════════════════════════════════════
-
+// ═══ Building with texture ═══
 function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
   project: Project; layout: BuildingLayout; cameraZ: number; onSelect: (p: Project) => void
 }) {
@@ -183,59 +156,48 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
   const lightRef = useRef<THREE.PointLight>(null)
   const [hovered, setHovered] = useState(false)
 
-  // Load texture via drei useTexture (handles Suspense)
   const texture = useTexture(project.buildingImage)
 
-  // Process texture: remove black background, create CanvasTexture
+  // Remove black background via canvas
   const processedTexture = useMemo(() => {
-    if (!texture.image) {
-      console.warn(`[Showcase] No image data for ${project.id} at ${project.buildingImage}`)
-      return texture
-    }
-    console.log(`[Showcase] Processing texture for ${project.id}: ${texture.image.width}x${texture.image.height}`)
-
+    if (!texture.image) return texture
     const canvas = document.createElement('canvas')
     const ctx = canvas.getContext('2d')
     if (!ctx) return texture
-
     canvas.width = texture.image.width
     canvas.height = texture.image.height
     ctx.drawImage(texture.image, 0, 0)
-
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-    const data = imageData.data
-    for (let i = 0; i < data.length; i += 4) {
-      if (data[i] < 20 && data[i + 1] < 20 && data[i + 2] < 20) {
-        data[i + 3] = 0
-      }
+    const d = imageData.data
+    for (let i = 0; i < d.length; i += 4) {
+      if (d[i] < 20 && d[i + 1] < 20 && d[i + 2] < 20) d[i + 3] = 0
     }
     ctx.putImageData(imageData, 0, 0)
+    const t = new THREE.CanvasTexture(canvas)
+    t.colorSpace = THREE.SRGBColorSpace
+    t.needsUpdate = true
+    return t
+  }, [texture])
 
-    const newTex = new THREE.CanvasTexture(canvas)
-    newTex.colorSpace = THREE.SRGBColorSpace
-    newTex.needsUpdate = true
-    return newTex
-  }, [texture, project.id, project.buildingImage])
-
-  // Aspect ratio from source image
-  const aspect = texture.image
-    ? (texture.image.width || 1) / (texture.image.height || 1)
-    : 0.5
+  const aspect = texture.image ? (texture.image.width || 1) / (texture.image.height || 1) : 0.6
   const h = layout.displayHeight
   const w = h * aspect
 
-  // Light position: between building and street center
-  const lightX = layout.side === 'left' ? layout.x + 2.5 : layout.x - 2.5
-
-  // Label fade: visible when camera is within 8 units
-  const dist = Math.abs(cameraZ - layout.z)
-  const labelOpacity = Math.max(0, Math.min(1, 1 - (dist - 4) / 4))
+  // Building faces the street center:
+  // Left side (x < 0): rotate +90° so plane faces +X direction (toward street)
+  // Right side (x > 0): rotate -90° so plane faces -X direction (toward street)
+  const rotY = layout.side === 'left' ? Math.PI / 2 : -Math.PI / 2
 
   const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
+  const lightOffset = layout.side === 'left' ? 2 : -2
+
+  // Label visibility
+  const dist = Math.abs(cameraZ - layout.z)
+  const labelOpacity = Math.max(0, Math.min(1, 1 - (dist - 6) / 6))
 
   useFrame(() => {
     if (!meshRef.current) return
-    const target = hovered ? 1.05 : 1
+    const target = hovered ? 1.04 : 1
     const s = meshRef.current.scale.x
     meshRef.current.scale.setScalar(s + (target - s) * 0.1)
     if (lightRef.current) {
@@ -245,90 +207,75 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
 
   return (
     <group position={[layout.x, h / 2, layout.z]}>
-      {/* Billboard so building always faces camera */}
-      <Billboard follow lockX={false} lockY={true} lockZ={false}>
-        <mesh
-          ref={meshRef}
-          onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
-          onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
-          onClick={(e) => { e.stopPropagation(); onSelect(project) }}
-        >
-          <planeGeometry args={[w, h]} />
-          <meshBasicMaterial
-            map={processedTexture}
-            transparent
-            alphaTest={0.05}
-            side={THREE.DoubleSide}
-            depthWrite
-          />
-        </mesh>
-      </Billboard>
+      {/* Building plane rotated to face street */}
+      <mesh
+        ref={meshRef}
+        rotation={[0, rotY, 0]}
+        onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
+        onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
+        onClick={(e) => { e.stopPropagation(); onSelect(project) }}
+      >
+        <planeGeometry args={[w, h]} />
+        <meshBasicMaterial map={processedTexture} transparent alphaTest={0.05} side={THREE.DoubleSide} depthWrite />
+      </mesh>
 
-      {/* Label — fades in when close */}
+      {/* Name label — faces the street, visible when close */}
       {labelOpacity > 0.01 && (
-        <Billboard follow lockY={true}>
-          <Text position={[0, -h / 2 - 0.3, 0]} fontSize={0.35} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
+        <group position={[lightOffset * 0.5, -h / 2 + 0.1, 0]} rotation={[0, rotY, 0]}>
+          <Text fontSize={0.3} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
             {project.name}
           </Text>
-          <Text position={[0, -h / 2 - 0.7, 0]} fontSize={0.2} color="#6B7280" anchorX="center" anchorY="top" fillOpacity={labelOpacity * 0.7}>
+          <Text position={[0, -0.35, 0]} fontSize={0.17} color="#6B7280" anchorX="center" anchorY="top" fillOpacity={labelOpacity * 0.7}>
             {project.subtitle}
           </Text>
-        </Billboard>
+        </group>
       )}
 
-      {/* Point light spilling onto the road */}
-      <pointLight ref={lightRef} position={[lightX - layout.x, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={12} decay={2} />
+      {/* Light spilling onto the road */}
+      <pointLight ref={lightRef} position={[lightOffset, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={10} decay={2} />
     </group>
   )
 }
 
-// ═══════════════════════════════════════
-// Fallback building
-// ═══════════════════════════════════════
-
+// ═══ Fallback building ═══
 function FallbackBuilding({ project, layout, cameraZ, onSelect }: {
   project: Project; layout: BuildingLayout; cameraZ: number; onSelect: (p: Project) => void
 }) {
   const meshRef = useRef<THREE.Mesh>(null)
   const [hovered, setHovered] = useState(false)
   const h = layout.displayHeight
-  const w = h * 0.45
+  const w = h * 0.5
   const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
-  const labelOpacity = Math.max(0, Math.min(1, 1 - (Math.abs(cameraZ - layout.z) - 4) / 4))
+  const labelOpacity = Math.max(0, Math.min(1, 1 - (Math.abs(cameraZ - layout.z) - 6) / 6))
 
   useFrame(() => {
     if (!meshRef.current) return
-    const target = hovered ? 1.05 : 1
+    const t = hovered ? 1.04 : 1
     const s = meshRef.current.scale.x
-    meshRef.current.scale.setScalar(s + (target - s) * 0.1)
+    meshRef.current.scale.setScalar(s + (t - s) * 0.1)
   })
 
   return (
     <group position={[layout.x, h / 2, layout.z]}>
-      <mesh
-        ref={meshRef}
+      <mesh ref={meshRef}
         onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
         onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
         onClick={(e) => { e.stopPropagation(); onSelect(project) }}
       >
-        <boxGeometry args={[w, h, w * 0.3]} />
-        <meshBasicMaterial color={accentColor} transparent opacity={0.3} />
+        <boxGeometry args={[w, h, 1]} />
+        <meshBasicMaterial color={accentColor} transparent opacity={0.25} />
       </mesh>
       {labelOpacity > 0.01 && (
-        <Billboard follow lockY={true}>
-          <Text position={[0, -h / 2 - 0.3, 0]} fontSize={0.35} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
-            {project.name}
-          </Text>
-        </Billboard>
+        <Text position={[0, -h / 2 + 0.1, layout.side === 'left' ? 1 : -1]}
+          rotation={[0, layout.side === 'left' ? Math.PI / 2 : -Math.PI / 2, 0]}
+          fontSize={0.3} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
+          {project.name}
+        </Text>
       )}
-      <pointLight position={[layout.side === 'left' ? 2.5 : -2.5, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={12} decay={2} />
+      <pointLight position={[layout.side === 'left' ? 2 : -2, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={10} decay={2} />
     </group>
   )
 }
-
-// ═══════════════════════════════════════
-// Building wrapper
-// ═══════════════════════════════════════
 
 function BuildingPlane({ project, layout, cameraZ, onSelect }: {
   project: Project; layout: BuildingLayout; cameraZ: number; onSelect: (p: Project) => void
@@ -340,28 +287,22 @@ function BuildingPlane({ project, layout, cameraZ, onSelect }: {
   )
 }
 
-// ═══════════════════════════════════════
-// Ground glow
-// ═══════════════════════════════════════
-
+// ═══ Ground glow ═══
 function GroundGlow({ x, z, color }: { x: number; z: number; color: string }) {
-  const colorObj = useMemo(() => new THREE.Color(color), [color])
+  const c = useMemo(() => new THREE.Color(color), [color])
   return (
-    <mesh position={[x, 0.02, z]} rotation={[-Math.PI / 2, 0, 0]}>
+    <mesh position={[x + (x < 0 ? 1.5 : -1.5), 0.02, z]} rotation={[-Math.PI / 2, 0, 0]}>
       <planeGeometry args={[3, 3]} />
-      <meshBasicMaterial color={colorObj} transparent opacity={0.12} depthWrite={false} blending={THREE.AdditiveBlending} />
+      <meshBasicMaterial color={c} transparent opacity={0.1} depthWrite={false} blending={THREE.AdditiveBlending} />
     </mesh>
   )
 }
 
-// ═══════════════════════════════════════
-// Street
-// ═══════════════════════════════════════
-
+// ═══ Street / environment ═══
 function Street() {
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 25]}>
-      <planeGeometry args={[12, 65]} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 20]}>
+      <planeGeometry args={[10, 70]} />
       <MeshReflectorMaterial mirror={0.4} roughness={0.25} mixStrength={0.6} mixBlur={1} color="#0a0e18" metalness={0.8} resolution={512} />
     </mesh>
   )
@@ -370,12 +311,12 @@ function Street() {
 function Sidewalks() {
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-5.5, 0.04, 25]}>
-        <planeGeometry args={[1.5, 65]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-4.5, 0.04, 20]}>
+        <planeGeometry args={[1.5, 70]} />
         <meshBasicMaterial color="#1a1a2e" />
       </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[5.5, 0.04, 25]}>
-        <planeGeometry args={[1.5, 65]} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[4.5, 0.04, 20]}>
+        <planeGeometry args={[1.5, 70]} />
         <meshBasicMaterial color="#1a1a2e" />
       </mesh>
     </>
@@ -383,13 +324,13 @@ function Sidewalks() {
 }
 
 function RoadDashes() {
-  const dashes = useMemo(() => Array.from({ length: 16 }, (_, i) => 2 + i * 3), [])
+  const dashes = useMemo(() => Array.from({ length: 20 }, (_, i) => -2 + i * 3), [])
   return (
     <>
-      {dashes.map((z) => (
+      {dashes.map(z => (
         <mesh key={z} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.015, z]}>
-          <planeGeometry args={[0.15, 1.2]} />
-          <meshBasicMaterial color="#334155" transparent opacity={0.5} />
+          <planeGeometry args={[0.12, 1.0]} />
+          <meshBasicMaterial color="#334155" transparent opacity={0.4} />
         </mesh>
       ))}
     </>
@@ -412,10 +353,7 @@ function FillerBuildings() {
 function Streetlamps() {
   const positions = useMemo(() => {
     const arr: [number, number][] = []
-    for (let z = 10; z <= 40; z += 10) {
-      arr.push([-4.5, z])
-      arr.push([4.5, z])
-    }
+    for (let z = 8; z <= 36; z += 8) { arr.push([-3.5, z]); arr.push([3.5, z]) }
     return arr
   }, [])
   return (
@@ -426,7 +364,7 @@ function Streetlamps() {
             <cylinderGeometry args={[0.03, 0.03, 3]} />
             <meshBasicMaterial color="#1a1a2e" />
           </mesh>
-          <pointLight position={[x, 3, z]} color="#FFF5E1" intensity={1} distance={8} decay={2} />
+          <pointLight position={[x, 3, z]} color="#FFF5E1" intensity={0.8} distance={6} decay={2} />
         </group>
       ))}
     </>
@@ -437,27 +375,18 @@ function TRockBeacon() {
   const lightRef = useRef<THREE.PointLight>(null)
   const synchub = STREET_LAYOUT.find(b => b.id === 'synchub')!
   useFrame(({ clock }) => {
-    if (lightRef.current) {
-      lightRef.current.intensity = 1 + Math.sin(clock.elapsedTime * 2) * 1.5
-    }
+    if (lightRef.current) lightRef.current.intensity = 1.5 + Math.sin(clock.elapsedTime * 2) * 1.5
   })
-  return (
-    <pointLight ref={lightRef} position={[synchub.x, synchub.displayHeight + 1, synchub.z]} color="#EF4444" intensity={3} distance={20} decay={2} />
-  )
+  return <pointLight ref={lightRef} position={[synchub.x, synchub.displayHeight + 0.5, synchub.z]} color="#EF4444" intensity={3} distance={18} decay={2} />
 }
 
-// ═══════════════════════════════════════
-// Scene content
-// ═══════════════════════════════════════
-
+// ═══ Scene content ═══
 function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
   onSelectProject: (p: Project) => void; cameraZ: number; onCameraZ: (z: number) => void
 }) {
   const { scene } = useThree()
-
   useEffect(() => {
-    scene.fog = new THREE.FogExp2('#0a1628', 0.02)
-    // Debug: log building layout
+    scene.fog = new THREE.FogExp2('#0a1628', 0.018)
     console.table(STREET_LAYOUT.map(l => {
       const p = projects.find(pp => pp.id === l.id)
       return { name: p?.name, side: l.side, x: l.x, z: l.z, height: l.displayHeight, texture: p?.buildingImage }
@@ -467,8 +396,8 @@ function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
 
   return (
     <>
-      <ambientLight intensity={0.3} color="#0a1628" />
-      <directionalLight position={[0, 10, -5]} color="#334155" intensity={0.2} />
+      <ambientLight intensity={0.4} color="#1a2744" />
+      <directionalLight position={[0, 15, -10]} color="#334155" intensity={0.3} />
       <CameraController onCameraZ={onCameraZ} />
       <Stars count={500} depth={100} saturation={0} factor={3} fade />
       <Street />
@@ -478,7 +407,7 @@ function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
       <FillerBuildings />
       <TRockBeacon />
 
-      {STREET_LAYOUT.map((layout) => {
+      {STREET_LAYOUT.map(layout => {
         const project = projects.find(p => p.id === layout.id)
         if (!project) return null
         return (
@@ -497,47 +426,31 @@ function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
   )
 }
 
-// ═══════════════════════════════════════
-// Main export
-// ═══════════════════════════════════════
-
+// ═══ Main export ═══
 export default function Scene3D({
-  onSelectProject,
-  hoveredProject,
-  setHoveredProject,
-  panelOpen,
+  onSelectProject, hoveredProject, setHoveredProject, panelOpen,
 }: {
-  onSelectProject: (p: Project) => void
-  hoveredProject: Project | null
-  setHoveredProject: (p: Project | null) => void
-  panelOpen: boolean
+  onSelectProject: (p: Project) => void; hoveredProject: Project | null
+  setHoveredProject: (p: Project | null) => void; panelOpen: boolean
 }) {
-  const [cameraZ, setCameraZ] = useState(0)
-
+  const [cameraZ, setCameraZ] = useState(-4)
   return (
     <>
       <LoadingScreen />
-
       {hoveredProject && (
-        <div
-          className="fixed top-24 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg pointer-events-none animate-[fadeIn_0.15s_ease]"
-          style={{ background: 'rgba(6,12,24,0.9)', border: `1px solid ${hoveredProject.accent}30`, backdropFilter: 'blur(12px)' }}
-        >
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg pointer-events-none animate-[fadeIn_0.15s_ease]"
+          style={{ background: 'rgba(6,12,24,0.9)', border: `1px solid ${hoveredProject.accent}30`, backdropFilter: 'blur(12px)' }}>
           <span className="text-sm font-bold" style={{ color: hoveredProject.accent }}>{hoveredProject.name}</span>
           <span className="text-white/40 text-xs ml-2">{hoveredProject.subtitle}</span>
         </div>
       )}
-
       {!panelOpen && (
         <div className="fixed bottom-6 left-0 right-0 text-center z-50 pointer-events-none">
-          <span className="text-white/25 text-xs tracking-[0.3em] uppercase">
-            Scroll to walk &middot; Click to explore
-          </span>
+          <span className="text-white/25 text-xs tracking-[0.3em] uppercase">Scroll to walk &middot; Click to explore</span>
         </div>
       )}
-
       <Canvas
-        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
+        gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
         camera={{ fov: 65, near: 0.1, far: 200 }}
         style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
         onPointerMissed={() => setHoveredProject(null)}
