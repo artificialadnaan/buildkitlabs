@@ -94,6 +94,21 @@ body {
   to { transform: translateX(0); }
 }
 
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+@keyframes roadScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-40px); }
+}
+
 /* Card border highlight on hover */
 .card-hover {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
