@@ -28,27 +28,23 @@ interface BuildingLayout {
   displayHeight: number
 }
 
-// LEFT side: smallest closest, biggest furthest back
-// RIGHT side: same pattern
+// All buildings in a line at Z:0, spread along X axis
+// Camera pans horizontally to see them all
 const STREET_LAYOUT: BuildingLayout[] = [
-  // LEFT SIDE — face right toward street
-  { id: 'fencetastic',    side: 'left',  x: -6, z: 10, displayHeight: 5   },
-  { id: 'booth-plug',     side: 'left',  x: -6, z: 17, displayHeight: 7   },
-  { id: 'virasat-jewels', side: 'left',  x: -6, z: 24, displayHeight: 9   },
-  { id: 'skyguard',       side: 'left',  x: -6, z: 31, displayHeight: 12  },
-  // RIGHT SIDE — face left toward street
-  { id: 'buildkit-labs',  side: 'right', x: 6,  z: 10, displayHeight: 5   },
-  { id: 'buildkit-crm',   side: 'right', x: 6,  z: 17, displayHeight: 9   },
-  { id: 'synchub',        side: 'right', x: 6,  z: 24, displayHeight: 14  },
+  { id: 'fencetastic',    side: 'left',  x: -18, z: 0, displayHeight: 5   },
+  { id: 'booth-plug',     side: 'left',  x: -12, z: 0, displayHeight: 7   },
+  { id: 'buildkit-labs',  side: 'left',  x: -6,  z: 0, displayHeight: 5   },
+  { id: 'buildkit-crm',   side: 'right', x: 0,   z: 0, displayHeight: 9   },
+  { id: 'virasat-jewels', side: 'right', x: 6,   z: 0, displayHeight: 8   },
+  { id: 'skyguard',       side: 'right', x: 12,  z: 0, displayHeight: 12  },
+  { id: 'synchub',        side: 'right', x: 18,  z: 0, displayHeight: 14  },
 ]
 
 const FILLER_BUILDINGS = [
-  { x: -7, z: 38, w: 3, h: 6,  color: '#0d1117' },
-  { x: -6, z: 44, w: 4, h: 10, color: '#0f1419' },
-  { x: -8, z: 50, w: 3, h: 5,  color: '#0d1117' },
-  { x: 7,  z: 32, w: 3, h: 5,  color: '#0d1117' },
-  { x: 6,  z: 38, w: 4, h: 12, color: '#0f1419' },
-  { x: 8,  z: 46, w: 3, h: 4,  color: '#0d1117' },
+  { x: -24, z: 0, w: 3, h: 6,  color: '#0d1117' },
+  { x: -27, z: 0, w: 4, h: 10, color: '#0f1419' },
+  { x: 24,  z: 0, w: 3, h: 7,  color: '#0d1117' },
+  { x: 27,  z: 0, w: 4, h: 11, color: '#0f1419' },
 ]
 
 // ═══ Loading Screen ═══
@@ -73,24 +69,22 @@ function LoadingScreen() {
 // ═══ First-person camera — walk forward along Z ═══
 function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
   const { camera } = useThree()
-  const targetZ = useRef(-8)
-  const currentZ = useRef(-8)
   const targetX = useRef(0)
   const currentX = useRef(0)
-  const time = useRef(0)
-  const moving = useRef(false)
   const keys = useRef<Set<string>>(new Set())
   const mouseX = useRef(0)
   const mouseY = useRef(0)
+  const xMin = -20
+  const xMax = 20
 
   useEffect(() => {
-    camera.position.set(0, 1.8, -8)
-    camera.lookAt(0, 1.5, 30)
+    // Camera at a fixed distance, eye height, facing the buildings
+    camera.position.set(0, 3, 16)
+    camera.lookAt(0, 3, 0)
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
-      // Clamp Z so camera approaches buildings but never walks past the first pair (Z:10)
-      targetZ.current = Math.max(-10, Math.min(7, targetZ.current + e.deltaY * 0.012))
+      targetX.current = Math.max(xMin, Math.min(xMax, targetX.current + e.deltaY * 0.015))
     }
     const onKeyDown = (e: KeyboardEvent) => keys.current.add(e.key.toLowerCase())
     const onKeyUp = (e: KeyboardEvent) => keys.current.delete(e.key.toLowerCase())
@@ -98,12 +92,12 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
       mouseX.current = (e.clientX / window.innerWidth - 0.5) * 2
       mouseY.current = (e.clientY / window.innerHeight - 0.5) * 2
     }
-    let touchY = 0
-    const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0].clientY }
+    let touchX = 0
+    const onTouchStart = (e: TouchEvent) => { touchX = e.touches[0].clientX }
     const onTouchMove = (e: TouchEvent) => {
-      const dy = touchY - e.touches[0].clientY
-      targetZ.current = Math.max(-10, Math.min(7, targetZ.current + dy * 0.025))
-      touchY = e.touches[0].clientY
+      const dx = touchX - e.touches[0].clientX
+      targetX.current = Math.max(xMin, Math.min(xMax, targetX.current + dx * 0.03))
+      touchX = e.touches[0].clientX
     }
 
     const canvas = document.querySelector('canvas')
@@ -121,30 +115,21 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
       canvas?.removeEventListener('touchstart', onTouchStart)
       canvas?.removeEventListener('touchmove', onTouchMove)
     }
-  }, [camera])
+  }, [camera, xMin, xMax])
 
   useFrame((_, delta) => {
-    time.current += delta
     const k = keys.current
-    const spd = 4 * delta
-    if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(7, targetZ.current + spd)
-    if (k.has('s') || k.has('arrowdown')) targetZ.current = Math.max(-10, targetZ.current - spd)
-    if (k.has('a') || k.has('arrowleft')) targetX.current = Math.max(-1.5, targetX.current - spd * 0.4)
-    if (k.has('d') || k.has('arrowright')) targetX.current = Math.min(1.5, targetX.current + spd * 0.4)
+    const spd = 5 * delta
+    if (k.has('a') || k.has('arrowleft')) targetX.current = Math.max(xMin, targetX.current - spd)
+    if (k.has('d') || k.has('arrowright')) targetX.current = Math.min(xMax, targetX.current + spd)
 
-    const prevZ = currentZ.current
-    currentZ.current += (targetZ.current - currentZ.current) * 0.06
     currentX.current += (targetX.current - currentX.current) * 0.06
-    moving.current = Math.abs(currentZ.current - prevZ) > 0.002
-
-    const bob = moving.current ? Math.sin(time.current * 3) * 0.02 : 0
-    camera.position.set(currentX.current, 1.8 + bob, currentZ.current)
-
-    // Subtle parallax look from mouse
-    const lx = currentX.current + mouseX.current * 0.6
-    const ly = 1.5 - mouseY.current * 0.2
-    camera.lookAt(lx, ly, currentZ.current + 25)
-    onCameraZ(currentZ.current)
+    camera.position.x = currentX.current
+    // Subtle parallax from mouse
+    const lx = currentX.current + mouseX.current * 0.5
+    const ly = 3 - mouseY.current * 0.3
+    camera.lookAt(lx, ly, 0)
+    onCameraZ(currentX.current) // reuse cameraZ for label proximity (now X-based)
   })
   return null
 }
@@ -184,14 +169,14 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
   const h = layout.displayHeight
   const w = h * aspect
 
-  // No manual rotation — Billboard handles facing the camera
+  // Billboard handles facing the camera
 
   const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
-  const lightOffset = layout.side === 'left' ? 2 : -2
+  const lightOffset = 0 // light directly below
 
-  // Label visibility
-  const dist = Math.abs(cameraZ - layout.z)
-  const labelOpacity = Math.max(0, Math.min(1, 1 - (dist - 6) / 6))
+  // Label visibility — based on camera X proximity
+  const dist = Math.abs(cameraZ - layout.x) // cameraZ is actually cameraX in horizontal mode
+  const labelOpacity = Math.max(0, Math.min(1, 1 - (dist - 4) / 6))
 
   useFrame(() => {
     if (!meshRef.current) return
@@ -245,7 +230,7 @@ function FallbackBuilding({ project, layout, cameraZ, onSelect }: {
   const h = layout.displayHeight
   const w = h * 0.5
   const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
-  const labelOpacity = Math.max(0, Math.min(1, 1 - (Math.abs(cameraZ - layout.z) - 6) / 6))
+  const labelOpacity = Math.max(0, Math.min(1, 1 - (Math.abs(cameraZ - layout.x) - 4) / 6))
 
   useFrame(() => {
     if (!meshRef.current) return
@@ -272,7 +257,7 @@ function FallbackBuilding({ project, layout, cameraZ, onSelect }: {
           </Text>
         </Billboard>
       )}
-      <pointLight position={[layout.side === 'left' ? 2 : -2, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={10} decay={2} />
+      <pointLight position={[0, -h / 2 + 0.5, 1]} color={accentColor} intensity={3} distance={10} decay={2} />
     </group>
   )
 }
@@ -301,8 +286,8 @@ function GroundGlow({ x, z, color }: { x: number; z: number; color: string }) {
 // ═══ Street / environment ═══
 function Street() {
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 20]}>
-      <planeGeometry args={[10, 70]} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
+      <planeGeometry args={[60, 20]} />
       <MeshReflectorMaterial mirror={0.4} roughness={0.25} mixStrength={0.6} mixBlur={1} color="#0a0e18" metalness={0.8} resolution={512} />
     </mesh>
   )
@@ -311,28 +296,16 @@ function Street() {
 function Sidewalks() {
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-4.5, 0.04, 20]}>
-        <planeGeometry args={[1.5, 70]} />
-        <meshBasicMaterial color="#1a1a2e" />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[4.5, 0.04, 20]}>
-        <planeGeometry args={[1.5, 70]} />
-        <meshBasicMaterial color="#1a1a2e" />
-      </mesh>
+      {/* No sidewalks in horizontal layout */}
     </>
   )
 }
 
 function RoadDashes() {
-  const dashes = useMemo(() => Array.from({ length: 20 }, (_, i) => -2 + i * 3), [])
+  // No road dashes in horizontal layout
   return (
     <>
-      {dashes.map(z => (
-        <mesh key={z} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.015, z]}>
-          <planeGeometry args={[0.12, 1.0]} />
-          <meshBasicMaterial color="#334155" transparent opacity={0.4} />
-        </mesh>
-      ))}
+      {null}
     </>
   )
 }
@@ -353,7 +326,7 @@ function FillerBuildings() {
 function Streetlamps() {
   const positions = useMemo(() => {
     const arr: [number, number][] = []
-    for (let z = 8; z <= 36; z += 8) { arr.push([-3.5, z]); arr.push([3.5, z]) }
+    for (let x = -21; x <= 21; x += 7) { arr.push([x, 3]) }
     return arr
   }, [])
   return (
@@ -364,7 +337,7 @@ function Streetlamps() {
             <cylinderGeometry args={[0.03, 0.03, 3]} />
             <meshBasicMaterial color="#1a1a2e" />
           </mesh>
-          <pointLight position={[x, 3, z]} color="#FFF5E1" intensity={0.8} distance={6} decay={2} />
+          <pointLight position={[x, 3, z]} color="#FFF5E1" intensity={0.6} distance={6} decay={2} />
         </group>
       ))}
     </>
@@ -377,7 +350,7 @@ function TRockBeacon() {
   useFrame(({ clock }) => {
     if (lightRef.current) lightRef.current.intensity = 1.5 + Math.sin(clock.elapsedTime * 2) * 1.5
   })
-  return <pointLight ref={lightRef} position={[synchub.x, synchub.displayHeight + 0.5, synchub.z]} color="#EF4444" intensity={3} distance={18} decay={2} />
+  return <pointLight ref={lightRef} position={[synchub.x, synchub.displayHeight + 1, synchub.z]} color="#EF4444" intensity={3} distance={18} decay={2} />
 }
 
 // ═══ Scene content ═══
@@ -433,7 +406,7 @@ export default function Scene3D({
   onSelectProject: (p: Project) => void; hoveredProject: Project | null
   setHoveredProject: (p: Project | null) => void; panelOpen: boolean
 }) {
-  const [cameraZ, setCameraZ] = useState(-8)
+  const [cameraZ, setCameraZ] = useState(0)
   return (
     <>
       <LoadingScreen />
@@ -446,7 +419,7 @@ export default function Scene3D({
       )}
       {!panelOpen && (
         <div className="fixed bottom-6 left-0 right-0 text-center z-50 pointer-events-none">
-          <span className="text-white/25 text-xs tracking-[0.3em] uppercase">Scroll to walk &middot; Click to explore</span>
+          <span className="text-white/25 text-xs tracking-[0.3em] uppercase">Scroll to explore &middot; Click any building</span>
         </div>
       )}
       <Canvas
