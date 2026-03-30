@@ -3,7 +3,8 @@
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { MeshReflectorMaterial, useProgress, Stars, Text, Billboard } from '@react-three/drei'
-import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
+// Postprocessing disabled — CSP blocks blob workers it needs
+// import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import { projects, type Project } from './data'
 
@@ -323,10 +324,7 @@ function SceneContent({ onSelectProject, cameraX, onCameraX }: {
         )
       })}
 
-      <EffectComposer>
-        <Bloom intensity={0.4} luminanceThreshold={0.5} luminanceSmoothing={0.9} radius={0.8} />
-        <Vignette eskil={false} offset={0.1} darkness={0.5} />
-      </EffectComposer>
+      {/* Postprocessing disabled — CSP blocks blob workers */}
     </>
   )
 }
