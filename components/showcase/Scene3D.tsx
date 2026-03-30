@@ -73,8 +73,8 @@ function LoadingScreen() {
 // ═══ First-person camera — walk forward along Z ═══
 function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
   const { camera } = useThree()
-  const targetZ = useRef(-4)
-  const currentZ = useRef(-4)
+  const targetZ = useRef(-8)
+  const currentZ = useRef(-8)
   const targetX = useRef(0)
   const currentX = useRef(0)
   const time = useRef(0)
@@ -84,12 +84,13 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
   const mouseY = useRef(0)
 
   useEffect(() => {
-    camera.position.set(0, 1.8, -4)
+    camera.position.set(0, 1.8, -8)
     camera.lookAt(0, 1.5, 30)
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
-      targetZ.current = Math.max(-6, Math.min(35, targetZ.current + e.deltaY * 0.012))
+      // Clamp Z so camera approaches buildings but never walks past the first pair (Z:10)
+      targetZ.current = Math.max(-10, Math.min(7, targetZ.current + e.deltaY * 0.012))
     }
     const onKeyDown = (e: KeyboardEvent) => keys.current.add(e.key.toLowerCase())
     const onKeyUp = (e: KeyboardEvent) => keys.current.delete(e.key.toLowerCase())
@@ -101,7 +102,7 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0].clientY }
     const onTouchMove = (e: TouchEvent) => {
       const dy = touchY - e.touches[0].clientY
-      targetZ.current = Math.max(-6, Math.min(35, targetZ.current + dy * 0.025))
+      targetZ.current = Math.max(-10, Math.min(7, targetZ.current + dy * 0.025))
       touchY = e.touches[0].clientY
     }
 
@@ -126,8 +127,8 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     time.current += delta
     const k = keys.current
     const spd = 4 * delta
-    if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(35, targetZ.current + spd)
-    if (k.has('s') || k.has('arrowdown')) targetZ.current = Math.max(-6, targetZ.current - spd)
+    if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(7, targetZ.current + spd)
+    if (k.has('s') || k.has('arrowdown')) targetZ.current = Math.max(-10, targetZ.current - spd)
     if (k.has('a') || k.has('arrowleft')) targetX.current = Math.max(-1.5, targetX.current - spd * 0.4)
     if (k.has('d') || k.has('arrowright')) targetX.current = Math.min(1.5, targetX.current + spd * 0.4)
 
@@ -432,7 +433,7 @@ export default function Scene3D({
   onSelectProject: (p: Project) => void; hoveredProject: Project | null
   setHoveredProject: (p: Project | null) => void; panelOpen: boolean
 }) {
-  const [cameraZ, setCameraZ] = useState(-4)
+  const [cameraZ, setCameraZ] = useState(-8)
   return (
     <>
       <LoadingScreen />
