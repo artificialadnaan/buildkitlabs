@@ -16,7 +16,7 @@ const nextConfig = {
           },
           {
             key: "Content-Security-Policy",
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.emailjs.com; frame-src 'self' https://calendly.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com;",
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' blob:; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; connect-src 'self' blob: https://api.emailjs.com; frame-src 'self' https://calendly.com; img-src 'self' data: https: blob:; font-src 'self' https://fonts.gstatic.com;",
           },
           {
             key: "X-XSS-Protection",
