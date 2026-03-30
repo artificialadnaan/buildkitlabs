@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect, useMemo, Suspense } from 'react'
-import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { MeshReflectorMaterial, useProgress, Stars, Text, useTexture } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
