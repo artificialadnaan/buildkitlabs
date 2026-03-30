@@ -166,11 +166,7 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
     if (!ctx) return texture
     canvas.width = texture.image.width
     canvas.height = texture.image.height
-    // Flip horizontally to un-mirror
-    ctx.translate(canvas.width, 0)
-    ctx.scale(-1, 1)
     ctx.drawImage(texture.image, 0, 0)
-    ctx.setTransform(1, 0, 0, 1, 0, 0) // reset transform
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
     const d = imageData.data
     for (let i = 0; i < d.length; i += 4) {
