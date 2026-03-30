@@ -1,10 +1,8 @@
 'use client'
 
-import { useRef, useState, useEffect, useMemo } from 'react'
+import { useRef, useState, useEffect, useMemo, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Stars, Text, Billboard } from '@react-three/drei'
-// Postprocessing disabled — CSP blocks blob workers it needs
-// import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
+import { Stars, Text, Billboard, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 import { projects, type Project } from './data'
 
@@ -113,9 +111,103 @@ function CameraController({ onCameraX }: { onCameraX: (x: number) => void }) {
   return null
 }
 
-// ═══ Building — loads texture manually, falls back to colored box ═══
+// ═══ GLB Building — loads a 3D model ═══
 
-function BuildingMesh({ project, layout, cameraX, onSelect }: {
+function GLBBuilding({ project, layout, cameraX, onSelect }: {
+  project: Project; layout: BuildingLayout; cameraX: number; onSelect: (p: Project) => void
+}) {
+  const groupRef = useRef<THREE.Group>(null)
+  const lightRef = useRef<THREE.PointLight>(null)
+  const [hovered, setHovered] = useState(false)
+  const { scene } = useGLTF(project.buildingModel!)
+
+  const clonedScene = useMemo(() => {
+    const clone = scene.clone(true)
+    // Compute bounding box to normalize scale
+    const box = new THREE.Box3().setFromObject(clone)
+    const size = new THREE.Vector3()
+    box.getSize(size)
+    const center = new THREE.Vector3()
+    box.getCenter(center)
+
+    // Scale model to fit the layout displayHeight
+    const scaleFactor = layout.displayHeight / size.y
+    clone.scale.setScalar(scaleFactor)
+
+    // Center the model horizontally and sit it on the ground
+    clone.position.set(
+      -center.x * scaleFactor,
+      -box.min.y * scaleFactor,
+      -center.z * scaleFactor
+    )
+
+    // Ensure all materials receive proper lighting
+    clone.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.castShadow = true
+        child.receiveShadow = true
+        if (child.material) {
+          const mat = child.material as THREE.MeshStandardMaterial
+          if (mat.isMeshStandardMaterial) {
+            mat.envMapIntensity = 0.8
+            mat.needsUpdate = true
+          }
+        }
+      }
+    })
+
+    return clone
+  }, [scene, layout.displayHeight])
+
+  const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
+
+  // Label fade based on camera X proximity
+  const dist = Math.abs(cameraX - layout.x)
+  const labelOpacity = Math.max(0, Math.min(1, 1 - (dist - 4) / 6))
+
+  useFrame(() => {
+    if (!groupRef.current) return
+    const target = hovered ? 1.04 : 1
+    const s = groupRef.current.scale.x
+    const newScale = s + (target - s) * 0.1
+    groupRef.current.scale.setScalar(newScale)
+    if (lightRef.current) {
+      lightRef.current.intensity += ((hovered ? 5 : 3) - lightRef.current.intensity) * 0.1
+    }
+  })
+
+  return (
+    <group position={[layout.x, 0, layout.z]}>
+      <group
+        ref={groupRef}
+        onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
+        onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
+        onClick={(e) => { e.stopPropagation(); onSelect(project) }}
+      >
+        <primitive object={clonedScene} />
+      </group>
+
+      {/* Name label */}
+      {labelOpacity > 0.01 && (
+        <Billboard follow lockY={true}>
+          <Text position={[0, -0.3, 2]} fontSize={0.35} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
+            {project.name}
+          </Text>
+          <Text position={[0, -0.7, 2]} fontSize={0.2} color="#6B7280" anchorX="center" anchorY="top" fillOpacity={labelOpacity * 0.7}>
+            {project.subtitle}
+          </Text>
+        </Billboard>
+      )}
+
+      {/* Accent light */}
+      <pointLight ref={lightRef} position={[0, 0.5, 2]} color={accentColor} intensity={3} distance={10} decay={2} />
+    </group>
+  )
+}
+
+// ═══ JPEG Billboard Fallback (for projects without GLB) ═══
+
+function BillboardBuilding({ project, layout, cameraX, onSelect }: {
   project: Project; layout: BuildingLayout; cameraX: number; onSelect: (p: Project) => void
 }) {
   const meshRef = useRef<THREE.Mesh>(null)
@@ -124,7 +216,6 @@ function BuildingMesh({ project, layout, cameraX, onSelect }: {
   const [tex, setTex] = useState<THREE.Texture | null>(null)
   const [aspect, setAspect] = useState(0.6)
 
-  // Load texture manually (no Suspense dependency)
   useEffect(() => {
     const loader = new THREE.TextureLoader()
     loader.load(
@@ -133,8 +224,6 @@ function BuildingMesh({ project, layout, cameraX, onSelect }: {
         texture.colorSpace = THREE.SRGBColorSpace
         texture.minFilter = THREE.LinearFilter
         texture.magFilter = THREE.LinearFilter
-
-        // Remove black background via canvas
         const img = texture.image as HTMLImageElement
         if (img.width && img.height) {
           setAspect(img.width / img.height)
@@ -160,20 +249,15 @@ function BuildingMesh({ project, layout, cameraX, onSelect }: {
         } else {
           setTex(texture)
         }
-        console.log(`[Showcase] Loaded: ${project.id}`)
       },
       undefined,
-      (err) => {
-        console.warn(`[Showcase] Failed to load ${project.buildingImage}:`, err)
-      }
+      (err) => { console.warn(`[Showcase] Failed to load ${project.buildingImage}:`, err) }
     )
-  }, [project.buildingImage, project.id])
+  }, [project.buildingImage])
 
   const h = layout.displayHeight
   const w = h * aspect
   const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
-
-  // Label fade based on camera X proximity
   const dist = Math.abs(cameraX - layout.x)
   const labelOpacity = Math.max(0, Math.min(1, 1 - (dist - 4) / 6))
 
@@ -205,7 +289,6 @@ function BuildingMesh({ project, layout, cameraX, onSelect }: {
         </mesh>
       </Billboard>
 
-      {/* Name label */}
       {labelOpacity > 0.01 && (
         <Billboard follow lockY={true}>
           <Text position={[0, -h / 2 - 0.3, 0]} fontSize={0.35} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
@@ -217,10 +300,26 @@ function BuildingMesh({ project, layout, cameraX, onSelect }: {
         </Billboard>
       )}
 
-      {/* Light */}
       <pointLight ref={lightRef} position={[0, -h / 2 + 0.5, 2]} color={accentColor} intensity={3} distance={10} decay={2} />
     </group>
   )
+}
+
+// ═══ Building Router — picks GLB or billboard based on data ═══
+
+function BuildingRouter({ project, layout, cameraX, onSelect }: {
+  project: Project; layout: BuildingLayout; cameraX: number; onSelect: (p: Project) => void
+}) {
+  if (project.buildingModel) {
+    return (
+      <Suspense fallback={
+        <BillboardBuilding project={project} layout={layout} cameraX={cameraX} onSelect={onSelect} />
+      }>
+        <GLBBuilding project={project} layout={layout} cameraX={cameraX} onSelect={onSelect} />
+      </Suspense>
+    )
+  }
+  return <BillboardBuilding project={project} layout={layout} cameraX={cameraX} onSelect={onSelect} />
 }
 
 // ═══ Ground glow ═══
@@ -302,8 +401,10 @@ function SceneContent({ onSelectProject, cameraX, onCameraX }: {
 
   return (
     <>
-      <ambientLight intensity={1} color="#667788" />
-      <directionalLight position={[0, 15, 10]} color="#445566" intensity={0.5} />
+      <ambientLight intensity={1.2} color="#8899aa" />
+      <directionalLight position={[5, 20, 10]} color="#aabbcc" intensity={0.8} castShadow shadow-mapSize={1024} />
+      <directionalLight position={[-5, 10, -5]} color="#445566" intensity={0.3} />
+      <hemisphereLight args={['#1a2a4a', '#0a0e18', 0.4]} />
       <CameraController onCameraX={onCameraX} />
       <Stars count={500} depth={100} saturation={0} factor={3} fade />
       <Street />
@@ -316,13 +417,11 @@ function SceneContent({ onSelectProject, cameraX, onCameraX }: {
         if (!project) return null
         return (
           <group key={layout.id}>
-            <BuildingMesh project={project} layout={layout} cameraX={cameraX} onSelect={onSelectProject} />
+            <BuildingRouter project={project} layout={layout} cameraX={cameraX} onSelect={onSelectProject} />
             <GroundGlow x={layout.x} z={layout.z} color={project.accent} />
           </group>
         )
       })}
-
-      {/* Postprocessing disabled — CSP blocks blob workers */}
     </>
   )
 }
@@ -353,6 +452,7 @@ export default function Scene3D({
       )}
       <Canvas
         gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.2 }}
+        shadows
         camera={{ fov: 65, near: 0.1, far: 200 }}
         style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
         onPointerMissed={() => setHoveredProject(null)}

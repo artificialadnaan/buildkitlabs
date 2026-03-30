@@ -13,6 +13,7 @@ export interface Project {
   accent: string
   accentRgb: string
   buildingImage: string
+  buildingModel?: string // GLB 3D model path
   screenshot: string
   position: [number, number, number] // x, y, z
   scaleHeight: number
@@ -32,6 +33,7 @@ export const projects: Project[] = [
     accent: '#9CA3AF',
     accentRgb: '156,163,175',
     buildingImage: '/buildings/fencetastic.jpeg',
+    buildingModel: '/buildings/fencetastic.glb',
     screenshot: '/screenshots/fencetastic.png',
     position: [-6, 0, -8],
     scaleHeight: 3,
@@ -48,6 +50,7 @@ export const projects: Project[] = [
     accent: '#DAA520',
     accentRgb: '218,165,32',
     buildingImage: '/buildings/booth-plug.jpeg',
+    buildingModel: '/buildings/booth-plug.glb',
     screenshot: '/screenshots/booth-plug.png',
     position: [-5.5, 0, -4],
     scaleHeight: 5,
@@ -64,6 +67,7 @@ export const projects: Project[] = [
     accent: '#8B5CF6',
     accentRgb: '139,92,246',
     buildingImage: '/buildings/virasat-jewels.jpeg',
+    buildingModel: '/buildings/virasat-jewels.glb',
     screenshot: '/screenshots/virasat-jewels.png',
     position: [-5, 0, 0],
     scaleHeight: 8,
@@ -80,6 +84,7 @@ export const projects: Project[] = [
     accent: '#EAB308',
     accentRgb: '234,179,8',
     buildingImage: '/buildings/buildkit-crm.jpeg',
+    buildingModel: '/buildings/buildkit-crm.glb',
     screenshot: '/screenshots/buildkit-crm.png',
     position: [5.5, 0, -4],
     scaleHeight: 9,
@@ -96,6 +101,7 @@ export const projects: Project[] = [
     accent: '#6B7280',
     accentRgb: '107,114,128',
     buildingImage: '/buildings/buildkit-labs.jpeg',
+    buildingModel: '/buildings/buildkit-labs.glb',
     screenshot: '/screenshots/buildkit-labs.png',
     position: [6, 0, -8],
     scaleHeight: 3,
@@ -112,6 +118,7 @@ export const projects: Project[] = [
     accent: '#38BDF8',
     accentRgb: '56,189,248',
     buildingImage: '/buildings/skyguard.jpeg',
+    buildingModel: '/buildings/skyguard.glb',
     screenshot: '/screenshots/skyguard.png',
     position: [-3, 0, 4],
     scaleHeight: 11,
