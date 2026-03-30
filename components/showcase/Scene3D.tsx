@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { Text, Billboard } from '@react-three/drei'
+import { Stars, Text, Billboard } from '@react-three/drei'
 // Postprocessing disabled — CSP blocks blob workers it needs
 // import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
@@ -305,7 +305,7 @@ function SceneContent({ onSelectProject, cameraX, onCameraX }: {
       <ambientLight intensity={1} color="#667788" />
       <directionalLight position={[0, 15, 10]} color="#445566" intensity={0.5} />
       <CameraController onCameraX={onCameraX} />
-      {/* Stars removed — drei Stars uses blob workers blocked by CSP */}
+      <Stars count={500} depth={100} saturation={0} factor={3} fade />
       <Street />
       <Streetlamps />
       <FillerBuildings />
