@@ -1,14 +1,25 @@
 'use client'
 
 import { useRef, useState, useEffect, useMemo, Suspense } from 'react'
-import { Canvas, useFrame, useThree, useLoader } from '@react-three/fiber'
-import { MeshReflectorMaterial, useProgress, Stars, Text } from '@react-three/drei'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { MeshReflectorMaterial, useProgress, Stars, Text, useTexture, Billboard } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import { projects, type Project } from './data'
 
 // ═══════════════════════════════════════
-// Street layout — NYC avenue perspective
+// Preload all building textures
+// ═══════════════════════════════════════
+useTexture.preload('/buildings/fencetastic.jpeg')
+useTexture.preload('/buildings/booth-plug.jpeg')
+useTexture.preload('/buildings/virasat-jewels.jpeg')
+useTexture.preload('/buildings/skyguard.jpeg')
+useTexture.preload('/buildings/synchub.jpeg')
+useTexture.preload('/buildings/buildkit-crm.jpeg')
+useTexture.preload('/buildings/buildkit-labs.jpeg')
+
+// ═══════════════════════════════════════
+// Street layout
 // ═══════════════════════════════════════
 
 interface BuildingLayout {
@@ -20,18 +31,15 @@ interface BuildingLayout {
 }
 
 const STREET_LAYOUT: BuildingLayout[] = [
-  // LEFT SIDE (negative X, spaced along Z)
   { id: 'fencetastic',    side: 'left',  x: -5.5, z: 8,  displayHeight: 4  },
   { id: 'booth-plug',     side: 'left',  x: -5.5, z: 16, displayHeight: 6  },
   { id: 'virasat-jewels', side: 'left',  x: -5.5, z: 24, displayHeight: 9  },
   { id: 'skyguard',       side: 'left',  x: -5.5, z: 32, displayHeight: 12 },
-  // RIGHT SIDE (positive X, spaced along Z)
   { id: 'buildkit-crm',   side: 'right', x: 5.5,  z: 8,  displayHeight: 10 },
   { id: 'buildkit-labs',  side: 'right', x: 5.5,  z: 16, displayHeight: 4  },
   { id: 'synchub',        side: 'right', x: 5.5,  z: 24, displayHeight: 16 },
 ]
 
-// Background filler buildings (dark silhouettes)
 const FILLER_BUILDINGS = [
   { x: -6, z: 40, w: 3, h: 8,  color: '#0d1117' },
   { x: -5, z: 46, w: 4, h: 12, color: '#0f1419' },
@@ -63,7 +71,6 @@ function LoadingScreen() {
   }, [progress])
 
   if (!visible) return null
-
   const gradientColors = projects.map(p => p.accent).join(', ')
 
   return (
@@ -81,7 +88,7 @@ function LoadingScreen() {
 }
 
 // ═══════════════════════════════════════
-// First-person street walk camera
+// First-person camera
 // ═══════════════════════════════════════
 
 function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
@@ -104,15 +111,12 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
       e.preventDefault()
       targetZ.current = Math.max(-2, Math.min(35, targetZ.current + e.deltaY * 0.015))
     }
-
     const onKeyDown = (e: KeyboardEvent) => keys.current.add(e.key.toLowerCase())
     const onKeyUp = (e: KeyboardEvent) => keys.current.delete(e.key.toLowerCase())
-
     const onMouseMove = (e: MouseEvent) => {
       mouseX.current = (e.clientX / window.innerWidth - 0.5) * 2
       mouseY.current = (e.clientY / window.innerHeight - 0.5) * 2
     }
-
     let touchY = 0
     const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0].clientY }
     const onTouchMove = (e: TouchEvent) => {
@@ -143,28 +147,22 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     time.current += delta
     const k = keys.current
     const speed = 5 * delta
-
     if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(35, targetZ.current + speed)
     if (k.has('s') || k.has('arrowdown')) targetZ.current = Math.max(-2, targetZ.current - speed)
     if (k.has('a') || k.has('arrowleft')) targetX.current = Math.max(-1, targetX.current - speed * 0.5)
     if (k.has('d') || k.has('arrowright')) targetX.current = Math.min(1, targetX.current + speed * 0.5)
 
-    // Lerp position
     const prevZ = currentZ.current
     currentZ.current += (targetZ.current - currentZ.current) * 0.06
     currentX.current += (targetX.current - currentX.current) * 0.06
     isMoving.current = Math.abs(currentZ.current - prevZ) > 0.001
 
-    // Head bob (only while moving)
     const bob = isMoving.current ? Math.sin(time.current * 3) * 0.03 : 0
-
     camera.position.set(currentX.current, 1.7 + bob, currentZ.current)
 
-    // Subtle parallax look-around from mouse
     const lookX = currentX.current + mouseX.current * 0.8
     const lookY = 1.7 - mouseY.current * 0.3
     camera.lookAt(lookX, lookY, currentZ.current + 20)
-
     onCameraZ(currentZ.current)
   })
 
@@ -172,7 +170,7 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
 }
 
 // ═══════════════════════════════════════
-// Textured building
+// Building with texture + black bg removal
 // ═══════════════════════════════════════
 
 function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
@@ -182,40 +180,51 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
   const lightRef = useRef<THREE.PointLight>(null)
   const [hovered, setHovered] = useState(false)
 
-  const texture = useLoader(THREE.TextureLoader, project.buildingImage)
+  // Load texture via drei useTexture (handles Suspense)
+  const texture = useTexture(project.buildingImage)
 
-  // Fix horizontal flip
-  const geometry = useMemo(() => {
-    const geo = new THREE.PlaneGeometry(1, 1)
-    const uvs = geo.attributes.uv
-    for (let i = 0; i < uvs.count; i++) {
-      uvs.setX(i, 1 - uvs.getX(i))
+  // Process texture: remove black background, create CanvasTexture
+  const processedTexture = useMemo(() => {
+    if (!texture.image) {
+      console.warn(`[Showcase] No image data for ${project.id} at ${project.buildingImage}`)
+      return texture
     }
-    uvs.needsUpdate = true
-    return geo
-  }, [])
+    console.log(`[Showcase] Processing texture for ${project.id}: ${texture.image.width}x${texture.image.height}`)
 
-  useMemo(() => {
-    texture.colorSpace = THREE.SRGBColorSpace
-    texture.minFilter = THREE.LinearFilter
-    texture.magFilter = THREE.LinearFilter
-  }, [texture])
+    const canvas = document.createElement('canvas')
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return texture
 
-  const img = texture.image as HTMLImageElement | undefined
-  const aspect = (img?.naturalWidth && img?.naturalHeight)
-    ? img.naturalWidth / img.naturalHeight
-    : (img?.width && img?.height) ? img.width / img.height : 0.5
+    canvas.width = texture.image.width
+    canvas.height = texture.image.height
+    ctx.drawImage(texture.image, 0, 0)
 
+    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+    const data = imageData.data
+    for (let i = 0; i < data.length; i += 4) {
+      if (data[i] < 20 && data[i + 1] < 20 && data[i + 2] < 20) {
+        data[i + 3] = 0
+      }
+    }
+    ctx.putImageData(imageData, 0, 0)
+
+    const newTex = new THREE.CanvasTexture(canvas)
+    newTex.colorSpace = THREE.SRGBColorSpace
+    newTex.needsUpdate = true
+    return newTex
+  }, [texture, project.id, project.buildingImage])
+
+  // Aspect ratio from source image
+  const aspect = texture.image
+    ? (texture.image.width || 1) / (texture.image.height || 1)
+    : 0.5
   const h = layout.displayHeight
   const w = h * aspect
 
-  // Rotation: left buildings face right, right buildings face left
-  const rotY = layout.side === 'left' ? Math.PI * 0.15 : -Math.PI * 0.15
-
   // Light position: between building and street center
-  const lightX = layout.side === 'left' ? layout.x + 2 : layout.x - 2
+  const lightX = layout.side === 'left' ? layout.x + 2.5 : layout.x - 2.5
 
-  // Label visibility: fade in when camera is within 8 units of building Z
+  // Label fade: visible when camera is within 8 units
   const dist = Math.abs(cameraZ - layout.z)
   const labelOpacity = Math.max(0, Math.min(1, 1 - (dist - 4) / 4))
 
@@ -225,66 +234,53 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
     if (!meshRef.current) return
     const target = hovered ? 1.05 : 1
     const s = meshRef.current.scale.x
-    const ns = s + (target - s) * 0.1
-    meshRef.current.scale.set(ns, ns, ns)
+    meshRef.current.scale.setScalar(s + (target - s) * 0.1)
     if (lightRef.current) {
       lightRef.current.intensity += ((hovered ? 5 : 3) - lightRef.current.intensity) * 0.1
     }
   })
 
   return (
-    <group position={[layout.x, h / 2, layout.z]} rotation={[0, rotY, 0]}>
-      <mesh
-        ref={meshRef}
-        onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
-        onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
-        onClick={(e) => { e.stopPropagation(); onSelect(project) }}
-        geometry={geometry}
-      >
-        <planeGeometry args={[w, h]} />
-        <meshBasicMaterial map={texture} transparent alphaTest={0.05} side={THREE.FrontSide} />
-      </mesh>
+    <group position={[layout.x, h / 2, layout.z]}>
+      {/* Billboard so building always faces camera */}
+      <Billboard follow lockX={false} lockY={true} lockZ={false}>
+        <mesh
+          ref={meshRef}
+          onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
+          onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
+          onClick={(e) => { e.stopPropagation(); onSelect(project) }}
+        >
+          <planeGeometry args={[w, h]} />
+          <meshBasicMaterial
+            map={processedTexture}
+            transparent
+            alphaTest={0.05}
+            side={THREE.DoubleSide}
+            depthWrite
+          />
+        </mesh>
+      </Billboard>
 
-      {/* Building label — fades in when close */}
+      {/* Label — fades in when close */}
       {labelOpacity > 0.01 && (
-        <group position={[0, -h / 2 + 0.2, layout.side === 'left' ? 0.5 : -0.5]} rotation={[0, -rotY, 0]}>
-          <Text
-            fontSize={0.3}
-            color={project.accent}
-            anchorX="center"
-            anchorY="top"
-            fillOpacity={labelOpacity}
-          >
+        <Billboard follow lockY={true}>
+          <Text position={[0, -h / 2 - 0.3, 0]} fontSize={0.35} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
             {project.name}
           </Text>
-          <Text
-            position={[0, -0.35, 0]}
-            fontSize={0.18}
-            color="#6B7280"
-            anchorX="center"
-            anchorY="top"
-            fillOpacity={labelOpacity * 0.7}
-          >
+          <Text position={[0, -h / 2 - 0.7, 0]} fontSize={0.2} color="#6B7280" anchorX="center" anchorY="top" fillOpacity={labelOpacity * 0.7}>
             {project.subtitle}
           </Text>
-        </group>
+        </Billboard>
       )}
 
       {/* Point light spilling onto the road */}
-      <pointLight
-        ref={lightRef}
-        position={[lightX - layout.x, -h / 2 + 0.5, 0]}
-        color={accentColor}
-        intensity={3}
-        distance={12}
-        decay={2}
-      />
+      <pointLight ref={lightRef} position={[lightX - layout.x, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={12} decay={2} />
     </group>
   )
 }
 
 // ═══════════════════════════════════════
-// Fallback building (when texture fails)
+// Fallback building
 // ═══════════════════════════════════════
 
 function FallbackBuilding({ project, layout, cameraZ, onSelect }: {
@@ -295,7 +291,6 @@ function FallbackBuilding({ project, layout, cameraZ, onSelect }: {
   const h = layout.displayHeight
   const w = h * 0.45
   const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
-  const darkColor = useMemo(() => new THREE.Color(project.accent).multiplyScalar(0.15), [project.accent])
   const labelOpacity = Math.max(0, Math.min(1, 1 - (Math.abs(cameraZ - layout.z) - 4) / 4))
 
   useFrame(() => {
@@ -314,20 +309,22 @@ function FallbackBuilding({ project, layout, cameraZ, onSelect }: {
         onClick={(e) => { e.stopPropagation(); onSelect(project) }}
       >
         <boxGeometry args={[w, h, w * 0.3]} />
-        <meshStandardMaterial color={darkColor} emissive={accentColor} emissiveIntensity={0.15} />
+        <meshBasicMaterial color={accentColor} transparent opacity={0.3} />
       </mesh>
       {labelOpacity > 0.01 && (
-        <Text position={[0, -h / 2 + 0.2, 1]} fontSize={0.3} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
-          {project.name}
-        </Text>
+        <Billboard follow lockY={true}>
+          <Text position={[0, -h / 2 - 0.3, 0]} fontSize={0.35} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
+            {project.name}
+          </Text>
+        </Billboard>
       )}
-      <pointLight position={[layout.side === 'left' ? 2 : -2, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={12} decay={2} />
+      <pointLight position={[layout.side === 'left' ? 2.5 : -2.5, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={12} decay={2} />
     </group>
   )
 }
 
 // ═══════════════════════════════════════
-// Building wrapper with Suspense
+// Building wrapper
 // ═══════════════════════════════════════
 
 function BuildingPlane({ project, layout, cameraZ, onSelect }: {
@@ -341,7 +338,7 @@ function BuildingPlane({ project, layout, cameraZ, onSelect }: {
 }
 
 // ═══════════════════════════════════════
-// Ground glow (light pool beneath building)
+// Ground glow
 // ═══════════════════════════════════════
 
 function GroundGlow({ x, z, color }: { x: number; z: number; color: string }) {
@@ -355,29 +352,17 @@ function GroundGlow({ x, z, color }: { x: number; z: number; color: string }) {
 }
 
 // ═══════════════════════════════════════
-// Street ground
+// Street
 // ═══════════════════════════════════════
 
 function Street() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 25]}>
       <planeGeometry args={[10, 55]} />
-      <MeshReflectorMaterial
-        mirror={0.4}
-        roughness={0.25}
-        mixStrength={0.6}
-        mixBlur={1}
-        color="#0a0e18"
-        metalness={0.8}
-        resolution={512}
-      />
+      <MeshReflectorMaterial mirror={0.4} roughness={0.25} mixStrength={0.6} mixBlur={1} color="#0a0e18" metalness={0.8} resolution={512} />
     </mesh>
   )
 }
-
-// ═══════════════════════════════════════
-// Sidewalks
-// ═══════════════════════════════════════
 
 function Sidewalks() {
   return (
@@ -394,19 +379,8 @@ function Sidewalks() {
   )
 }
 
-// ═══════════════════════════════════════
-// Road center dashes
-// ═══════════════════════════════════════
-
 function RoadDashes() {
-  const dashes = useMemo(() => {
-    const arr = []
-    for (let z = 2; z < 50; z += 3) {
-      arr.push(z)
-    }
-    return arr
-  }, [])
-
+  const dashes = useMemo(() => Array.from({ length: 16 }, (_, i) => 2 + i * 3), [])
   return (
     <>
       {dashes.map((z) => (
@@ -419,26 +393,18 @@ function RoadDashes() {
   )
 }
 
-// ═══════════════════════════════════════
-// Filler buildings (dark silhouettes)
-// ═══════════════════════════════════════
-
 function FillerBuildings() {
   return (
     <>
       {FILLER_BUILDINGS.map((fb, i) => (
         <mesh key={i} position={[fb.x, fb.h / 2, fb.z]}>
           <boxGeometry args={[fb.w, fb.h, 1.5]} />
-          <meshStandardMaterial color={fb.color} roughness={1} />
+          <meshBasicMaterial color={fb.color} />
         </mesh>
       ))}
     </>
   )
 }
-
-// ═══════════════════════════════════════
-// Streetlamps
-// ═══════════════════════════════════════
 
 function Streetlamps() {
   const positions = useMemo(() => {
@@ -449,17 +415,14 @@ function Streetlamps() {
     }
     return arr
   }, [])
-
   return (
     <>
       {positions.map(([x, z], i) => (
         <group key={i}>
-          {/* Pole */}
           <mesh position={[x, 1.5, z]}>
             <cylinderGeometry args={[0.03, 0.03, 3]} />
-            <meshStandardMaterial color="#1a1a2e" />
+            <meshBasicMaterial color="#1a1a2e" />
           </mesh>
-          {/* Light */}
           <pointLight position={[x, 3, z]} color="#FFF5E1" intensity={1} distance={8} decay={2} />
         </group>
       ))}
@@ -467,29 +430,16 @@ function Streetlamps() {
   )
 }
 
-// ═══════════════════════════════════════
-// T-Rock beacon (pulsing red light)
-// ═══════════════════════════════════════
-
 function TRockBeacon() {
   const lightRef = useRef<THREE.PointLight>(null)
   const synchub = STREET_LAYOUT.find(b => b.id === 'synchub')!
-
   useFrame(({ clock }) => {
     if (lightRef.current) {
       lightRef.current.intensity = 1 + Math.sin(clock.elapsedTime * 2) * 1.5
     }
   })
-
   return (
-    <pointLight
-      ref={lightRef}
-      position={[synchub.x, synchub.displayHeight + 1, synchub.z]}
-      color="#EF4444"
-      intensity={3}
-      distance={20}
-      decay={2}
-    />
+    <pointLight ref={lightRef} position={[synchub.x, synchub.displayHeight + 1, synchub.z]} color="#EF4444" intensity={3} distance={20} decay={2} />
   )
 }
 
@@ -509,29 +459,17 @@ function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
 
   return (
     <>
-      {/* Lighting */}
       <ambientLight intensity={0.3} color="#0a1628" />
       <directionalLight position={[0, 10, -5]} color="#334155" intensity={0.2} />
-
-      {/* Camera */}
       <CameraController onCameraZ={onCameraZ} />
-
-      {/* Sky */}
       <Stars count={500} depth={100} saturation={0} factor={3} fade />
-
-      {/* Street */}
       <Street />
       <Sidewalks />
       <RoadDashes />
       <Streetlamps />
-
-      {/* Filler buildings in the distance */}
       <FillerBuildings />
-
-      {/* T-Rock beacon */}
       <TRockBeacon />
 
-      {/* Project buildings */}
       {STREET_LAYOUT.map((layout) => {
         const project = projects.find(p => p.id === layout.id)
         if (!project) return null
@@ -543,7 +481,6 @@ function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
         )
       })}
 
-      {/* Post-processing */}
       <EffectComposer>
         <Bloom intensity={0.4} luminanceThreshold={0.5} luminanceSmoothing={0.9} radius={0.8} />
         <Vignette eskil={false} offset={0.1} darkness={0.5} />
@@ -573,7 +510,6 @@ export default function Scene3D({
     <>
       <LoadingScreen />
 
-      {/* Tooltip */}
       {hoveredProject && (
         <div
           className="fixed top-24 left-1/2 -translate-x-1/2 z-50 px-4 py-2 rounded-lg pointer-events-none animate-[fadeIn_0.15s_ease]"
@@ -584,7 +520,6 @@ export default function Scene3D({
         </div>
       )}
 
-      {/* Bottom HUD */}
       {!panelOpen && (
         <div className="fixed bottom-6 left-0 right-0 text-center z-50 pointer-events-none">
           <span className="text-white/25 text-xs tracking-[0.3em] uppercase">
