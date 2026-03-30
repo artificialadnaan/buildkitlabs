@@ -78,9 +78,9 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
   const xMax = 20
 
   useEffect(() => {
-    // Camera at a fixed distance, eye height, facing the buildings
-    camera.position.set(0, 3, 16)
-    camera.lookAt(0, 3, 0)
+    // Camera at comfortable distance, slightly above eye height
+    camera.position.set(0, 2.5, 12)
+    camera.lookAt(0, 2.5, 0)
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
@@ -127,7 +127,7 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     camera.position.x = currentX.current
     // Subtle parallax from mouse
     const lx = currentX.current + mouseX.current * 0.5
-    const ly = 3 - mouseY.current * 0.3
+    const ly = 2.5 - mouseY.current * 0.3
     camera.lookAt(lx, ly, 0)
     onCameraZ(currentX.current) // reuse cameraZ for label proximity (now X-based)
   })
