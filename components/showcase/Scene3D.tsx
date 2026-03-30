@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useMemo, Suspense } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { MeshReflectorMaterial, useProgress, Stars, Text, useTexture } from '@react-three/drei'
+import { MeshReflectorMaterial, useProgress, Stars, Text, useTexture, Billboard } from '@react-three/drei'
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
 import { projects, type Project } from './data'
@@ -187,10 +187,7 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
   const h = layout.displayHeight
   const w = h * aspect
 
-  // Building angled toward the camera — 35° from perpendicular
-  // This way buildings are visible from the walking perspective
-  // but still feel like they line the street sides
-  const rotY = layout.side === 'left' ? Math.PI * 0.2 : -Math.PI * 0.2
+  // No manual rotation — Billboard handles facing the camera
 
   const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
   const lightOffset = layout.side === 'left' ? 2 : -2
@@ -211,28 +208,29 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
 
   return (
     <group position={[layout.x, h / 2, layout.z]}>
-      {/* Building plane rotated to face street */}
-      <mesh
-        ref={meshRef}
-        rotation={[0, rotY, 0]}
-        onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
-        onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
-        onClick={(e) => { e.stopPropagation(); onSelect(project) }}
-      >
-        <planeGeometry args={[w, h]} />
-        <meshBasicMaterial map={processedTexture} transparent alphaTest={0.05} side={THREE.DoubleSide} depthWrite />
-      </mesh>
+      {/* Building plane — Billboard keeps it facing camera */}
+      <Billboard follow lockX={false} lockY={true} lockZ={false}>
+        <mesh
+          ref={meshRef}
+          onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
+          onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
+          onClick={(e) => { e.stopPropagation(); onSelect(project) }}
+        >
+          <planeGeometry args={[w, h]} />
+          <meshBasicMaterial map={processedTexture} transparent alphaTest={0.05} side={THREE.DoubleSide} depthWrite />
+        </mesh>
+      </Billboard>
 
-      {/* Name label — faces the street, visible when close */}
+      {/* Name label — visible when close */}
       {labelOpacity > 0.01 && (
-        <group position={[lightOffset * 0.5, -h / 2 + 0.1, 0]} rotation={[0, rotY, 0]}>
-          <Text fontSize={0.3} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
+        <Billboard follow lockY={true}>
+          <Text position={[0, -h / 2 + 0.1, 0]} fontSize={0.3} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
             {project.name}
           </Text>
-          <Text position={[0, -0.35, 0]} fontSize={0.17} color="#6B7280" anchorX="center" anchorY="top" fillOpacity={labelOpacity * 0.7}>
+          <Text position={[0, -h / 2 - 0.25, 0]} fontSize={0.17} color="#6B7280" anchorX="center" anchorY="top" fillOpacity={labelOpacity * 0.7}>
             {project.subtitle}
           </Text>
-        </group>
+        </Billboard>
       )}
 
       {/* Light spilling onto the road */}
@@ -270,11 +268,12 @@ function FallbackBuilding({ project, layout, cameraZ, onSelect }: {
         <meshBasicMaterial color={accentColor} transparent opacity={0.25} />
       </mesh>
       {labelOpacity > 0.01 && (
-        <Text position={[0, -h / 2 + 0.1, layout.side === 'left' ? 1 : -1]}
-          rotation={[0, layout.side === 'left' ? Math.PI / 2 : -Math.PI / 2, 0]}
-          fontSize={0.3} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
-          {project.name}
-        </Text>
+        <Billboard follow lockY={true}>
+          <Text position={[0, -h / 2 + 0.1, 0]}
+            fontSize={0.3} color={project.accent} anchorX="center" anchorY="top" fillOpacity={labelOpacity}>
+            {project.name}
+          </Text>
+        </Billboard>
       )}
       <pointLight position={[layout.side === 'left' ? 2 : -2, -h / 2 + 0.5, 0]} color={accentColor} intensity={3} distance={10} decay={2} />
     </group>
