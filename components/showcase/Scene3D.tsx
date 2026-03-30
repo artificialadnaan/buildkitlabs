@@ -166,7 +166,11 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
     if (!ctx) return texture
     canvas.width = texture.image.width
     canvas.height = texture.image.height
+    // Flip horizontally to un-mirror
+    ctx.translate(canvas.width, 0)
+    ctx.scale(-1, 1)
     ctx.drawImage(texture.image, 0, 0)
+    ctx.setTransform(1, 0, 0, 1, 0, 0) // reset transform
     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
     const d = imageData.data
     for (let i = 0; i < d.length; i += 4) {
@@ -207,11 +211,10 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
 
   return (
     <group position={[layout.x, h / 2, layout.z]}>
-      {/* Building plane rotated to face street, scale.x=-1 to un-mirror texture */}
+      {/* Building plane rotated to face street */}
       <mesh
         ref={meshRef}
         rotation={[0, rotY, 0]}
-        scale={[-1, 1, 1]}
         onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
         onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
         onClick={(e) => { e.stopPropagation(); onSelect(project) }}
