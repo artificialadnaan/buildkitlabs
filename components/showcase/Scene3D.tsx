@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useProgress, Stars, Text, Billboard } from '@react-three/drei'
+import { Text, Billboard } from '@react-three/drei'
 // Postprocessing disabled — CSP blocks blob workers it needs
 // import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
@@ -38,14 +38,12 @@ const FILLER_BUILDINGS = [
 // ═══ Loading Screen ═══
 
 function LoadingScreen() {
-  const { progress } = useProgress()
   const [visible, setVisible] = useState(true)
-  useEffect(() => { const t = setTimeout(() => setVisible(false), 5000); return () => clearTimeout(t) }, [])
-  useEffect(() => { if (progress >= 100) { const t = setTimeout(() => setVisible(false), 400); return () => clearTimeout(t) } return undefined }, [progress])
+  useEffect(() => { const t = setTimeout(() => setVisible(false), 3000); return () => clearTimeout(t) }, [])
   if (!visible) return null
   return (
     <div className="fixed inset-0 z-[300] flex flex-col items-center justify-center transition-opacity duration-500"
-      style={{ backgroundColor: '#0a1628', opacity: progress >= 100 ? 0 : 1, pointerEvents: progress >= 100 ? 'none' : 'auto' }}>
+      style={{ backgroundColor: '#0a1628' }}>
       <p className="text-white/50 tracking-[0.3em] text-sm uppercase mb-6">Entering the city...</p>
     </div>
   )
@@ -307,7 +305,7 @@ function SceneContent({ onSelectProject, cameraX, onCameraX }: {
       <ambientLight intensity={1} color="#667788" />
       <directionalLight position={[0, 15, 10]} color="#445566" intensity={0.5} />
       <CameraController onCameraX={onCameraX} />
-      <Stars count={500} depth={100} saturation={0} factor={3} fade />
+      {/* Stars removed — drei Stars uses blob workers blocked by CSP */}
       <Street />
       <Streetlamps />
       <FillerBuildings />
