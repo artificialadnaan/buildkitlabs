@@ -31,13 +31,13 @@ interface BuildingLayout {
 // All buildings in a line at Z:0, spread along X axis
 // Camera pans horizontally to see them all
 const STREET_LAYOUT: BuildingLayout[] = [
-  { id: 'fencetastic',    side: 'left',  x: -18, z: 0, displayHeight: 5   },
-  { id: 'booth-plug',     side: 'left',  x: -12, z: 0, displayHeight: 7   },
-  { id: 'buildkit-labs',  side: 'left',  x: -6,  z: 0, displayHeight: 5   },
-  { id: 'buildkit-crm',   side: 'right', x: 0,   z: 0, displayHeight: 9   },
-  { id: 'virasat-jewels', side: 'right', x: 6,   z: 0, displayHeight: 8   },
-  { id: 'skyguard',       side: 'right', x: 12,  z: 0, displayHeight: 12  },
-  { id: 'synchub',        side: 'right', x: 18,  z: 0, displayHeight: 14  },
+  { id: 'fencetastic',    side: 'left',  x: -15, z: 0, displayHeight: 6   },
+  { id: 'booth-plug',     side: 'left',  x: -9,  z: 0, displayHeight: 8   },
+  { id: 'buildkit-labs',  side: 'left',  x: -3,  z: 0, displayHeight: 6   },
+  { id: 'buildkit-crm',   side: 'right', x: 3,   z: 0, displayHeight: 10  },
+  { id: 'virasat-jewels', side: 'right', x: 9,   z: 0, displayHeight: 9   },
+  { id: 'skyguard',       side: 'right', x: 15,  z: 0, displayHeight: 13  },
+  { id: 'synchub',        side: 'right', x: 21,  z: 0, displayHeight: 16  },
 ]
 
 const FILLER_BUILDINGS = [
@@ -286,8 +286,8 @@ function GroundGlow({ x, z, color }: { x: number; z: number; color: string }) {
 // ═══ Street / environment ═══
 function Street() {
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]}>
-      <planeGeometry args={[60, 20]} />
+    <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 5]}>
+      <planeGeometry args={[60, 30]} />
       <MeshReflectorMaterial mirror={0.4} roughness={0.25} mixStrength={0.6} mixBlur={1} color="#0a0e18" metalness={0.8} resolution={512} />
     </mesh>
   )
@@ -359,7 +359,7 @@ function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
 }) {
   const { scene } = useThree()
   useEffect(() => {
-    scene.fog = new THREE.FogExp2('#0a1628', 0.018)
+    scene.fog = new THREE.FogExp2('#0a1628', 0.008)
     console.table(STREET_LAYOUT.map(l => {
       const p = projects.find(pp => pp.id === l.id)
       return { name: p?.name, side: l.side, x: l.x, z: l.z, height: l.displayHeight, texture: p?.buildingImage }
@@ -369,7 +369,7 @@ function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
 
   return (
     <>
-      <ambientLight intensity={0.4} color="#1a2744" />
+      <ambientLight intensity={0.8} color="#334466" />
       <directionalLight position={[0, 15, -10]} color="#334155" intensity={0.3} />
       <CameraController onCameraZ={onCameraZ} />
       <Stars count={500} depth={100} saturation={0} factor={3} fade />
