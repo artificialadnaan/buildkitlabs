@@ -207,10 +207,11 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
 
   return (
     <group position={[layout.x, h / 2, layout.z]}>
-      {/* Building plane rotated to face street */}
+      {/* Building plane rotated to face street, scale.x=-1 to un-mirror texture */}
       <mesh
         ref={meshRef}
         rotation={[0, rotY, 0]}
+        scale={[-1, 1, 1]}
         onPointerOver={(e) => { e.stopPropagation(); setHovered(true); document.body.style.cursor = 'pointer' }}
         onPointerOut={() => { setHovered(false); document.body.style.cursor = 'default' }}
         onClick={(e) => { e.stopPropagation(); onSelect(project) }}
