@@ -31,22 +31,24 @@ interface BuildingLayout {
 }
 
 const STREET_LAYOUT: BuildingLayout[] = [
-  { id: 'fencetastic',    side: 'left',  x: -5.5, z: 8,  displayHeight: 4  },
-  { id: 'booth-plug',     side: 'left',  x: -5.5, z: 16, displayHeight: 6  },
-  { id: 'virasat-jewels', side: 'left',  x: -5.5, z: 24, displayHeight: 9  },
-  { id: 'skyguard',       side: 'left',  x: -5.5, z: 32, displayHeight: 12 },
-  { id: 'buildkit-crm',   side: 'right', x: 5.5,  z: 8,  displayHeight: 10 },
-  { id: 'buildkit-labs',  side: 'right', x: 5.5,  z: 16, displayHeight: 4  },
-  { id: 'synchub',        side: 'right', x: 5.5,  z: 24, displayHeight: 16 },
+  // LEFT SIDE
+  { id: 'fencetastic',    side: 'left',  x: -7, z: 12, displayHeight: 4  },
+  { id: 'booth-plug',     side: 'left',  x: -7, z: 20, displayHeight: 6  },
+  { id: 'virasat-jewels', side: 'left',  x: -7, z: 28, displayHeight: 9  },
+  { id: 'skyguard',       side: 'left',  x: -7, z: 36, displayHeight: 12 },
+  // RIGHT SIDE
+  { id: 'buildkit-labs',  side: 'right', x: 7,  z: 12, displayHeight: 4  },
+  { id: 'buildkit-crm',   side: 'right', x: 7,  z: 20, displayHeight: 10 },
+  { id: 'synchub',        side: 'right', x: 7,  z: 28, displayHeight: 16 },
 ]
 
 const FILLER_BUILDINGS = [
-  { x: -6, z: 40, w: 3, h: 8,  color: '#0d1117' },
-  { x: -5, z: 46, w: 4, h: 12, color: '#0f1419' },
-  { x: -7, z: 52, w: 3, h: 6,  color: '#0d1117' },
-  { x: 6,  z: 34, w: 3, h: 7,  color: '#0d1117' },
-  { x: 5,  z: 40, w: 4, h: 14, color: '#0f1419' },
-  { x: 7,  z: 48, w: 3, h: 5,  color: '#0d1117' },
+  { x: -8, z: 44, w: 3, h: 8,  color: '#0d1117' },
+  { x: -7, z: 50, w: 4, h: 12, color: '#0f1419' },
+  { x: -9, z: 56, w: 3, h: 6,  color: '#0d1117' },
+  { x: 8,  z: 36, w: 3, h: 7,  color: '#0d1117' },
+  { x: 7,  z: 44, w: 4, h: 14, color: '#0f1419' },
+  { x: 9,  z: 52, w: 3, h: 5,  color: '#0d1117' },
 ]
 
 // ═══════════════════════════════════════
@@ -109,7 +111,8 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
-      targetZ.current = Math.max(-2, Math.min(35, targetZ.current + e.deltaY * 0.015))
+      // ~2 units per full scroll, 8-10 scrolls for the full street
+      targetZ.current = Math.max(-2, Math.min(40, targetZ.current + e.deltaY * 0.012))
     }
     const onKeyDown = (e: KeyboardEvent) => keys.current.add(e.key.toLowerCase())
     const onKeyUp = (e: KeyboardEvent) => keys.current.delete(e.key.toLowerCase())
@@ -121,7 +124,7 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     const onTouchStart = (e: TouchEvent) => { touchY = e.touches[0].clientY }
     const onTouchMove = (e: TouchEvent) => {
       const dy = touchY - e.touches[0].clientY
-      targetZ.current = Math.max(-2, Math.min(35, targetZ.current + dy * 0.03))
+      targetZ.current = Math.max(-2, Math.min(40, targetZ.current + dy * 0.03))
       touchY = e.touches[0].clientY
     }
 
@@ -147,7 +150,7 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     time.current += delta
     const k = keys.current
     const speed = 5 * delta
-    if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(35, targetZ.current + speed)
+    if (k.has('w') || k.has('arrowup')) targetZ.current = Math.min(40, targetZ.current + speed)
     if (k.has('s') || k.has('arrowdown')) targetZ.current = Math.max(-2, targetZ.current - speed)
     if (k.has('a') || k.has('arrowleft')) targetX.current = Math.max(-1, targetX.current - speed * 0.5)
     if (k.has('d') || k.has('arrowright')) targetX.current = Math.min(1, targetX.current + speed * 0.5)
@@ -358,7 +361,7 @@ function GroundGlow({ x, z, color }: { x: number; z: number; color: string }) {
 function Street() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 25]}>
-      <planeGeometry args={[10, 55]} />
+      <planeGeometry args={[12, 65]} />
       <MeshReflectorMaterial mirror={0.4} roughness={0.25} mixStrength={0.6} mixBlur={1} color="#0a0e18" metalness={0.8} resolution={512} />
     </mesh>
   )
@@ -367,13 +370,13 @@ function Street() {
 function Sidewalks() {
   return (
     <>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-4, 0.04, 25]}>
-        <planeGeometry args={[1.5, 55]} />
-        <meshStandardMaterial color="#1a1a2e" roughness={0.9} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[-5.5, 0.04, 25]}>
+        <planeGeometry args={[1.5, 65]} />
+        <meshBasicMaterial color="#1a1a2e" />
       </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[4, 0.04, 25]}>
-        <planeGeometry args={[1.5, 55]} />
-        <meshStandardMaterial color="#1a1a2e" roughness={0.9} />
+      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[5.5, 0.04, 25]}>
+        <planeGeometry args={[1.5, 65]} />
+        <meshBasicMaterial color="#1a1a2e" />
       </mesh>
     </>
   )
@@ -409,9 +412,9 @@ function FillerBuildings() {
 function Streetlamps() {
   const positions = useMemo(() => {
     const arr: [number, number][] = []
-    for (let z = 6; z <= 36; z += 10) {
-      arr.push([-3.2, z])
-      arr.push([3.2, z])
+    for (let z = 10; z <= 40; z += 10) {
+      arr.push([-4.5, z])
+      arr.push([4.5, z])
     }
     return arr
   }, [])
@@ -454,6 +457,11 @@ function SceneContent({ onSelectProject, cameraZ, onCameraZ }: {
 
   useEffect(() => {
     scene.fog = new THREE.FogExp2('#0a1628', 0.02)
+    // Debug: log building layout
+    console.table(STREET_LAYOUT.map(l => {
+      const p = projects.find(pp => pp.id === l.id)
+      return { name: p?.name, side: l.side, x: l.x, z: l.z, height: l.displayHeight, texture: p?.buildingImage }
+    }))
     return () => { scene.fog = null }
   }, [scene])
 
@@ -530,7 +538,7 @@ export default function Scene3D({
 
       <Canvas
         gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1 }}
-        camera={{ fov: 60, near: 0.1, far: 200 }}
+        camera={{ fov: 65, near: 0.1, far: 200 }}
         style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%' }}
         onPointerMissed={() => setHoveredProject(null)}
       >
