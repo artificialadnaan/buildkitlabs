@@ -52,16 +52,8 @@ export default function ShowcaseContent() {
             onSelectProject={handleSelect}
             hoveredProject={hoveredProject}
             setHoveredProject={setHoveredProject}
+            panelOpen={!!selectedProject}
           />
-
-          {/* Bottom hint overlay */}
-          {!selectedProject && (
-            <div className="fixed bottom-8 left-0 right-0 text-center z-50 pointer-events-none">
-              <span className="text-white/30 text-xs tracking-[0.3em] uppercase">
-                Click any building to explore
-              </span>
-            </div>
-          )}
         </>
       )}
 
