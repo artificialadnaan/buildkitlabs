@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect, useMemo } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { MeshReflectorMaterial, useProgress, Stars, Text, Billboard } from '@react-three/drei'
+import { useProgress, Stars, Text, Billboard } from '@react-three/drei'
 // Postprocessing disabled — CSP blocks blob workers it needs
 // import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing'
 import * as THREE from 'three'
@@ -243,7 +243,7 @@ function Street() {
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 5]}>
       <planeGeometry args={[70, 30]} />
-      <MeshReflectorMaterial mirror={0.4} roughness={0.25} mixStrength={0.6} mixBlur={1} color="#0a0e18" metalness={0.8} resolution={512} />
+      <meshStandardMaterial color="#0a0e18" metalness={0.9} roughness={0.15} />
     </mesh>
   )
 }
