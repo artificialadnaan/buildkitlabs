@@ -32,14 +32,14 @@ interface BuildingLayout {
 // RIGHT side: same pattern
 const STREET_LAYOUT: BuildingLayout[] = [
   // LEFT SIDE — face right toward street
-  { id: 'fencetastic',    side: 'left',  x: -6, z: 10, displayHeight: 3.5 },
-  { id: 'booth-plug',     side: 'left',  x: -6, z: 17, displayHeight: 5   },
-  { id: 'virasat-jewels', side: 'left',  x: -6, z: 24, displayHeight: 7   },
-  { id: 'skyguard',       side: 'left',  x: -6, z: 31, displayHeight: 9   },
+  { id: 'fencetastic',    side: 'left',  x: -6, z: 10, displayHeight: 5   },
+  { id: 'booth-plug',     side: 'left',  x: -6, z: 17, displayHeight: 7   },
+  { id: 'virasat-jewels', side: 'left',  x: -6, z: 24, displayHeight: 9   },
+  { id: 'skyguard',       side: 'left',  x: -6, z: 31, displayHeight: 12  },
   // RIGHT SIDE — face left toward street
-  { id: 'buildkit-labs',  side: 'right', x: 6,  z: 10, displayHeight: 3.5 },
-  { id: 'buildkit-crm',   side: 'right', x: 6,  z: 17, displayHeight: 7   },
-  { id: 'synchub',        side: 'right', x: 6,  z: 24, displayHeight: 11  },
+  { id: 'buildkit-labs',  side: 'right', x: 6,  z: 10, displayHeight: 5   },
+  { id: 'buildkit-crm',   side: 'right', x: 6,  z: 17, displayHeight: 9   },
+  { id: 'synchub',        side: 'right', x: 6,  z: 24, displayHeight: 14  },
 ]
 
 const FILLER_BUILDINGS = [
@@ -84,8 +84,8 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
   const mouseY = useRef(0)
 
   useEffect(() => {
-    camera.position.set(0, 1.6, -4)
-    camera.lookAt(0, 2, 30)
+    camera.position.set(0, 1.8, -4)
+    camera.lookAt(0, 1.5, 30)
 
     const onWheel = (e: WheelEvent) => {
       e.preventDefault()
@@ -137,11 +137,11 @@ function CameraController({ onCameraZ }: { onCameraZ: (z: number) => void }) {
     moving.current = Math.abs(currentZ.current - prevZ) > 0.002
 
     const bob = moving.current ? Math.sin(time.current * 3) * 0.02 : 0
-    camera.position.set(currentX.current, 1.6 + bob, currentZ.current)
+    camera.position.set(currentX.current, 1.8 + bob, currentZ.current)
 
     // Subtle parallax look from mouse
     const lx = currentX.current + mouseX.current * 0.6
-    const ly = 2.0 - mouseY.current * 0.2
+    const ly = 1.5 - mouseY.current * 0.2
     camera.lookAt(lx, ly, currentZ.current + 25)
     onCameraZ(currentZ.current)
   })
@@ -183,10 +183,10 @@ function TexturedBuilding({ project, layout, cameraZ, onSelect }: {
   const h = layout.displayHeight
   const w = h * aspect
 
-  // Building faces the street center:
-  // Left side (x < 0): rotate +90° so plane faces +X direction (toward street)
-  // Right side (x > 0): rotate -90° so plane faces -X direction (toward street)
-  const rotY = layout.side === 'left' ? Math.PI / 2 : -Math.PI / 2
+  // Building angled toward the camera — 35° from perpendicular
+  // This way buildings are visible from the walking perspective
+  // but still feel like they line the street sides
+  const rotY = layout.side === 'left' ? Math.PI * 0.2 : -Math.PI * 0.2
 
   const accentColor = useMemo(() => new THREE.Color(project.accent), [project.accent])
   const lightOffset = layout.side === 'left' ? 2 : -2
