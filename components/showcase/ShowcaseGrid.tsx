@@ -55,7 +55,7 @@ function TextOnlyCard({ project, index, visible, onClick }: {
   const config = gridConfig[project.id]!
   return (
     <div
-      className={`group relative rounded-xl cursor-pointer overflow-hidden flex flex-col justify-between
+      className={`group relative rounded-xl cursor-pointer flex flex-col justify-between
         transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]
         hover:-translate-y-0.5
         ${config.className}
@@ -76,35 +76,35 @@ function TextOnlyCard({ project, index, visible, onClick }: {
       <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl" style={{ backgroundColor: project.accent }} />
 
       <div className="p-5 pl-6 flex flex-col h-full">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary-500" />
-          <span className="text-[10px] tracking-wider text-stone-500 uppercase">{project.subtitle}</span>
+        <div className="flex items-center gap-2 mb-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
+          <span className="text-[9px] tracking-wide text-stone-500 uppercase truncate">{project.subtitle}</span>
           {project.nda && (
-            <span className="ml-auto px-2 py-0.5 rounded text-[9px] text-stone-500 border border-stone-700/50 uppercase tracking-wider">NDA</span>
+            <span className="ml-auto flex-shrink-0 px-1.5 py-0.5 rounded text-[8px] text-stone-500 border border-stone-700/50 uppercase">NDA</span>
           )}
         </div>
 
-        <h3 className="text-lg font-bold text-stone-100 tracking-tight">{project.name}</h3>
-        <p className="text-[12px] text-stone-500 mt-1 line-clamp-2 leading-relaxed">{project.description}</p>
+        <h3 className="text-base font-bold text-stone-100 tracking-tight">{project.name}</h3>
+        <p className="text-[11px] text-stone-500 mt-1 line-clamp-2 leading-relaxed">{project.description}</p>
 
         {/* Lead with the big metric */}
-        <div className="mt-3">
-          <span className="text-2xl font-bold text-stone-100">{project.metrics[0].value}</span>
-          <span className="text-[10px] text-stone-500 uppercase tracking-wider ml-1.5">{project.metrics[0].label}</span>
+        <div className="mt-2">
+          <span className="text-xl font-bold text-stone-100">{project.metrics[0].value}</span>
+          <span className="text-[9px] text-stone-500 uppercase tracking-wide ml-1">{project.metrics[0].label}</span>
         </div>
 
-        <div className="flex items-center gap-4 mt-1.5">
+        <div className="flex items-center gap-3 mt-1">
           {project.metrics.slice(1).map((m, i) => (
             <div key={i}>
               <span className="text-sm font-bold text-stone-300">{m.value}</span>
-              <span className="text-[9px] text-stone-500 uppercase tracking-wider ml-1">{m.label}</span>
+              <span className="text-[8px] text-stone-500 uppercase tracking-wide ml-0.5">{m.label}</span>
             </div>
           ))}
         </div>
 
-        <div className="flex flex-wrap gap-1.5 mt-auto pt-3">
+        <div className="flex flex-wrap gap-1 mt-auto pt-2">
           {project.tech.slice(0, 3).map((t) => (
-            <span key={t} className="bg-stone-800/60 text-stone-500 text-[10px] px-2 py-0.5 rounded">{t}</span>
+            <span key={t} className="bg-stone-800/60 text-stone-500 text-[9px] px-1.5 py-0.5 rounded">{t}</span>
           ))}
         </div>
       </div>
