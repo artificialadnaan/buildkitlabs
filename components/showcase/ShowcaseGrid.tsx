@@ -52,7 +52,6 @@ function hexToRgb(hex: string): string {
 function TextOnlyCard({ project, index, visible, onClick }: {
   project: Project; index: number; visible: boolean; onClick: () => void
 }) {
-  const config = gridConfig[project.id]!
   return (
     <div
       className={`group relative rounded-xl cursor-pointer flex flex-col justify-between
