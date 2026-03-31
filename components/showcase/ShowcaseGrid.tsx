@@ -7,13 +7,8 @@ import DetailPanel from './DetailPanel'
 // ── Grid placement config ──────────────────────────────────────────
 // Each entry defines how the card sits in the CSS grid on desktop
 const gridPlacements: Record<string, string> = {
-  synchub:        'md:col-span-2 md:row-span-2',  // hero — big tile
-  skyguard:       'md:col-span-1 md:row-span-1',
-  'buildkit-crm': 'md:col-span-1 md:row-span-1',
-  'virasat-jewels':'md:col-span-1 md:row-span-1',
-  'booth-plug':   'md:col-span-1 md:row-span-1',
-  fencetastic:    'md:col-span-1 md:row-span-1',
-  'buildkit-labs':'md:col-span-2 md:row-span-1',  // wide footer tile
+  synchub:            'md:col-span-2 md:row-span-2',  // hero — big tile
+  'buildkit-labs':    'md:col-span-2 md:row-span-1',  // wide footer tile
 }
 
 // ── Card component ─────────────────────────────────────────────────
