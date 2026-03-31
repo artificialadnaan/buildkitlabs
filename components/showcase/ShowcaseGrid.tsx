@@ -4,17 +4,17 @@ import { useState, useEffect, useRef } from 'react'
 import { projects, categoryLabels, type Project, type ProjectCategory } from './data'
 
 // ── 12-col grid placements ─────────────────────────────────────────
-const gridConfig: Record<string, { className: string; maxH?: string; isHero?: boolean }> = {
-  synchub:            { className: 'col-span-12 md:col-span-7 md:row-span-2', maxH: '520px', isHero: true },
-  'skyguard-hq':      { className: 'col-span-12 md:col-span-5' },
-  'buildkit-crm':     { className: 'col-span-12 md:col-span-5' },
-  'ticket-hub':       { className: 'col-span-12 sm:col-span-6 md:col-span-4', maxH: '300px' },
-  'virasat-jewels':   { className: 'col-span-12 sm:col-span-6 md:col-span-4', maxH: '300px' },
-  'trock-website':    { className: 'col-span-12 sm:col-span-6 md:col-span-4', maxH: '300px' },
-  'skyguard-website': { className: 'col-span-12 sm:col-span-6 md:col-span-4', maxH: '260px' },
-  fencetastic:        { className: 'col-span-12 sm:col-span-6 md:col-span-4', maxH: '260px' },
-  'booth-plug':       { className: 'col-span-12 sm:col-span-6 md:col-span-4', maxH: '260px' },
-  'buildkit-labs':    { className: 'col-span-12 md:col-span-12', maxH: '260px' },
+const gridConfig: Record<string, { className: string; maxH?: string; imgH: string; isHero?: boolean; wide?: boolean }> = {
+  synchub:            { className: 'col-span-12 md:col-span-7 md:row-span-2', maxH: '520px', imgH: '280px', isHero: true },
+  'skyguard-hq':      { className: 'col-span-12 md:col-span-5', imgH: '140px' },
+  'buildkit-crm':     { className: 'col-span-12 md:col-span-5', imgH: '140px' },
+  'ticket-hub':       { className: 'col-span-12 sm:col-span-6 md:col-span-5', imgH: '150px', wide: true },
+  'virasat-jewels':   { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '140px' },
+  'trock-website':    { className: 'col-span-12 sm:col-span-6 md:col-span-3', imgH: '120px' },
+  'skyguard-website': { className: 'col-span-12 sm:col-span-6 md:col-span-3', imgH: '120px' },
+  fencetastic:        { className: 'col-span-12 sm:col-span-6 md:col-span-5', imgH: '150px', wide: true },
+  'booth-plug':       { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '140px' },
+  'buildkit-labs':    { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '140px' },
 }
 
 // ── Accent glow colors ─────────────────────────────────────────────
@@ -140,6 +140,9 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
   }
 
   // ── Standard cards: screenshot top, content bottom ──
+  const isWide = (config as typeof gridConfig[string]).wide
+  const imgHeight = (config as typeof gridConfig[string]).imgH ?? '140px'
+
   return (
     <div
       ref={ref}
@@ -150,7 +153,6 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
         ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
       `}
       style={{
-        maxHeight: config.maxH,
         transitionDelay: `${index * 50}ms`,
         background: 'rgba(255,255,255,0.03)',
         border: '1px solid rgba(255,255,255,0.06)',
@@ -167,8 +169,8 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
         style={{ background: `radial-gradient(circle, ${(accentGlows[project.id] ?? project.accent)} 0%, transparent 70%)` }}
       />
 
-      {/* Screenshot — fixed height */}
-      <div className="relative flex-shrink-0 h-[140px] overflow-hidden">
+      {/* Screenshot */}
+      <div className="relative flex-shrink-0 overflow-hidden" style={{ height: imgHeight }}>
         <img
           src={project.screenshot}
           alt=""
@@ -188,8 +190,11 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
 
         <h3 className="text-lg font-bold text-white tracking-tight">{project.name}</h3>
 
-        <div className="flex items-center gap-4 mt-1.5 flex-wrap">
-          {project.metrics.slice(0, 2).map((m, i) => (
+        {/* Description — one line */}
+        <p className="text-[12px] text-white/30 mt-1 line-clamp-1 leading-relaxed">{project.description}</p>
+
+        <div className="flex items-center gap-4 mt-2 flex-wrap">
+          {project.metrics.slice(0, isWide ? 3 : 2).map((m, i) => (
             <div key={i}>
               <span className="text-sm font-bold text-white">{m.value}</span>
               <span className="text-[9px] text-white/40 uppercase tracking-wider ml-1">{m.label}</span>
@@ -198,11 +203,11 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
         </div>
 
         <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
-          {project.tech.slice(0, 3).map((t) => (
+          {project.tech.slice(0, isWide ? 4 : 3).map((t) => (
             <span key={t} className="bg-white/[0.06] text-white/50 text-[10px] px-2 py-0.5 rounded-md">{t}</span>
           ))}
-          {project.tech.length > 3 && (
-            <span className="bg-white/[0.06] text-white/30 text-[10px] px-2 py-0.5 rounded-md">+{project.tech.length - 3}</span>
+          {project.tech.length > (isWide ? 4 : 3) && (
+            <span className="bg-white/[0.06] text-white/30 text-[10px] px-2 py-0.5 rounded-md">+{project.tech.length - (isWide ? 4 : 3)}</span>
           )}
         </div>
       </div>
