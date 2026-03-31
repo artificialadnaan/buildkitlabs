@@ -16,16 +16,16 @@ const gridConfig: Record<string, {
   wide?: boolean
   textOnly?: boolean
 }> = {
-  synchub:            { className: 'col-span-12 md:col-span-7 md:row-span-2', imgH: '280px', isHero: true },
-  'skyguard-hq':      { className: 'col-span-12 sm:col-span-6 md:col-span-5', imgH: '0', textOnly: true },
-  'buildkit-crm':     { className: 'col-span-12 sm:col-span-6 md:col-span-5', imgH: '0', textOnly: true },
-  'ticket-hub':       { className: 'col-span-12 sm:col-span-6 md:col-span-5', imgH: '160px', wide: true },
+  synchub:            { className: 'col-span-12', imgH: '320px', isHero: true },
+  'skyguard-hq':      { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '0', textOnly: true },
+  'buildkit-crm':     { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '0', textOnly: true },
+  'ticket-hub':       { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '160px' },
   'virasat-jewels':   { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '170px' },
-  'trock-website':    { className: 'col-span-12 sm:col-span-6 md:col-span-3', imgH: '140px' },
-  'skyguard-website': { className: 'col-span-12 sm:col-span-6 md:col-span-3', imgH: '150px' },
-  fencetastic:        { className: 'col-span-12 sm:col-span-6 md:col-span-5', imgH: '170px', wide: true },
+  'trock-website':    { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '160px' },
+  'skyguard-website': { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '160px' },
+  fencetastic:        { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '170px', wide: true },
   'booth-plug':       { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '160px' },
-  'buildkit-labs':    { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '150px' },
+  'buildkit-labs':    { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '160px' },
 }
 
 // ── NDA Badge ──────────────────────────────────────────────────────
@@ -139,14 +139,13 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
     return (
       <div
         ref={ref}
-        className={`group relative rounded-xl cursor-pointer overflow-hidden flex flex-col
+        className={`group relative rounded-xl cursor-pointer overflow-hidden flex flex-col md:flex-row
           transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]
           hover:-translate-y-0.5
           ${config.className}
           ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
         `}
         style={{
-          maxHeight: '520px',
           transitionDelay: `${index * 50}ms`,
           background: 'rgba(255,255,255,0.02)',
           border: '1px solid rgba(255,255,255,0.06)',
@@ -157,28 +156,31 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } }}
         aria-label={`View ${project.name} project details`}
       >
-        <div className="relative flex-shrink-0 h-[280px] overflow-hidden">
+        {/* Screenshot — left side on desktop, top on mobile */}
+        <div className="relative flex-shrink-0 md:w-[55%] h-[240px] md:h-auto overflow-hidden">
           <img src={project.screenshot} alt="" className="w-full h-full object-cover object-top" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent from-40% to-[#0e0b08]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent from-60% to-[#0e0b08]/80 hidden md:block" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-[#0e0b08] md:hidden" />
           {project.nda && <NdaBadge />}
         </div>
 
-        <div className="p-6 flex flex-col flex-1">
+        {/* Content — right side on desktop, bottom on mobile */}
+        <div className="p-6 md:p-8 flex flex-col justify-center flex-1">
           <div className="flex items-center gap-2 mb-2">
             <div className="w-1.5 h-1.5 rounded-full bg-primary-500" />
             <span className="text-[10px] tracking-wider text-stone-500 uppercase">{project.subtitle}</span>
           </div>
           <h3 className="text-2xl sm:text-3xl font-bold text-stone-100 tracking-tight">{project.name}</h3>
-          <p className="text-sm text-stone-500 mt-1.5 line-clamp-2 max-w-lg leading-relaxed">{project.description}</p>
-          <div className="flex items-center gap-6 mt-3">
+          <p className="text-sm text-stone-400 mt-2 leading-relaxed">{project.description}</p>
+          <div className="flex items-center gap-6 mt-4">
             {project.metrics.map((m, i) => (
               <div key={i}>
-                <span className="text-lg font-bold text-stone-100">{m.value}</span>
+                <span className="text-xl font-bold text-stone-100">{m.value}</span>
                 <span className="text-[10px] text-stone-500 uppercase tracking-wider ml-1.5">{m.label}</span>
               </div>
             ))}
           </div>
-          <div className="flex flex-wrap gap-1.5 mt-3">
+          <div className="flex flex-wrap gap-1.5 mt-4">
             {project.tech.slice(0, 5).map((t) => (
               <span key={t} className="bg-stone-800/60 text-stone-500 text-[11px] px-2.5 py-1 rounded">{t}</span>
             ))}
