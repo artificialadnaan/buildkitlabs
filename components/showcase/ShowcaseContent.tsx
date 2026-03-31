@@ -1,70 +1,7 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
-import dynamic from 'next/dynamic'
-import type { Project } from './data'
-import DetailPanel from './DetailPanel'
-import MobileSkyline from './MobileSkyline'
-
-// Dynamically import Three.js scene (no SSR — Three.js needs DOM)
-const Scene3D = dynamic(() => import('./Scene3D'), {
-  ssr: false,
-  loading: () => (
-    <div className="fixed inset-0 bg-[#0a1628] flex items-center justify-center">
-      <p className="text-white/60 tracking-[0.3em] text-sm uppercase">Loading...</p>
-    </div>
-  ),
-})
+import ShowcaseGrid from './ShowcaseGrid'
 
 export default function ShowcaseContent() {
-  const [selectedProject, setSelectedProject] = useState<Project | null>(null)
-  const [hoveredProject, setHoveredProject] = useState<Project | null>(null)
-  const [isMobile, setIsMobile] = useState(false)
-  const [mounted, setMounted] = useState(false)
-
-  // Detect screen size
-  useEffect(() => {
-    setMounted(true)
-    const check = () => setIsMobile(window.innerWidth < 768)
-    check()
-    window.addEventListener('resize', check)
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
-  const handleSelect = useCallback((p: Project) => setSelectedProject(p), [])
-  const handleClose = useCallback(() => setSelectedProject(null), [])
-
-  if (!mounted) {
-    return (
-      <div className="fixed inset-0 bg-[#0a1628] flex items-center justify-center">
-        <p className="text-white/60 tracking-[0.3em] text-sm uppercase">Entering the city...</p>
-      </div>
-    )
-  }
-
-  return (
-    <div className="bg-[#0a1628]">
-      {isMobile ? (
-        <MobileSkyline onSelectProject={handleSelect} />
-      ) : (
-        <>
-          <Scene3D
-            onSelectProject={handleSelect}
-            hoveredProject={hoveredProject}
-            setHoveredProject={setHoveredProject}
-            panelOpen={!!selectedProject}
-          />
-        </>
-      )}
-
-      {/* Detail panel (shared between mobile and desktop) */}
-      {selectedProject && (
-        <DetailPanel
-          project={selectedProject}
-          onClose={handleClose}
-          mobile={isMobile}
-        />
-      )}
-    </div>
-  )
+  return <ShowcaseGrid />
 }
