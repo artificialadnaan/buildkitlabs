@@ -58,7 +58,6 @@ function TextOnlyCard({ project, index, visible, onClick }: {
       className={`group relative rounded-xl cursor-pointer flex flex-col justify-between
         transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]
         hover:-translate-y-0.5
-        ${config.className}
         ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
       `}
       style={{
@@ -132,7 +131,7 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
   }, [])
 
   if (config.textOnly) {
-    return <div ref={ref}><TextOnlyCard project={project} index={index} visible={visible} onClick={onClick} /></div>
+    return <div ref={ref} className={config.className}><TextOnlyCard project={project} index={index} visible={visible} onClick={onClick} /></div>
   }
 
   if (config.isHero) {
