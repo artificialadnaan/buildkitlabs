@@ -7,9 +7,13 @@ interface CalendlyEmbedProps {
 export default function CalendlyEmbed({ url }: CalendlyEmbedProps) {
   if (!url) {
     return (
-      <div className="bg-dark-900/50 rounded-lg p-12 border border-dashed border-stone-700">
-        <p className="text-stone-400 text-center">
-          Scheduling is being set up. Please email us at hello@buildkitlabs.com to book a call.
+      <div className="bg-paper-100 border border-dashed border-line-strong rounded-sm p-12 text-center">
+        <p className="text-ink-500">
+          Scheduling is being set up. Please email us at{' '}
+          <a href="mailto:hello@buildkitlabs.com" className="text-primary-600 link-draw">
+            hello@buildkitlabs.com
+          </a>{' '}
+          to book a call.
         </p>
       </div>
     )
@@ -22,7 +26,7 @@ export default function CalendlyEmbed({ url }: CalendlyEmbedProps) {
       height="700"
       frameBorder="0"
       title="Schedule a Discovery Call"
-      className="rounded-lg"
+      className="rounded-sm border border-line bg-paper-50"
     />
   )
 }

@@ -36,3 +36,8 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# agent tooling / skill installs
+.agents/
+skills-lock.json
+.playwright-mcp/

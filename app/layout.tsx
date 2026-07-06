@@ -1,13 +1,20 @@
 import type { Metadata } from 'next'
-import { Sora } from 'next/font/google'
+import { Space_Grotesk, IBM_Plex_Mono } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-const sora = Sora({
+const grotesk = Space_Grotesk({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700', '800'],
-  variable: '--font-sora',
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-grotesk',
+  display: 'swap',
+})
+
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-mono',
   display: 'swap',
 })
 
@@ -47,13 +54,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`scroll-smooth ${sora.variable}`}>
-      <body className={`bg-dark-950 text-stone-100 ${sora.className}`}>
-        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-primary-600 focus:text-dark-950 focus:rounded-lg focus:font-bold">
+    <html lang="en" className={`scroll-smooth ${grotesk.variable} ${mono.variable}`}>
+      <body className="bg-paper-200 text-ink font-sans paper-grain antialiased">
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:bg-primary-500 focus:text-paper-50 focus:font-semibold focus:rounded-sm">
           Skip to content
         </a>
         <Header />
-        <main id="main-content">{children}</main>
+        <main id="main-content" className="relative z-[2]">{children}</main>
         <Footer />
       </body>
     </html>

@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ============================================================
+   BuildKit Labs — Engineering Drawing base
+   ============================================================ */
+
 * {
   margin: 0;
   padding: 0;
@@ -10,137 +14,168 @@
 
 html {
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: var(--font-sora), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-grotesk), system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #0e0b08;
-  color: #f5f5f4;
+  background-color: #EFEEE9;
+  color: #1A1915;
+  text-rendering: optimizeLegibility;
 }
 
-/* Smooth scrolling */
-@supports (scroll-behavior: smooth) {
-  html {
-    scroll-behavior: smooth;
-  }
+::selection {
+  background: #E4551E;
+  color: #FBFAF6;
 }
 
-/* Custom scrollbar — warm charcoal */
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: #1a1410;
-}
-
+/* Scrollbar — drafting neutrals */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: #E7E5DE; }
 ::-webkit-scrollbar-thumb {
-  background: #44403c;
-  border-radius: 4px;
+  background: #C6C1B4;
+  border: 3px solid #E7E5DE;
+  border-radius: 6px;
 }
+::-webkit-scrollbar-thumb:hover { background: #B0AA9B; }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #57534e;
-}
-
-
-/* Blueprint grid overlay — subtle amber lines */
-.blueprint-bg {
+/* ------------------------------------------------------------
+   Engineering paper — graph grid drawn in ink
+   ------------------------------------------------------------ */
+.draft-grid {
   background-image:
-    linear-gradient(rgba(217, 119, 6, 0.07) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(217, 119, 6, 0.07) 1px, transparent 1px);
-  background-size: 44px 44px;
+    linear-gradient(to right,  rgba(26,25,21,0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(26,25,21,0.045) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+/* Heavier ruling every 5 squares, like a title-block grid */
+.draft-grid-major {
+  background-image:
+    linear-gradient(to right,  rgba(26,25,21,0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(26,25,21,0.05) 1px, transparent 1px),
+    linear-gradient(to right,  rgba(26,25,21,0.09) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(26,25,21,0.09) 1px, transparent 1px);
+  background-size: 28px 28px, 28px 28px, 140px 140px, 140px 140px;
+}
+/* Diagonal hatch fill — used for "cut" / emphasis blocks */
+.draft-hatch {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(26,25,21,0.10) 0, rgba(26,25,21,0.10) 1px,
+    transparent 1px, transparent 7px
+  );
+}
+.draft-hatch-accent {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(228,85,30,0.16) 0, rgba(228,85,30,0.16) 1px,
+    transparent 1px, transparent 7px
+  );
 }
 
+/* Paper grain — subtle fixed noise so the sheet isn't sterile-flat */
+.paper-grain::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
 
-/* Fade-in animation */
+/* ------------------------------------------------------------
+   Registration / corner tick marks (drafting frame)
+   ------------------------------------------------------------ */
+.tick-frame { position: relative; }
+.tick-frame::before,
+.tick-frame::after {
+  content: "";
+  position: absolute;
+  width: 9px; height: 9px;
+  border-color: #1A1915;
+  pointer-events: none;
+}
+.tick-frame::before {
+  top: -1px; left: -1px;
+  border-top: 1.5px solid; border-left: 1.5px solid;
+}
+.tick-frame::after {
+  bottom: -1px; right: -1px;
+  border-bottom: 1.5px solid; border-right: 1.5px solid;
+}
+
+/* ------------------------------------------------------------
+   Motion
+   ------------------------------------------------------------ */
+.animate-fade-in        { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+.animate-fade-in-delay-1 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.08s both; }
+.animate-fade-in-delay-2 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.18s both; }
+.animate-fade-in-delay-3 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.30s both; }
+.animate-fade-in-delay-4 { animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.42s both; }
+
 @keyframes fadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fade-in {
-  animation: fadeUp 0.55s ease-out both;
-}
+/* Showcase detail-panel keyframes (kept for that view) */
+@keyframes fadeIn      { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@keyframes slideUp     { from { transform: translateY(100%); } to { transform: translateY(0); } }
+@keyframes scaleIn     { from { opacity: 0; transform: scale(0.96); } to { opacity: 1; transform: scale(1); } }
 
-.animate-fade-in-delay-1 {
-  animation: fadeUp 0.55s ease-out 0.1s both;
-}
-
-.animate-fade-in-delay-2 {
-  animation: fadeUp 0.55s ease-out 0.2s both;
-}
-
-.animate-fade-in-delay-3 {
-  animation: fadeUp 0.55s ease-out 0.35s both;
-}
-
-/* Showcase — detail panel animations */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-@keyframes twinkle {
-  0%, 100% { opacity: 0.2; }
-  50% { opacity: 1; }
-}
-
-@keyframes roadScroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-40px); }
-}
-
-/* Card border highlight on hover */
+/* ------------------------------------------------------------
+   Interaction affordances
+   ------------------------------------------------------------ */
 .card-hover {
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.25s ease, transform 0.25s ease;
 }
-
 .card-hover:hover {
-  border-color: rgba(217, 119, 6, 0.50);
-  box-shadow: 0 4px 24px rgba(14, 11, 8, 0.40);
+  border-color: #1A1915;
+  box-shadow: 0 2px 4px rgba(26,25,21,0.05), 0 22px 46px -22px rgba(26,25,21,0.35);
 }
 
-/* Focus-visible styles — amber outline for keyboard navigation */
+.press { transition: transform 0.12s ease; }
+.press:active { transform: translateY(1px); }
+
+/* Editorial link — drawn underline that fills the width on hover */
+.link-draw {
+  background-image: linear-gradient(#1A1915, #1A1915);
+  background-size: 0% 1.5px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.link-draw:hover { background-size: 100% 1.5px; }
+
+/* Focus — hi-vis, matches jobsite palette */
 a:focus-visible,
 button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
 [role="button"]:focus-visible {
-  outline: 2px solid #d97706;
+  outline: 2px solid #E4551E;
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 2px;
 }
 
-/* Reduced motion — disable animations for users who prefer it */
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   .animate-fade-in,
   .animate-fade-in-delay-1,
   .animate-fade-in-delay-2,
-  .animate-fade-in-delay-3 {
+  .animate-fade-in-delay-3,
+  .animate-fade-in-delay-4 {
     animation: none !important;
     opacity: 1 !important;
+    transform: none !important;
   }
 }
-

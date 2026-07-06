@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
+import { X, ArrowRight, ArrowUpRight, ArrowLeft, Lock } from '@phosphor-icons/react'
+import { Kicker, DimLabel } from '@/components/technical/marks'
 import { projects, categoryLabels, type Project, type ProjectCategory } from './data'
 
 // ── Grid config ────────────────────────────────────────────────────
-// Row 1: hero (7) + 2 text-only stacked (5)
-// Row 2: ticket-hub (5) + virasat (4) + trock-website (3)
-// Row 3: skyguard-website (3) + fencetastic (5) + booth-plug (4)
-// Row 4: buildkit-labs (4) — sits left-aligned
+// Row 1: hero (12) + 2 text-only stacked
+// Following rows: standard image cards on a 12-col drafting grid.
 const gridConfig: Record<string, {
   className: string
   imgH: string
@@ -28,24 +28,20 @@ const gridConfig: Record<string, {
   'buildkit-labs':    { className: 'col-span-12 sm:col-span-6 md:col-span-4', imgH: '160px' },
 }
 
-// ── NDA Badge ──────────────────────────────────────────────────────
+const plateLabel = (index: number) => `Plate ${String(index + 1).padStart(2, '0')}`
+
+// ── Reused chrome ──────────────────────────────────────────────────
+const CHIP = 'font-mono text-[9px] uppercase tracking-wide text-primary-600 border border-primary-200 px-1.5 py-0.5 bg-primary-50'
+const TECH = 'font-mono text-[10px] uppercase tracking-wide text-ink-600 border border-line px-2 py-0.5'
+
+// ── NDA Badge (drafting stamp) ─────────────────────────────────────
 function NdaBadge({ small }: { small?: boolean }) {
   return (
-    <div className={`absolute top-3 right-3 z-10 flex items-center gap-1.5 bg-stone-900/80 backdrop-blur-sm rounded-lg border border-stone-700/50 ${small ? 'px-2 py-0.5' : 'px-3 py-1.5'}`}>
-      <svg className="w-3 h-3 text-stone-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-      </svg>
-      <span className={`text-stone-400 ${small ? 'text-[9px]' : 'text-xs'}`}>NDA</span>
+    <div className={`absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5 bg-paper-50/95 border border-line ${small ? 'px-1.5 py-0.5' : 'px-2.5 py-1'}`}>
+      <Lock size={small ? 10 : 12} weight="bold" className="text-ink-500" />
+      <span className={`font-mono uppercase tracking-widest text-ink-500 ${small ? 'text-[9px]' : 'text-[10px]'}`}>NDA</span>
     </div>
   )
-}
-
-// ── hex to rgb helper ──────────────────────────────────────────────
-function hexToRgb(hex: string): string {
-  const r = parseInt(hex.slice(1, 3), 16)
-  const g = parseInt(hex.slice(3, 5), 16)
-  const b = parseInt(hex.slice(5, 7), 16)
-  return `${r},${g},${b}`
 }
 
 // ── Text-Only Card (for login-page projects) ───────────────────────
@@ -54,60 +50,60 @@ function TextOnlyCard({ project, index, visible, onClick }: {
 }) {
   return (
     <div
-      className={`group relative rounded-xl cursor-pointer flex flex-col justify-between
+      className={`group relative cursor-pointer overflow-hidden flex flex-col justify-between bg-paper-50 border border-line
         transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]
-        hover:-translate-y-0.5
+        hover:-translate-y-0.5 hover:border-ink hover:shadow-sheet
         ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
       `}
-      style={{
-        transitionDelay: `${index * 50}ms`,
-        background: `linear-gradient(135deg, rgba(${hexToRgb(project.accent)},0.08) 0%, rgba(${hexToRgb(project.accent)},0.02) 100%)`,
-        border: '1px solid rgba(255,255,255,0.06)',
-      }}
+      style={{ transitionDelay: `${index * 50}ms` }}
       onClick={onClick}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } }}
       aria-label={`View ${project.name} project details`}
     >
-      {/* Accent bar — left edge */}
-      <div className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl" style={{ backgroundColor: project.accent }} />
+      {/* Hi-vis edge marker */}
+      <span className="absolute left-0 top-0 bottom-0 w-[3px] bg-primary-500" aria-hidden="true" />
+
+      {/* Title block */}
+      <div className="flex items-center justify-between pl-6 pr-3 py-2 border-b border-line">
+        <DimLabel>{plateLabel(index)}</DimLabel>
+        <span className={CHIP}>{categoryLabels[project.category]}</span>
+      </div>
 
       <div className="p-5 pl-6 flex flex-col h-full">
         <div className="flex items-center gap-2 mb-1.5">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
-          <span className="text-[9px] tracking-wide text-stone-500 uppercase truncate">{project.subtitle}</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-primary-500 flex-shrink-0" />
+          <span className="font-mono text-[10px] uppercase tracking-widest text-ink-400 truncate">{project.subtitle}</span>
           {project.nda && (
-            <span className="ml-auto flex-shrink-0 px-1.5 py-0.5 rounded text-[8px] text-stone-500 border border-stone-700/50 uppercase">NDA</span>
+            <span className="ml-auto flex-shrink-0 font-mono text-[8px] uppercase tracking-widest text-ink-400 border border-line px-1.5 py-0.5">NDA</span>
           )}
         </div>
 
-        <h3 className="text-base font-bold text-stone-100 tracking-tight">{project.name}</h3>
-        <p className="text-[11px] text-stone-500 mt-1 line-clamp-2 leading-relaxed">{project.description}</p>
+        <h3 className="text-base font-bold text-ink tracking-tight">{project.name}</h3>
+        <p className="text-[11px] text-ink-500 mt-1 line-clamp-2 leading-relaxed">{project.description}</p>
 
-        {/* Lead with the big metric */}
+        {/* Lead metric */}
         <div className="mt-2">
-          <span className="text-xl font-bold text-stone-100">{project.metrics[0].value}</span>
-          <span className="text-[9px] text-stone-500 uppercase tracking-wide ml-1">{project.metrics[0].label}</span>
+          <span className="text-xl font-bold text-ink tabular">{project.metrics[0].value}</span>
+          <span className="font-mono text-[9px] text-ink-400 uppercase tracking-wide ml-1">{project.metrics[0].label}</span>
         </div>
 
         <div className="flex items-center gap-3 mt-1">
           {project.metrics.slice(1).map((m, i) => (
             <div key={i}>
-              <span className="text-sm font-bold text-stone-300">{m.value}</span>
-              <span className="text-[8px] text-stone-500 uppercase tracking-wide ml-0.5">{m.label}</span>
+              <span className="text-sm font-bold text-ink tabular">{m.value}</span>
+              <span className="font-mono text-[8px] text-ink-400 uppercase tracking-wide ml-0.5">{m.label}</span>
             </div>
           ))}
         </div>
 
         <div className="flex flex-wrap gap-1 mt-auto pt-2">
           {project.tech.slice(0, 3).map((t) => (
-            <span key={t} className="bg-stone-800/60 text-stone-500 text-[9px] px-1.5 py-0.5 rounded">{t}</span>
+            <span key={t} className={TECH}>{t}</span>
           ))}
         </div>
       </div>
-
-      <div className="absolute inset-0 rounded-xl pointer-events-none border border-transparent group-hover:border-stone-700/50 transition-all duration-[400ms]" />
     </div>
   )
 }
@@ -137,55 +133,55 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
     return (
       <div
         ref={ref}
-        className={`group relative rounded-xl cursor-pointer overflow-hidden flex flex-col md:flex-row
+        className={`group relative cursor-pointer overflow-hidden flex flex-col bg-paper-50 border border-line
           transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]
-          hover:-translate-y-0.5
+          hover:-translate-y-0.5 hover:border-ink hover:shadow-sheet
           ${config.className}
           ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
         `}
-        style={{
-          transitionDelay: `${index * 50}ms`,
-          background: 'rgba(255,255,255,0.02)',
-          border: '1px solid rgba(255,255,255,0.06)',
-        }}
+        style={{ transitionDelay: `${index * 50}ms` }}
         onClick={onClick}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } }}
         aria-label={`View ${project.name} project details`}
       >
-        {/* Screenshot — left side on desktop, top on mobile */}
-        <div className="relative flex-shrink-0 md:w-[55%] h-[240px] md:h-auto overflow-hidden">
-          <img src={project.screenshot} alt="" className="w-full h-full object-cover object-top" loading="lazy" />
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent from-60% to-[#0e0b08]/80 hidden md:block" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-[#0e0b08] md:hidden" />
-          {project.nda && <NdaBadge />}
+        {/* Title block */}
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-line">
+          <DimLabel>{plateLabel(index)} · Featured</DimLabel>
+          <span className={CHIP}>{categoryLabels[project.category]}</span>
         </div>
 
-        {/* Content — right side on desktop, bottom on mobile */}
-        <div className="p-6 md:p-8 flex flex-col justify-center flex-1">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-primary-500" />
-            <span className="text-[10px] tracking-wider text-stone-500 uppercase">{project.subtitle}</span>
+        <div className="flex flex-col md:flex-row">
+          {/* Screenshot viewport — left on desktop, top on mobile */}
+          <div className="relative flex-shrink-0 md:w-[55%] h-[240px] md:h-auto md:min-h-[300px] overflow-hidden border-b md:border-b-0 md:border-r border-line bg-paper-100">
+            <img src={project.screenshot} alt="" className="w-full h-full object-cover object-top" loading="lazy" />
+            {project.nda && <NdaBadge />}
           </div>
-          <h3 className="text-2xl sm:text-3xl font-bold text-stone-100 tracking-tight">{project.name}</h3>
-          <p className="text-sm text-stone-400 mt-2 leading-relaxed">{project.description}</p>
-          <div className="flex items-center gap-6 mt-4">
-            {project.metrics.map((m, i) => (
-              <div key={i}>
-                <span className="text-xl font-bold text-stone-100">{m.value}</span>
-                <span className="text-[10px] text-stone-500 uppercase tracking-wider ml-1.5">{m.label}</span>
-              </div>
-            ))}
-          </div>
-          <div className="flex flex-wrap gap-1.5 mt-4">
-            {project.tech.slice(0, 5).map((t) => (
-              <span key={t} className="bg-stone-800/60 text-stone-500 text-[11px] px-2.5 py-1 rounded">{t}</span>
-            ))}
+
+          {/* Content — right on desktop, bottom on mobile */}
+          <div className="p-6 md:p-8 flex flex-col justify-center flex-1">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-500" />
+              <span className="font-mono text-[10px] uppercase tracking-widest text-ink-400">{project.subtitle}</span>
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-bold text-ink tracking-tight">{project.name}</h3>
+            <p className="text-sm text-ink-500 mt-2 leading-relaxed">{project.description}</p>
+            <div className="flex items-center gap-6 mt-4 flex-wrap">
+              {project.metrics.map((m, i) => (
+                <div key={i}>
+                  <span className="text-xl font-bold text-ink tabular">{m.value}</span>
+                  <span className="font-mono text-[10px] text-ink-400 uppercase tracking-wide ml-1.5">{m.label}</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-wrap gap-1.5 mt-5">
+              {project.tech.slice(0, 5).map((t) => (
+                <span key={t} className={TECH}>{t}</span>
+              ))}
+            </div>
           </div>
         </div>
-
-        <div className="absolute inset-0 rounded-xl pointer-events-none border border-transparent group-hover:border-stone-700/50 transition-all duration-[400ms]" />
       </div>
     )
   }
@@ -197,57 +193,57 @@ function BentoCard({ project, index, onClick }: { project: Project; index: numbe
   return (
     <div
       ref={ref}
-      className={`group relative rounded-xl cursor-pointer overflow-hidden flex flex-col
+      className={`group relative cursor-pointer overflow-hidden flex flex-col bg-paper-50 border border-line
         transition-all duration-[400ms] ease-[cubic-bezier(0.16,1,0.3,1)]
-        hover:-translate-y-0.5
+        hover:-translate-y-0.5 hover:border-ink hover:shadow-sheet
         ${config.className}
         ${visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-5'}
       `}
-      style={{
-        transitionDelay: `${index * 50}ms`,
-        background: 'rgba(255,255,255,0.02)',
-        border: '1px solid rgba(255,255,255,0.06)',
-      }}
+      style={{ transitionDelay: `${index * 50}ms` }}
       onClick={onClick}
       role="button"
       tabIndex={0}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } }}
       aria-label={`View ${project.name} project details`}
     >
-      <div className="relative flex-shrink-0 overflow-hidden" style={{ height: imgHeight }}>
+      {/* Title block */}
+      <div className="flex items-center justify-between px-3 py-2 border-b border-line">
+        <DimLabel>{plateLabel(index)}</DimLabel>
+        <span className={CHIP}>{categoryLabels[project.category]}</span>
+      </div>
+
+      {/* Screenshot viewport */}
+      <div className="relative flex-shrink-0 overflow-hidden border-b border-line bg-paper-100" style={{ height: imgHeight }}>
         <img src={project.screenshot} alt="" className="w-full h-full object-cover object-top" loading="lazy" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent from-50% to-[#0e0b08]/80" />
         {project.nda && <NdaBadge small />}
       </div>
 
       <div className="p-4 flex flex-col flex-1">
         <div className="flex items-center gap-2 mb-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-primary-500" />
-          <span className="text-[10px] tracking-wider text-stone-500 uppercase">{project.subtitle}</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-primary-500" />
+          <span className="font-mono text-[10px] uppercase tracking-widest text-ink-400 truncate">{project.subtitle}</span>
         </div>
-        <h3 className="text-lg font-bold text-stone-100 tracking-tight">{project.name}</h3>
-        <p className="text-[12px] text-stone-600 mt-1 line-clamp-1 leading-relaxed">{project.description}</p>
+        <h3 className="text-lg font-bold text-ink tracking-tight">{project.name}</h3>
+        <p className="text-[12px] text-ink-500 mt-1 line-clamp-1 leading-relaxed">{project.description}</p>
         <div className="flex items-center gap-4 mt-2 flex-wrap">
           {project.metrics.slice(0, isWide ? 3 : 2).map((m, i) => (
             <div key={i}>
-              <span className="text-sm font-bold text-stone-200">{m.value}</span>
-              <span className="text-[9px] text-stone-500 uppercase tracking-wider ml-1">{m.label}</span>
+              <span className="text-sm font-bold text-ink tabular">{m.value}</span>
+              <span className="font-mono text-[9px] text-ink-400 uppercase tracking-wide ml-1">{m.label}</span>
             </div>
           ))}
         </div>
-        <div className="flex flex-wrap gap-1.5 mt-auto pt-2">
+        <div className="flex flex-wrap gap-1.5 mt-auto pt-3">
           {project.tech.slice(0, isWide ? 4 : 3).map((t) => (
-            <span key={t} className="bg-stone-800/60 text-stone-500 text-[10px] px-2 py-0.5 rounded">{t}</span>
+            <span key={t} className={TECH}>{t}</span>
           ))}
         </div>
       </div>
-
-      <div className="absolute inset-0 rounded-xl pointer-events-none border border-transparent group-hover:border-stone-700/50 transition-all duration-[400ms]" />
     </div>
   )
 }
 
-// ── Detail Modal ───────────────────────────────────────────────────
+// ── Detail Modal (project sheet) ───────────────────────────────────
 function DetailModal({ project, onClose }: { project: Project; onClose: () => void }) {
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -258,47 +254,77 @@ function DetailModal({ project, onClose }: { project: Project; onClose: () => vo
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto py-8 px-4" onClick={onClose}>
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-md animate-[fadeIn_0.2s_ease]" />
+      <div className="fixed inset-0 bg-ink/30 backdrop-blur-sm animate-[fadeIn_0.2s_ease]" />
       <div
-        className="relative z-10 max-w-4xl w-full rounded-xl overflow-hidden animate-[scaleIn_0.25s_ease-out]"
-        style={{ background: '#1a1410', border: '1px solid rgba(255,255,255,0.08)' }}
+        className="relative z-10 max-w-4xl w-full bg-paper-50 border border-ink shadow-sheet animate-[scaleIn_0.25s_ease-out]"
         onClick={(e) => e.stopPropagation()}
       >
-        <img src={project.screenshot} alt={`${project.name} screenshot`} className="w-full max-h-[400px] object-cover" />
-        <div className="p-8">
-          <div className="flex items-center gap-2 mb-3">
-            <div className="w-2 h-2 rounded-full bg-primary-500" />
-            <span className="text-[10px] tracking-wider text-stone-500 uppercase">{project.subtitle}</span>
-            {project.nda && (
-              <span className="ml-2 px-2 py-0.5 rounded text-[9px] uppercase tracking-wider text-primary-500/80 border border-primary-600/20">NDA</span>
-            )}
+        {/* Title block */}
+        <div className="flex items-center justify-between px-5 py-3 border-b border-ink">
+          <div className="flex items-center gap-3">
+            <DimLabel>Project sheet</DimLabel>
+            <span className={CHIP}>{categoryLabels[project.category]}</span>
           </div>
-          <h2 className="text-4xl font-bold text-stone-100 tracking-tight">{project.name}</h2>
-          <p className="text-base text-stone-400 mt-3 leading-relaxed max-w-2xl">{project.description}</p>
-          <div className="flex items-center gap-8 mt-6 flex-wrap">
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="inline-flex items-center justify-center w-8 h-8 border border-line text-ink-500 hover:text-ink hover:border-ink transition-colors"
+          >
+            <X size={16} weight="bold" />
+          </button>
+        </div>
+
+        {/* Screenshot viewport */}
+        <div className="border-b border-line bg-paper-100">
+          <div className="flex items-center justify-between px-5 py-2 border-b border-line">
+            <DimLabel>Fig. 01 · Visual</DimLabel>
+            <DimLabel>{project.nda ? 'Classified · NDA' : 'Live'}</DimLabel>
+          </div>
+          <img src={project.screenshot} alt={`${project.name} screenshot`} className="w-full max-h-[380px] object-cover object-top" />
+        </div>
+
+        <div className="p-6 md:p-8">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="w-2 h-2 rounded-full bg-primary-500" />
+            <span className="font-mono text-[10px] uppercase tracking-widest text-ink-400">{project.subtitle}</span>
+          </div>
+          <h2 className="text-3xl md:text-4xl font-bold text-ink tracking-tight">{project.name}</h2>
+          <p className="text-base text-ink-500 mt-3 leading-relaxed max-w-2xl">{project.description}</p>
+
+          {/* Spec rows */}
+          <dl className="mt-6 border-y border-line divide-y divide-line">
             {project.metrics.map((m, i) => (
-              <div key={i}>
-                <span className="text-2xl font-bold text-stone-100">{m.value}</span>
-                <span className="text-xs text-stone-500 uppercase tracking-wider ml-2">{m.label}</span>
+              <div key={i} className="flex items-center justify-between py-2.5">
+                <dt className="font-mono text-[10px] uppercase tracking-widest text-ink-400">{m.label}</dt>
+                <dd className="text-lg font-bold text-ink tabular">{m.value}</dd>
               </div>
             ))}
+          </dl>
+
+          <div className="mt-5">
+            <DimLabel>Stack</DimLabel>
+            <div className="flex flex-wrap gap-2 mt-2">
+              {project.tech.map((t) => (
+                <span key={t} className="font-mono text-[11px] uppercase tracking-wide text-ink-600 border border-line px-2.5 py-1">{t}</span>
+              ))}
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2 mt-5">
-            {project.tech.map((t) => (
-              <span key={t} className="bg-stone-800/60 text-stone-400 text-sm px-3 py-1.5 rounded-lg">{t}</span>
-            ))}
-          </div>
+
           <div className="flex items-center gap-3 mt-8">
             {project.url && (
-              <a href={project.url} target="_blank" rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-primary-600 text-dark-950 font-semibold px-6 py-3 rounded-lg hover:bg-primary-500 transition-colors text-sm">
-                Visit Live Site
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                </svg>
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center gap-2 px-6 py-3 bg-primary-500 hover:bg-primary-600 text-ink font-semibold rounded-sm transition-colors press text-sm"
+              >
+                Visit live site
+                <ArrowUpRight size={16} weight="bold" className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </a>
             )}
-            <button onClick={onClose} className="px-6 py-3 text-sm text-stone-500 hover:text-stone-200 transition-colors">&larr; Back</button>
+            <button onClick={onClose} className="inline-flex items-center gap-2 px-5 py-3 text-sm text-ink-500 hover:text-ink font-medium transition-colors">
+              <ArrowLeft size={15} weight="bold" /> Back
+            </button>
           </div>
         </div>
       </div>
@@ -321,45 +347,40 @@ export default function ShowcaseGrid() {
   }
 
   return (
-    <div className="min-h-screen bg-dark-950">
-      {/* Warm amber wash */}
-      <div className="fixed inset-0 pointer-events-none" style={{
-        backgroundImage: `
-          radial-gradient(ellipse at 70% 20%, rgba(217,119,6,0.04) 0%, transparent 50%),
-          radial-gradient(ellipse at 30% 80%, rgba(217,119,6,0.03) 0%, transparent 50%)
-        `,
-      }} />
-      {/* Blueprint grid */}
-      <div className="fixed inset-0 blueprint-bg opacity-40 pointer-events-none" />
+    <div className="min-h-[100dvh] bg-paper-200">
+      {/* ── Header ── */}
+      <div className="relative border-b border-line overflow-hidden">
+        <div className="absolute inset-0 draft-grid-major opacity-60 pointer-events-none" />
+        <div className="relative max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8 pt-28 md:pt-32 pb-14">
+          <Kicker index="01" className="mb-6">Portfolio · Selected work</Kicker>
 
-      <div className="relative z-10">
-        {/* ── Header ── */}
-        <div className="pt-24 pb-10 px-6 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2 mb-4">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary-500" />
-            <span className="text-[11px] tracking-[0.3em] text-stone-500 uppercase">Portfolio</span>
-          </div>
-
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05]">
-            <span className="text-stone-100">What we&apos;ve</span><br />
-            <span className="text-primary-500">built.</span>
+          <h1 className="text-[3rem] leading-[0.98] sm:text-6xl lg:text-7xl font-bold tracking-tight text-ink text-balance">
+            What we&apos;ve{' '}
+            <span className="relative inline-block whitespace-nowrap">
+              built.
+              <span className="absolute -bottom-2 left-0 right-1 flex items-center text-primary-500" aria-hidden="true">
+                <span className="w-px h-2.5 bg-current" />
+                <span className="h-[2px] flex-1 bg-current" />
+                <span className="w-px h-2.5 bg-current" />
+              </span>
+            </span>
           </h1>
 
-          <p className="text-lg text-stone-400 mt-4 max-w-xl leading-relaxed">
+          <p className="text-lg text-ink-500 mt-8 max-w-xl leading-relaxed">
             Platforms, automations, and websites — from construction middleware to e-commerce storefronts.
           </p>
 
-          <div className="flex gap-2 mt-8 flex-wrap">
+          <div className="flex items-center gap-2 mt-9 flex-wrap">
             {categories.map((cat) => {
               const active = filter === cat
               return (
                 <button
                   key={cat}
                   onClick={() => handleFilter(cat)}
-                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200
+                  className={`font-mono text-[11px] uppercase tracking-widest px-4 py-2 border transition-colors press
                     ${active
-                      ? 'bg-primary-600 text-dark-950 font-semibold'
-                      : 'bg-stone-800/50 text-stone-500 hover:bg-stone-800 hover:text-stone-300 border border-stone-800'
+                      ? 'bg-primary-500 hover:bg-primary-600 text-ink border-primary-500'
+                      : 'bg-paper-50 text-ink-500 border-line hover:border-ink hover:text-ink'
                     }
                   `}
                 >
@@ -369,38 +390,42 @@ export default function ShowcaseGrid() {
             })}
           </div>
         </div>
-
-        {/* ── Bento Grid ── */}
-        <div className="max-w-7xl mx-auto px-6 pb-12">
-          <div key={filterKey} className="grid grid-cols-12 gap-3 animate-[fadeIn_0.25s_ease-out]">
-            {filtered.map((project, i) => (
-              <BentoCard key={project.id} project={project} index={i} onClick={() => setSelectedProject(project)} />
-            ))}
-          </div>
-          {filtered.length === 0 && (
-            <div className="text-center py-20 text-stone-600 text-sm">No projects in this category.</div>
-          )}
-        </div>
-
-        {/* ── CTA Section ── */}
-        <section className="relative overflow-hidden border-t border-stone-800/60 mt-12">
-          <div className="relative z-10 max-w-4xl mx-auto text-center px-6 py-20 md:py-28">
-            <div className="w-12 h-px bg-primary-600 mx-auto mb-8" />
-            <h2 className="text-3xl md:text-5xl font-bold text-stone-100 tracking-tight leading-tight mb-4">
-              Ready to build<br />something that lasts?
-            </h2>
-            <p className="text-lg text-stone-400 mb-8 max-w-md mx-auto leading-relaxed">
-              One call — no pitch deck, no runaround. Let&apos;s talk through your operations.
-            </p>
-            <Link
-              href="/contact"
-              className="inline-block px-10 py-4 bg-primary-600 hover:bg-primary-500 text-dark-950 font-bold rounded-lg transition-all duration-200 text-base shadow-glow"
-            >
-              Schedule a Free Discovery Call
-            </Link>
-          </div>
-        </section>
       </div>
+
+      {/* ── Bento Grid ── */}
+      <div className="max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8 py-12">
+        <div key={filterKey} className="grid grid-cols-12 gap-4 md:gap-5 animate-[fadeIn_0.25s_ease-out]">
+          {filtered.map((project, i) => (
+            <BentoCard key={project.id} project={project} index={i} onClick={() => setSelectedProject(project)} />
+          ))}
+        </div>
+        {filtered.length === 0 && (
+          <div className="text-center py-20 font-mono text-[11px] uppercase tracking-widest text-ink-400">
+            No projects in this category.
+          </div>
+        )}
+      </div>
+
+      {/* ── Sign-off CTA ── */}
+      <section className="relative overflow-hidden border-t border-line">
+        <div className="absolute inset-0 draft-grid-major opacity-60 pointer-events-none" />
+        <div className="relative max-w-[1400px] mx-auto px-5 sm:px-6 lg:px-8 py-24 md:py-32 text-center">
+          <span className="inline-flex mx-auto mb-8 w-12 h-[3px] bg-primary-500 origin-center animate-draw-x" />
+          <h2 className="text-3xl md:text-5xl font-bold text-ink tracking-tight leading-tight mb-5 text-balance">
+            Ready to build<br />something that lasts?
+          </h2>
+          <p className="text-lg text-ink-500 mb-10 max-w-md mx-auto leading-relaxed">
+            One call — no pitch deck, no runaround. Let&apos;s talk through your operations.
+          </p>
+          <Link
+            href="/contact"
+            className="group inline-flex items-center gap-2.5 px-9 py-4 bg-primary-500 hover:bg-primary-600 text-ink font-semibold rounded-sm transition-colors press"
+          >
+            Schedule a free discovery call
+            <ArrowRight size={18} weight="bold" className="transition-transform group-hover:translate-x-1" />
+          </Link>
+        </div>
+      </section>
 
       {selectedProject && <DetailModal project={selectedProject} onClose={() => setSelectedProject(null)} />}
     </div>
